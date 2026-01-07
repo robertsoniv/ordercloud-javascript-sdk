@@ -1,4 +1,4 @@
-import mockAxios from 'axios'
+import mockFetch, { setupMockFetch } from './__mocks__/fetch'
 import {
   Tokens,
   Auth,
@@ -21,12 +21,28 @@ const testdata = {
   clientIDFromToken: 'client-id-from-token',
 }
 
+function expectDeleteCall(expectedToken: string) {
+  expect(mockFetch).toHaveBeenCalledTimes(1)
+  const call = mockFetch.mock.calls[0]
+  const url = call[0] as string
+  const options = call[1] as RequestInit
+  
+  expect(url).toContain(`${apiUrl}/products/${testdata.productID}`)
+  expect(options.method).toBe('DELETE')
+  const headers = options.headers as Headers
+  const authHeader = headers.get('Authorization')
+  if (expectedToken) {
+    expect(authHeader).toBe(`Bearer ${expectedToken}`)
+  } else {
+    expect(authHeader).toMatch(/^Bearer\s*$/)
+  }
+}
+
 beforeEach(() => {
-  jest.clearAllMocks() // cleans up any tracked calls before the next test
-  jest.restoreAllMocks() // clears information for spies
+  setupMockFetch({})
+  jest.restoreAllMocks()
   Tokens.RemoveAccessToken()
   Tokens.RemoveRefreshToken()
-  // reset defaults for configuration
   Configuration.Set({
     baseApiUrl: 'https://api.ordercloud.io',
     apiVersion: 'v1',
@@ -44,18 +60,7 @@ describe('has expired access token', () => {
   describe('AND has no refresh token', () => {
     test('should make call with expired access token', async () => {
       await Products.Delete(testdata.productID)
-      expect(mockAxios.delete).toHaveBeenCalledTimes(1)
-      expect(mockAxios.delete).toHaveBeenCalledWith(
-        `${apiUrl}/products/${testdata.productID}`,
-        {
-          paramsSerializer: expect.any(Object),
-          timeout: 10000,
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${expiredToken}`,
-          },
-        }
-      )
+      expectDeleteCall(expiredToken)
     })
   })
   describe('AND has refresh token', () => {
@@ -79,24 +84,13 @@ describe('has expired access token', () => {
 
         await Products.Delete(testdata.productID)
 
-        expect(mockAxios.delete).toHaveBeenCalledTimes(1)
         expect(GetRefreshTokenSpy).toHaveBeenCalledTimes(1)
         expect(RefreshTokenSpy).toHaveBeenCalledTimes(1)
         expect(RefreshTokenSpy).toHaveBeenCalledWith(
           testdata.refreshToken,
           testdata.clientID
         )
-        expect(mockAxios.delete).toHaveBeenCalledWith(
-          `${apiUrl}/products/${testdata.productID}`,
-          {
-            paramsSerializer: expect.any(Object),
-            timeout: 10000,
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${testdata.accessTokenFromRefresh}`,
-            },
-          }
-        )
+        expectDeleteCall(testdata.accessTokenFromRefresh)
       })
     })
     describe('AND has no clientID config set', () => {
@@ -117,24 +111,13 @@ describe('has expired access token', () => {
 
         await Products.Delete(testdata.productID)
 
-        expect(mockAxios.delete).toHaveBeenCalledTimes(1)
         expect(GetRefreshTokenSpy).toHaveBeenCalledTimes(1)
         expect(RefreshTokenSpy).toHaveBeenCalledTimes(1)
         expect(RefreshTokenSpy).toHaveBeenCalledWith(
           testdata.refreshToken,
           testdata.clientIDFromToken
         )
-        expect(mockAxios.delete).toHaveBeenCalledWith(
-          `${apiUrl}/products/${testdata.productID}`,
-          {
-            paramsSerializer: expect.any(Object),
-            timeout: 10000,
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${testdata.accessTokenFromRefresh}`,
-            },
-          }
-        )
+        expectDeleteCall(testdata.accessTokenFromRefresh)
       })
     })
   })
@@ -144,18 +127,7 @@ describe('has no access token', () => {
   describe('AND has no refresh token', () => {
     test('should make call with no access token set', async () => {
       await Products.Delete(testdata.productID)
-      expect(mockAxios.delete).toHaveBeenCalledTimes(1)
-      expect(mockAxios.delete).toHaveBeenCalledWith(
-        `${apiUrl}/products/${testdata.productID}`,
-        {
-          paramsSerializer: expect.any(Object),
-          timeout: 10000,
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer `,
-          },
-        }
-      )
+      expectDeleteCall('')
     })
   })
   describe('AND has refresh token', () => {
@@ -180,7 +152,6 @@ describe('has no access token', () => {
 
         await Products.Delete(testdata.productID)
 
-        expect(mockAxios.delete).toHaveBeenCalledTimes(1)
         expect(GetRefreshTokenSpy).toHaveBeenCalledTimes(1)
         expect(RefreshTokenSpy).toHaveBeenCalledTimes(1)
         expect(RefreshTokenSpy).toHaveBeenCalledWith(
@@ -191,17 +162,7 @@ describe('has no access token', () => {
         expect(SetAccessTokenSpy).toHaveBeenCalledWith(
           testdata.accessTokenFromRefresh
         )
-        expect(mockAxios.delete).toHaveBeenCalledWith(
-          `${apiUrl}/products/${testdata.productID}`,
-          {
-            paramsSerializer: expect.any(Object),
-            timeout: 10000,
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${testdata.accessTokenFromRefresh}`,
-            },
-          }
-        )
+        expectDeleteCall(testdata.accessTokenFromRefresh)
       })
     })
     describe('AND has no clientID config set', () => {
@@ -210,18 +171,7 @@ describe('has no access token', () => {
 
         await Products.Delete(testdata.productID)
 
-        expect(mockAxios.delete).toHaveBeenCalledTimes(1)
-        expect(mockAxios.delete).toHaveBeenCalledWith(
-          `${apiUrl}/products/${testdata.productID}`,
-          {
-            paramsSerializer: expect.any(Object),
-            timeout: 10000,
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer `,
-            },
-          }
-        )
+        expectDeleteCall('')
       })
     })
   })
@@ -233,17 +183,6 @@ describe('has valid access token', () => {
     const token = makeToken(tenMinutesFromNow, testdata.clientIDFromToken)
     Tokens.SetAccessToken(token)
     await Products.Delete(testdata.productID)
-    expect(mockAxios.delete).toHaveBeenCalledTimes(1)
-    expect(mockAxios.delete).toHaveBeenCalledWith(
-      `${apiUrl}/products/${testdata.productID}`,
-      {
-        paramsSerializer: expect.any(Object),
-        timeout: 10000,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      }
-    )
+    expectDeleteCall(token)
   })
 })

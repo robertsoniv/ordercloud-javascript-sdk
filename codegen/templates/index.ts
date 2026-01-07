@@ -1,4 +1,4 @@
-import Configuration from './Configuration'
+import Configuration from './configuration'
 export { Configuration }
 import OrderCloudError from './utils/OrderCloudError'
 export { OrderCloudError }

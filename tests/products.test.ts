@@ -1,4 +1,4 @@
-import mockAxios from 'axios'
+import mockFetch, { setupMockFetch } from './__mocks__/fetch'
 import { Tokens, Products, Product } from '../src'
 import { makeToken } from './utils'
 
@@ -6,7 +6,7 @@ const apiUrl = 'https://api.ordercloud.io/v1'
 const validToken = makeToken()
 
 beforeEach(() => {
-  jest.clearAllMocks() // cleans up any tracked calls before the next test
+  setupMockFetch({ ID: 'mock-id', Name: 'Mock Product' })
   Tokens.RemoveAccessToken()
 })
 
@@ -17,15 +17,18 @@ test('can create product', async () => {
     ID: 'TB2038',
   }
   await Products.Create(product)
-  expect(mockAxios.post).toHaveBeenCalledTimes(1)
-  expect(mockAxios.post).toHaveBeenCalledWith(`${apiUrl}/products`, product, {
-    paramsSerializer: expect.any(Object),
-    timeout: 60000,
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${validToken}`,
-    },
-  })
+  expect(mockFetch).toHaveBeenCalledTimes(1)
+  
+  const call = mockFetch.mock.calls[0]
+  const url = call[0] as string
+  const options = call[1] as RequestInit
+  
+  expect(url).toContain(`${apiUrl}/products`)
+  expect(options.method).toBe('POST')
+  expect(options.body).toBe(JSON.stringify(product))
+  const headers = options.headers as Headers
+  expect(headers.get('Content-Type')).toBe('application/json')
+  expect(headers.get('Authorization')).toBe(`Bearer ${validToken}`)
 })
 
 test('can patch product', async () => {
@@ -35,19 +38,18 @@ test('can patch product', async () => {
     Description: 'This product is pretty sweet, trust me',
   }
   await Products.Patch(productID, partialProduct)
-  expect(mockAxios.patch).toHaveBeenCalledTimes(1)
-  expect(mockAxios.patch).toHaveBeenCalledWith(
-    `${apiUrl}/products/${productID}`,
-    partialProduct,
-    {
-      paramsSerializer: expect.any(Object),
-      timeout: 60000,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${validToken}`,
-      },
-    }
-  )
+  expect(mockFetch).toHaveBeenCalledTimes(1)
+  
+  const call = mockFetch.mock.calls[0]
+  const url = call[0] as string
+  const options = call[1] as RequestInit
+  
+  expect(url).toContain(`${apiUrl}/products/${productID}`)
+  expect(options.method).toBe('PATCH')
+  expect(options.body).toBe(JSON.stringify(partialProduct))
+  const headers = options.headers as Headers
+  expect(headers.get('Content-Type')).toBe('application/json')
+  expect(headers.get('Authorization')).toBe(`Bearer ${validToken}`)
 })
 
 test('can update product', async () => {
@@ -58,35 +60,33 @@ test('can update product', async () => {
     Description: 'This product is pretty sweet, trust me',
   }
   await Products.Save(productID, product)
-  expect(mockAxios.put).toHaveBeenCalledTimes(1)
-  expect(mockAxios.put).toHaveBeenCalledWith(
-    `${apiUrl}/products/${productID}`,
-    product,
-    {
-      paramsSerializer: expect.any(Object),
-      timeout: 60000,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${validToken}`,
-      },
-    }
-  )
+  expect(mockFetch).toHaveBeenCalledTimes(1)
+  
+  const call = mockFetch.mock.calls[0]
+  const url = call[0] as string
+  const options = call[1] as RequestInit
+  
+  expect(url).toContain(`${apiUrl}/products/${productID}`)
+  expect(options.method).toBe('PUT')
+  expect(options.body).toBe(JSON.stringify(product))
+  const headers = options.headers as Headers
+  expect(headers.get('Content-Type')).toBe('application/json')
+  expect(headers.get('Authorization')).toBe(`Bearer ${validToken}`)
 })
 
 test('can delete product', async () => {
   Tokens.SetAccessToken(validToken)
   const productID = 'mockproductid'
   await Products.Delete(productID)
-  expect(mockAxios.delete).toHaveBeenCalledTimes(1)
-  expect(mockAxios.delete).toHaveBeenCalledWith(
-    `${apiUrl}/products/${productID}`,
-    {
-      paramsSerializer: expect.any(Object),
-      timeout: 60000,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${validToken}`,
-      },
-    }
-  )
+  expect(mockFetch).toHaveBeenCalledTimes(1)
+  
+  const call = mockFetch.mock.calls[0]
+  const url = call[0] as string
+  const options = call[1] as RequestInit
+  
+  expect(url).toContain(`${apiUrl}/products/${productID}`)
+  expect(options.method).toBe('DELETE')
+  const headers = options.headers as Headers
+  expect(headers.get('Content-Type')).toBe('application/json')
+  expect(headers.get('Authorization')).toBe(`Bearer ${validToken}`)
 })

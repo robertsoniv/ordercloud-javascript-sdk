@@ -5,4 +5,5 @@ module.exports = {
   },
   'testPathIgnorePatterns': ['cookie-api.test.ts'], // there aren't cookies on server
   'testEnvironment': 'node',
+  'setupFilesAfterEnv': ['<rootDir>/setup.ts'],
 }

@@ -1,7 +1,7 @@
 import { NativeDataFetcher } from '../core/NativeDataFetcher'
 import { RequestConfig } from '../core/types'
 import tokenService from '../api/Tokens'
-import Configuration from '../Configuration'
+import Configuration from '../configuration'
 
 /**
  * @ignore

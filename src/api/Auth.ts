@@ -2,7 +2,7 @@
 import { NativeDataFetcher } from '../core/NativeDataFetcher'
 import { CancelToken } from '../core/types'
 import { AccessToken } from '../models/AccessToken'
-import Configuration from '../Configuration'
+import Configuration from '../configuration'
 import { ApiRole } from '../models/ApiRole'
 import paramsSerializer from '../utils/paramsSerializer'
 import { RequiredDeep } from '../models/RequiredDeep'

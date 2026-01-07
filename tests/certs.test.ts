@@ -1,4 +1,4 @@
-import mockAxios from 'axios'
+import mockFetch, { setupMockFetch } from './__mocks__/fetch'
 import { Tokens, Certs } from '../src'
 import { makeToken } from './utils'
 
@@ -8,23 +8,22 @@ const validToken = makeToken()
 const mockKid = 'x6sA-GfTGEWUp5OWFbhmmg'
 
 beforeEach(() => {
-  jest.clearAllMocks() // cleans up any tracked calls before the next test
+  setupMockFetch({ key: 'mock-public-key' })
   Tokens.RemoveAccessToken()
 })
 
 test('can get cert', async () => {
   Tokens.SetAccessToken(validToken)
   await Certs.GetPublicKey(mockKid)
-  expect(mockAxios.get).toHaveBeenCalledTimes(1)
-  expect(mockAxios.get).toHaveBeenCalledWith(
-    `${apiUrl}/oauth/certs/${mockKid}`,
-    {
-      paramsSerializer: expect.any(Object),
-      timeout: 60000,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${validToken}`,
-      },
-    }
-  )
+  expect(mockFetch).toHaveBeenCalledTimes(1)
+  
+  const call = mockFetch.mock.calls[0]
+  const url = call[0] as string
+  const options = call[1] as RequestInit
+  
+  expect(url).toContain(`${apiUrl}/oauth/certs/${mockKid}`)
+  expect(options.method).toBe('GET')
+  const headers = options.headers as Headers
+  expect(headers.get('Content-Type')).toBe('application/json')
+  expect(headers.get('Authorization')).toBe(`Bearer ${validToken}`)
 })
