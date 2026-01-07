@@ -24,7 +24,7 @@ class PromotionIntegrations {
     * Check out the {@link https://ordercloud.io/api-reference/integrations/promotion-integrations/get|api docs} for more info 
     * 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Get<TPromotionIntegration extends PromotionIntegration>(requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TPromotionIntegration>>{
@@ -45,13 +45,13 @@ class PromotionIntegrations {
     * 
     * @param promotionIntegration Required fields: HashKey
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Save<TPromotionIntegration extends PromotionIntegration>(promotionIntegration: PromotionIntegration,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TPromotionIntegration>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrations/promotion`, { ...requestOptions, data: promotionIntegration, impersonating,  } )
+        return await http.put(`/integrations/promotion`, { ...requestOptions, body: promotionIntegration, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -65,7 +65,7 @@ class PromotionIntegrations {
     * Check out the {@link https://ordercloud.io/api-reference/integrations/promotion-integrations/delete|api docs} for more info 
     * 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Delete(requestOptions: RequestOptions = {} ): Promise<void>{
@@ -86,13 +86,13 @@ class PromotionIntegrations {
     * 
     * @param promotionIntegration 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Patch<TPromotionIntegration extends PromotionIntegration>(promotionIntegration: PartialDeep<PromotionIntegration>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TPromotionIntegration>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrations/promotion`, { ...requestOptions, data: promotionIntegration, impersonating,  } )
+        return await http.patch(`/integrations/promotion`, { ...requestOptions, body: promotionIntegration, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)

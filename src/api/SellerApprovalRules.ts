@@ -36,7 +36,7 @@ class SellerApprovalRules {
     * @param listOptions.pageSize Number of results to return per page.
     * @param listOptions.filters An object or dictionary representing key/value pairs to apply as filters. Valid keys are top-level properties of the returned model or 'xp.???'
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async List<TSellerApprovalRule extends SellerApprovalRule>(listOptions: { search?: string, searchOn?: Searchable<'SellerApprovalRules.List'>, sortBy?: Sortable<'SellerApprovalRules.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TSellerApprovalRule>>>{
@@ -57,13 +57,13 @@ class SellerApprovalRules {
     * 
     * @param sellerApprovalRule Required fields: ApprovalType, ApprovingGroupID, RuleExpression
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Create<TSellerApprovalRule extends SellerApprovalRule>(sellerApprovalRule: SellerApprovalRule,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TSellerApprovalRule>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/approvalrules`, { ...requestOptions, data: sellerApprovalRule, impersonating,  } )
+        return await http.post(`/approvalrules`, { ...requestOptions, body: sellerApprovalRule, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -78,7 +78,7 @@ class SellerApprovalRules {
     * 
     * @param approvalRuleID ID of the approval rule.
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Get<TSellerApprovalRule extends SellerApprovalRule>(approvalRuleID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TSellerApprovalRule>>{
@@ -100,13 +100,13 @@ class SellerApprovalRules {
     * @param approvalRuleID ID of the approval rule.
     * @param sellerApprovalRule Required fields: ApprovalType, ApprovingGroupID, RuleExpression
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Save<TSellerApprovalRule extends SellerApprovalRule>(approvalRuleID: string, sellerApprovalRule: SellerApprovalRule,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TSellerApprovalRule>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/approvalrules/${approvalRuleID}`, { ...requestOptions, data: sellerApprovalRule, impersonating,  } )
+        return await http.put(`/approvalrules/${approvalRuleID}`, { ...requestOptions, body: sellerApprovalRule, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -121,7 +121,7 @@ class SellerApprovalRules {
     * 
     * @param approvalRuleID ID of the approval rule.
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Delete(approvalRuleID: string, requestOptions: RequestOptions = {} ): Promise<void>{
@@ -143,13 +143,13 @@ class SellerApprovalRules {
     * @param approvalRuleID ID of the approval rule.
     * @param sellerApprovalRule 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Patch<TSellerApprovalRule extends SellerApprovalRule>(approvalRuleID: string, sellerApprovalRule: PartialDeep<SellerApprovalRule>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TSellerApprovalRule>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/approvalrules/${approvalRuleID}`, { ...requestOptions, data: sellerApprovalRule, impersonating,  } )
+        return await http.patch(`/approvalrules/${approvalRuleID}`, { ...requestOptions, body: sellerApprovalRule, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)

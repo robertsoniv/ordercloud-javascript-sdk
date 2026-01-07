@@ -26,6 +26,14 @@ class Configuration {
   }
 
   Set(config: SdkConfiguration): void {
+    // Deprecation warning for axiosAdapter
+    if (config?.axiosAdapter) {
+      console.warn(
+        'OrderCloud SDK: axiosAdapter is deprecated and will be removed in the next major version. ' +
+          'The SDK now uses native fetch. Use fetchImplementation if you need to provide a custom fetch implementation.'
+      )
+    }
+
     this.config = { ...this.defaultConfig, ...this.config, ...(config || {}) }
     this.config.cookieOptions = {
       ...this.defaultConfig.cookieOptions,

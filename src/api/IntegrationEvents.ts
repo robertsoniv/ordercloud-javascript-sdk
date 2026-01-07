@@ -43,7 +43,7 @@ class IntegrationEvents {
     * @param listOptions.pageSize Number of results to return per page.
     * @param listOptions.filters An object or dictionary representing key/value pairs to apply as filters. Valid keys are top-level properties of the returned model or 'xp.???'
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async List<TIntegrationEvent extends IntegrationEvent>(listOptions: { search?: string, searchOn?: Searchable<'IntegrationEvents.List'>, sortBy?: Sortable<'IntegrationEvents.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TIntegrationEvent>>>{
@@ -64,13 +64,13 @@ class IntegrationEvents {
     * 
     * @param integrationEvent Required fields: CustomImplementationUrl, Name, HashKey
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Create<TIntegrationEvent extends IntegrationEvent>(integrationEvent: IntegrationEvent,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TIntegrationEvent>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/integrationEvents`, { ...requestOptions, data: integrationEvent, impersonating,  } )
+        return await http.post(`/integrationEvents`, { ...requestOptions, body: integrationEvent, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -85,7 +85,7 @@ class IntegrationEvents {
     * 
     * @param integrationEventID ID of the integration event.
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Get<TIntegrationEvent extends IntegrationEvent>(integrationEventID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TIntegrationEvent>>{
@@ -107,13 +107,13 @@ class IntegrationEvents {
     * @param integrationEventID ID of the integration event.
     * @param integrationEvent Required fields: CustomImplementationUrl, Name, HashKey
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Save<TIntegrationEvent extends IntegrationEvent>(integrationEventID: string, integrationEvent: IntegrationEvent,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TIntegrationEvent>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrationEvents/${integrationEventID}`, { ...requestOptions, data: integrationEvent, impersonating,  } )
+        return await http.put(`/integrationEvents/${integrationEventID}`, { ...requestOptions, body: integrationEvent, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -128,7 +128,7 @@ class IntegrationEvents {
     * 
     * @param integrationEventID ID of the integration event.
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Delete(integrationEventID: string, requestOptions: RequestOptions = {} ): Promise<void>{
@@ -150,13 +150,13 @@ class IntegrationEvents {
     * @param integrationEventID ID of the integration event.
     * @param integrationEvent 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Patch<TIntegrationEvent extends IntegrationEvent>(integrationEventID: string, integrationEvent: PartialDeep<IntegrationEvent>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TIntegrationEvent>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrationEvents/${integrationEventID}`, { ...requestOptions, data: integrationEvent, impersonating,  } )
+        return await http.patch(`/integrationEvents/${integrationEventID}`, { ...requestOptions, body: integrationEvent, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -172,7 +172,7 @@ class IntegrationEvents {
     * @param direction Direction of the order, from the current user's perspective.
     * @param orderID ID of the order.
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Calculate<TOrderWorksheet extends OrderWorksheet>(direction: OrderDirection, orderID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TOrderWorksheet>>{
@@ -194,7 +194,7 @@ class IntegrationEvents {
     * @param direction Direction of the order, from the current user's perspective.
     * @param orderID ID of the order.
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async EstimateShipping<TOrderWorksheet extends OrderWorksheet>(direction: OrderDirection, orderID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TOrderWorksheet>>{
@@ -217,13 +217,13 @@ class IntegrationEvents {
     * @param orderID ID of the order.
     * @param orderShipMethodSelection 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async SelectShipmethods<TOrderWorksheet extends OrderWorksheet>(direction: OrderDirection, orderID: string, orderShipMethodSelection: OrderShipMethodSelection,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TOrderWorksheet>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/orders/${direction}/${orderID}/shipmethods`, { ...requestOptions, data: orderShipMethodSelection, impersonating,  } )
+        return await http.post(`/orders/${direction}/${orderID}/shipmethods`, { ...requestOptions, body: orderShipMethodSelection, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -239,7 +239,7 @@ class IntegrationEvents {
     * @param direction Direction of the order, from the current user's perspective.
     * @param orderID ID of the order.
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async GetWorksheet<TOrderWorksheet extends OrderWorksheet>(direction: OrderDirection, orderID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TOrderWorksheet>>{

@@ -36,7 +36,7 @@ class DeliveryConfigurations {
     * @param listOptions.pageSize Number of results to return per page.
     * @param listOptions.filters An object or dictionary representing key/value pairs to apply as filters. Valid keys are top-level properties of the returned model or 'xp.???'
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async List<TDeliveryConfig extends DeliveryConfig>(listOptions: { search?: string, searchOn?: Searchable<'DeliveryConfigurations.List'>, sortBy?: Sortable<'DeliveryConfigurations.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TDeliveryConfig>>>{
@@ -57,13 +57,13 @@ class DeliveryConfigurations {
     * 
     * @param deliveryConfig Required fields: Name, DeliveryTargets
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Create<TDeliveryConfig extends DeliveryConfig>(deliveryConfig: DeliveryConfig,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TDeliveryConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/integrations/deliveryconfig`, { ...requestOptions, data: deliveryConfig, impersonating,  } )
+        return await http.post(`/integrations/deliveryconfig`, { ...requestOptions, body: deliveryConfig, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -78,7 +78,7 @@ class DeliveryConfigurations {
     * 
     * @param deliveryConfigID ID of the delivery config.
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Get<TDeliveryConfig extends DeliveryConfig>(deliveryConfigID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TDeliveryConfig>>{
@@ -100,13 +100,13 @@ class DeliveryConfigurations {
     * @param deliveryConfigID ID of the delivery config.
     * @param deliveryConfig Required fields: Name, DeliveryTargets
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Save<TDeliveryConfig extends DeliveryConfig>(deliveryConfigID: string, deliveryConfig: DeliveryConfig,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TDeliveryConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrations/deliveryconfig/${deliveryConfigID}`, { ...requestOptions, data: deliveryConfig, impersonating,  } )
+        return await http.put(`/integrations/deliveryconfig/${deliveryConfigID}`, { ...requestOptions, body: deliveryConfig, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -121,7 +121,7 @@ class DeliveryConfigurations {
     * 
     * @param deliveryConfigID ID of the delivery config.
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Delete(deliveryConfigID: string, requestOptions: RequestOptions = {} ): Promise<void>{
@@ -143,13 +143,13 @@ class DeliveryConfigurations {
     * @param deliveryConfigID ID of the delivery config. Required.
     * @param deliveryConfig 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Patch<TDeliveryConfig extends DeliveryConfig>(deliveryConfigID: string, deliveryConfig: PartialDeep<DeliveryConfig>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TDeliveryConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrations/deliveryconfig/${deliveryConfigID}`, { ...requestOptions, data: deliveryConfig, impersonating,  } )
+        return await http.patch(`/integrations/deliveryconfig/${deliveryConfigID}`, { ...requestOptions, body: deliveryConfig, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)

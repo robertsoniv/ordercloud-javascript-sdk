@@ -21,7 +21,7 @@ class Certs {
    *
    * @param ID ID of the public key.
    * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-   * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+   * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
    * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
    */
   public async GetPublicKey<TPublicKey extends PublicKey>(

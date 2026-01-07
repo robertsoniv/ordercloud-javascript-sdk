@@ -51,7 +51,7 @@ class InventoryRecords {
     * @param listOptions.filters An object or dictionary representing key/value pairs to apply as filters. Valid keys are top-level properties of the returned model or 'xp.???'
     * @param listOptions.includeAddress Include address of the inventory record.
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async List<TInventoryRecord extends InventoryRecord>(productID: string, listOptions: { search?: string, searchOn?: Searchable<'InventoryRecords.List'>, sortBy?: Sortable<'InventoryRecords.List'>, page?: number, pageSize?: number, filters?: Filters, includeAddress?: boolean } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TInventoryRecord>>>{
@@ -73,13 +73,13 @@ class InventoryRecords {
     * @param productID ID of the product.
     * @param inventoryRecord Required fields: AddressID
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Create<TInventoryRecord extends InventoryRecord>(productID: string, inventoryRecord: InventoryRecord,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TInventoryRecord>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/products/${productID}/inventoryrecords`, { ...requestOptions, data: inventoryRecord, impersonating,  } )
+        return await http.post(`/products/${productID}/inventoryrecords`, { ...requestOptions, body: inventoryRecord, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -95,7 +95,7 @@ class InventoryRecords {
     * @param productID ID of the product.
     * @param inventoryRecordID ID of the inventory record.
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Get<TInventoryRecord extends InventoryRecord>(productID: string, inventoryRecordID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TInventoryRecord>>{
@@ -118,13 +118,13 @@ class InventoryRecords {
     * @param inventoryRecordID ID of the inventory record.
     * @param inventoryRecord Required fields: AddressID
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Save<TInventoryRecord extends InventoryRecord>(productID: string, inventoryRecordID: string, inventoryRecord: InventoryRecord,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TInventoryRecord>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/products/${productID}/inventoryrecords/${inventoryRecordID}`, { ...requestOptions, data: inventoryRecord, impersonating,  } )
+        return await http.put(`/products/${productID}/inventoryrecords/${inventoryRecordID}`, { ...requestOptions, body: inventoryRecord, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -140,7 +140,7 @@ class InventoryRecords {
     * @param productID ID of the product.
     * @param inventoryRecordID ID of the inventory record.
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Delete(productID: string, inventoryRecordID: string, requestOptions: RequestOptions = {} ): Promise<void>{
@@ -163,13 +163,13 @@ class InventoryRecords {
     * @param inventoryRecordID ID of the inventory record.
     * @param inventoryRecord 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Patch<TInventoryRecord extends InventoryRecord>(productID: string, inventoryRecordID: string, inventoryRecord: PartialDeep<InventoryRecord>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TInventoryRecord>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/products/${productID}/inventoryrecords/${inventoryRecordID}`, { ...requestOptions, data: inventoryRecord, impersonating,  } )
+        return await http.patch(`/products/${productID}/inventoryrecords/${inventoryRecordID}`, { ...requestOptions, body: inventoryRecord, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -188,7 +188,7 @@ class InventoryRecords {
     * @param listOptions.userID ID of the user.
     * @param listOptions.userGroupID ID of the user group.
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async DeleteAssignment(productID: string, inventoryRecordID: string, listOptions: { buyerID?: string, userID?: string, userGroupID?: string } = {}, requestOptions: RequestOptions = {} ): Promise<void>{
@@ -215,7 +215,7 @@ class InventoryRecords {
     * @param listOptions.page Page of results to return. When paginating through many items (> page 30), we recommend the "Last ID" method, as outlined in the Advanced Querying documentation.
     * @param listOptions.pageSize Number of results to return per page.
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async ListAssignments<TInventoryRecordAssignment extends InventoryRecordAssignment>(productID: string, listOptions: { buyerID?: string, inventoryRecordID?: string, userGroupID?: string, level?: 'Group' | 'Company', page?: number, pageSize?: number } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TInventoryRecordAssignment>>>{
@@ -237,13 +237,13 @@ class InventoryRecords {
     * @param productID ID of the product.
     * @param inventoryRecordAssignment Required fields: InventoryRecordID, BuyerID
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async SaveAssignment(productID: string, inventoryRecordAssignment: InventoryRecordAssignment,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/products/${productID}/inventoryrecords/assignments`, { ...requestOptions, data: inventoryRecordAssignment, impersonating,  } )
+        return await http.post(`/products/${productID}/inventoryrecords/assignments`, { ...requestOptions, body: inventoryRecordAssignment, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -266,7 +266,7 @@ class InventoryRecords {
     * @param listOptions.filters An object or dictionary representing key/value pairs to apply as filters. Valid keys are top-level properties of the returned model or 'xp.???'
     * @param listOptions.includeAddress Include address of the inventory record.
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async ListVariant<TInventoryRecord extends InventoryRecord>(productID: string, variantID: string, listOptions: { search?: string, searchOn?: Searchable<'InventoryRecords.ListVariant'>, sortBy?: Sortable<'InventoryRecords.ListVariant'>, page?: number, pageSize?: number, filters?: Filters, includeAddress?: boolean } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TInventoryRecord>>>{
@@ -289,13 +289,13 @@ class InventoryRecords {
     * @param variantID ID of the variant.
     * @param inventoryRecord Required fields: AddressID
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async CreateVariant<TInventoryRecord extends InventoryRecord>(productID: string, variantID: string, inventoryRecord: InventoryRecord,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TInventoryRecord>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/products/${productID}/variants/${variantID}/inventoryrecords`, { ...requestOptions, data: inventoryRecord, impersonating,  } )
+        return await http.post(`/products/${productID}/variants/${variantID}/inventoryrecords`, { ...requestOptions, body: inventoryRecord, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -312,7 +312,7 @@ class InventoryRecords {
     * @param variantID ID of the variant.
     * @param inventoryRecordID ID of the inventory record.
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async GetVariant<TInventoryRecord extends InventoryRecord>(productID: string, variantID: string, inventoryRecordID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TInventoryRecord>>{
@@ -336,13 +336,13 @@ class InventoryRecords {
     * @param inventoryRecordID ID of the inventory record.
     * @param inventoryRecord Required fields: AddressID
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async SaveVariant<TInventoryRecord extends InventoryRecord>(productID: string, variantID: string, inventoryRecordID: string, inventoryRecord: InventoryRecord,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TInventoryRecord>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/products/${productID}/variants/${variantID}/inventoryrecords/${inventoryRecordID}`, { ...requestOptions, data: inventoryRecord, impersonating,  } )
+        return await http.put(`/products/${productID}/variants/${variantID}/inventoryrecords/${inventoryRecordID}`, { ...requestOptions, body: inventoryRecord, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -359,7 +359,7 @@ class InventoryRecords {
     * @param variantID ID of the variant.
     * @param inventoryRecordID ID of the inventory record.
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async DeleteVariant(productID: string, variantID: string, inventoryRecordID: string, requestOptions: RequestOptions = {} ): Promise<void>{
@@ -383,13 +383,13 @@ class InventoryRecords {
     * @param inventoryRecordID ID of the inventory record.
     * @param inventoryRecord 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async PatchVariant<TInventoryRecord extends InventoryRecord>(productID: string, variantID: string, inventoryRecordID: string, inventoryRecord: PartialDeep<InventoryRecord>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TInventoryRecord>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/products/${productID}/variants/${variantID}/inventoryrecords/${inventoryRecordID}`, { ...requestOptions, data: inventoryRecord, impersonating,  } )
+        return await http.patch(`/products/${productID}/variants/${variantID}/inventoryrecords/${inventoryRecordID}`, { ...requestOptions, body: inventoryRecord, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -409,7 +409,7 @@ class InventoryRecords {
     * @param listOptions.userID ID of the user.
     * @param listOptions.userGroupID ID of the user group.
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async DeleteVariantAssignment(productID: string, variantID: string, inventoryRecordID: string, listOptions: { buyerID?: string, userID?: string, userGroupID?: string } = {}, requestOptions: RequestOptions = {} ): Promise<void>{
@@ -437,7 +437,7 @@ class InventoryRecords {
     * @param listOptions.page Page of results to return. When paginating through many items (> page 30), we recommend the "Last ID" method, as outlined in the Advanced Querying documentation.
     * @param listOptions.pageSize Number of results to return per page.
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async ListVariantAssignments<TInventoryRecordAssignment extends InventoryRecordAssignment>(productID: string, variantID: string, listOptions: { buyerID?: string, inventoryRecordID?: string, userGroupID?: string, level?: 'Group' | 'Company', page?: number, pageSize?: number } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TInventoryRecordAssignment>>>{
@@ -460,13 +460,13 @@ class InventoryRecords {
     * @param variantID ID of the variant.
     * @param inventoryRecordAssignment Required fields: InventoryRecordID, BuyerID
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async SaveVariantAssignment(productID: string, variantID: string, inventoryRecordAssignment: InventoryRecordAssignment,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/products/${productID}/variants/${variantID}/inventoryrecords/assignments`, { ...requestOptions, data: inventoryRecordAssignment, impersonating,  } )
+        return await http.post(`/products/${productID}/variants/${variantID}/inventoryrecords/assignments`, { ...requestOptions, body: inventoryRecordAssignment, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)

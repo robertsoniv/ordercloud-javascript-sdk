@@ -1,4 +1,4 @@
-import { CancelToken } from 'axios'
+import { CancelToken } from '../core/types'
 
 export interface RequestOptions {
   /**
@@ -7,7 +7,7 @@ export interface RequestOptions {
   accessToken?: string
 
   /**
-   * [Axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+   * Cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
    */
   cancelToken?: CancelToken
 

@@ -15,7 +15,7 @@ export default [
         format: 'cjs',
       },
     ],
-    external: ['axios'],
+    external: [],
     plugins: [
       typescript({
         typescript: require('typescript'),
@@ -28,9 +28,7 @@ export default [
       file: pkg['umd:main'],
       format: 'umd',
       name: 'OrderCloud',
-      globals: {
-        axios: 'axios',
-      },
+      globals: {},
       esModule: false,
     },
     plugins: [
@@ -39,6 +37,6 @@ export default [
       }),
       terser(),
     ],
-    external: ['axios'],
+    external: [],
   },
 ]

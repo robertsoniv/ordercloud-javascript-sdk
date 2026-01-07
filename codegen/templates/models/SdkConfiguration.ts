@@ -1,5 +1,3 @@
-import { AxiosAdapter } from 'axios'
-
 export interface SdkConfiguration {
   /**
    * The apiurl that will be used to talk to the ordercloud API.
@@ -27,14 +25,21 @@ export interface SdkConfiguration {
   /**
    * specifies the number of milliseconds before the request times out.
    * If the request takes longer than `timeoutInMilliseconds`, the request will be aborted.
-   * Default timeout is 10,000 milliseconds or 10 seconds
+   * Default timeout is 60,000 milliseconds or 60 seconds
    */
   timeoutInMilliseconds?: number
 
   /**
-   * provide a custom axios adapter to handle dispatching request/responses
+   * Custom fetch implementation for Node.js compatibility or testing.
+   * If not provided, uses the global fetch API (available in Node.js 18+ and all modern browsers)
    */
-  axiosAdapter?: AxiosAdapter
+  fetchImplementation?: typeof fetch
+
+  /**
+   * @deprecated This property is no longer used. The SDK now uses native fetch instead of axios.
+   * This will be removed in the next major version.
+   */
+  axiosAdapter?: any
 
   cookieOptions?: CookieOptions
 }

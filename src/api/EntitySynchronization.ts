@@ -68,7 +68,7 @@ class EntitySynchronization {
     * Check out the {@link https://ordercloud.io/api-reference/integrations/entity-synchronization/get-admin-users|api docs} for more info 
     * 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async GetAdminUsers<TEntitySyncConfig extends EntitySyncConfig>(requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
@@ -89,13 +89,13 @@ class EntitySynchronization {
     * 
     * @param entitySyncConfig Required fields: DeliveryConfigID, SyncEntityChanged, SyncEntityDeleted
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async SaveAdminUsers<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: EntitySyncConfig,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrations/entitysync/adminusers`, { ...requestOptions, data: entitySyncConfig, impersonating,  } )
+        return await http.put(`/integrations/entitysync/adminusers`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -109,7 +109,7 @@ class EntitySynchronization {
     * Check out the {@link https://ordercloud.io/api-reference/integrations/entity-synchronization/delete-admin-users|api docs} for more info 
     * 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async DeleteAdminUsers(requestOptions: RequestOptions = {} ): Promise<void>{
@@ -130,13 +130,13 @@ class EntitySynchronization {
     * 
     * @param entitySyncConfig 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async PatchAdminUsers<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: PartialDeep<EntitySyncConfig>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrations/entitysync/adminusers`, { ...requestOptions, data: entitySyncConfig, impersonating,  } )
+        return await http.patch(`/integrations/entitysync/adminusers`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -151,13 +151,13 @@ class EntitySynchronization {
     * 
     * @param syncAdminUser Required fields: UserID
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async SyncAdminUser(syncAdminUser: SyncAdminUser,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/integrations/entitysync/adminusers/sync`, { ...requestOptions, data: syncAdminUser, impersonating,  } )
+        return await http.post(`/integrations/entitysync/adminusers/sync`, { ...requestOptions, body: syncAdminUser, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -171,7 +171,7 @@ class EntitySynchronization {
     * Check out the {@link https://ordercloud.io/api-reference/integrations/entity-synchronization/get-buyers|api docs} for more info 
     * 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async GetBuyers<TEntitySyncConfig extends EntitySyncConfig>(requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
@@ -192,13 +192,13 @@ class EntitySynchronization {
     * 
     * @param entitySyncConfig Required fields: DeliveryConfigID, SyncEntityChanged, SyncEntityDeleted
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async SaveBuyers<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: EntitySyncConfig,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrations/entitysync/buyers`, { ...requestOptions, data: entitySyncConfig, impersonating,  } )
+        return await http.put(`/integrations/entitysync/buyers`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -212,7 +212,7 @@ class EntitySynchronization {
     * Check out the {@link https://ordercloud.io/api-reference/integrations/entity-synchronization/delete-buyers|api docs} for more info 
     * 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async DeleteBuyers(requestOptions: RequestOptions = {} ): Promise<void>{
@@ -233,13 +233,13 @@ class EntitySynchronization {
     * 
     * @param entitySyncConfig 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async PatchBuyers<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: PartialDeep<EntitySyncConfig>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrations/entitysync/buyers`, { ...requestOptions, data: entitySyncConfig, impersonating,  } )
+        return await http.patch(`/integrations/entitysync/buyers`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -254,13 +254,13 @@ class EntitySynchronization {
     * 
     * @param syncBuyer Required fields: BuyerID
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async SyncBuyer(syncBuyer: SyncBuyer,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/integrations/entitysync/buyers/sync`, { ...requestOptions, data: syncBuyer, impersonating,  } )
+        return await http.post(`/integrations/entitysync/buyers/sync`, { ...requestOptions, body: syncBuyer, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -274,7 +274,7 @@ class EntitySynchronization {
     * Check out the {@link https://ordercloud.io/api-reference/integrations/entity-synchronization/get-buyer-user-groups|api docs} for more info 
     * 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async GetBuyerUserGroups<TEntitySyncConfig extends EntitySyncConfig>(requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
@@ -295,13 +295,13 @@ class EntitySynchronization {
     * 
     * @param entitySyncConfig Required fields: DeliveryConfigID, SyncEntityChanged, SyncEntityDeleted
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async SaveUserGroups<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: EntitySyncConfig,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrations/entitysync/buyers/usergroups`, { ...requestOptions, data: entitySyncConfig, impersonating,  } )
+        return await http.put(`/integrations/entitysync/buyers/usergroups`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -315,7 +315,7 @@ class EntitySynchronization {
     * Check out the {@link https://ordercloud.io/api-reference/integrations/entity-synchronization/delete-user-groups|api docs} for more info 
     * 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async DeleteUserGroups(requestOptions: RequestOptions = {} ): Promise<void>{
@@ -336,13 +336,13 @@ class EntitySynchronization {
     * 
     * @param entitySyncConfig 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async PatchBuyerUserGroups<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: PartialDeep<EntitySyncConfig>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrations/entitysync/buyers/usergroups`, { ...requestOptions, data: entitySyncConfig, impersonating,  } )
+        return await http.patch(`/integrations/entitysync/buyers/usergroups`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -357,13 +357,13 @@ class EntitySynchronization {
     * 
     * @param syncBuyerUserGroup Required fields: BuyerID, UserGroupID
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async SyncBuyerUserGroup(syncBuyerUserGroup: SyncBuyerUserGroup,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/integrations/entitysync/buyers/usergroups/sync`, { ...requestOptions, data: syncBuyerUserGroup, impersonating,  } )
+        return await http.post(`/integrations/entitysync/buyers/usergroups/sync`, { ...requestOptions, body: syncBuyerUserGroup, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -377,7 +377,7 @@ class EntitySynchronization {
     * Check out the {@link https://ordercloud.io/api-reference/integrations/entity-synchronization/get-buyer-users|api docs} for more info 
     * 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async GetBuyerUsers<TEntitySyncConfig extends EntitySyncConfig>(requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
@@ -398,13 +398,13 @@ class EntitySynchronization {
     * 
     * @param entitySyncConfig Required fields: DeliveryConfigID, SyncEntityChanged, SyncEntityDeleted
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async SaveBuyerUsers<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: EntitySyncConfig,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrations/entitysync/buyers/users`, { ...requestOptions, data: entitySyncConfig, impersonating,  } )
+        return await http.put(`/integrations/entitysync/buyers/users`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -418,7 +418,7 @@ class EntitySynchronization {
     * Check out the {@link https://ordercloud.io/api-reference/integrations/entity-synchronization/delete-buyer-users|api docs} for more info 
     * 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async DeleteBuyerUsers(requestOptions: RequestOptions = {} ): Promise<void>{
@@ -439,13 +439,13 @@ class EntitySynchronization {
     * 
     * @param entitySyncConfig 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async PatchBuyerUsers<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: PartialDeep<EntitySyncConfig>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrations/entitysync/buyers/users`, { ...requestOptions, data: entitySyncConfig, impersonating,  } )
+        return await http.patch(`/integrations/entitysync/buyers/users`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -460,13 +460,13 @@ class EntitySynchronization {
     * 
     * @param syncBuyerUser Required fields: BuyerID, UserID
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async SyncBuyerUser(syncBuyerUser: SyncBuyerUser,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/integrations/entitysync/buyers/users/sync`, { ...requestOptions, data: syncBuyerUser, impersonating,  } )
+        return await http.post(`/integrations/entitysync/buyers/users/sync`, { ...requestOptions, body: syncBuyerUser, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -480,7 +480,7 @@ class EntitySynchronization {
     * Check out the {@link https://ordercloud.io/api-reference/integrations/entity-synchronization/get-categories|api docs} for more info 
     * 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async GetCategories<TEntitySyncConfig extends EntitySyncConfig>(requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
@@ -501,13 +501,13 @@ class EntitySynchronization {
     * 
     * @param entitySyncConfig Required fields: DeliveryConfigID, SyncEntityChanged, SyncEntityDeleted
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async SaveCategories<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: EntitySyncConfig,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrations/entitysync/categories`, { ...requestOptions, data: entitySyncConfig, impersonating,  } )
+        return await http.put(`/integrations/entitysync/categories`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -521,7 +521,7 @@ class EntitySynchronization {
     * Check out the {@link https://ordercloud.io/api-reference/integrations/entity-synchronization/delete-categories|api docs} for more info 
     * 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async DeleteCategories(requestOptions: RequestOptions = {} ): Promise<void>{
@@ -542,13 +542,13 @@ class EntitySynchronization {
     * 
     * @param entitySyncConfig 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async PatchCategories<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: PartialDeep<EntitySyncConfig>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrations/entitysync/categories`, { ...requestOptions, data: entitySyncConfig, impersonating,  } )
+        return await http.patch(`/integrations/entitysync/categories`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -563,13 +563,13 @@ class EntitySynchronization {
     * 
     * @param syncCategory Required fields: CatalogID, CategoryID
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async SyncCategory(syncCategory: SyncCategory,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/integrations/entitysync/categories/sync`, { ...requestOptions, data: syncCategory, impersonating,  } )
+        return await http.post(`/integrations/entitysync/categories/sync`, { ...requestOptions, body: syncCategory, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -583,7 +583,7 @@ class EntitySynchronization {
     * Check out the {@link https://ordercloud.io/api-reference/integrations/entity-synchronization/get-inventory-records|api docs} for more info 
     * 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async GetInventoryRecords<TEntitySyncConfig extends EntitySyncConfig>(requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
@@ -604,13 +604,13 @@ class EntitySynchronization {
     * 
     * @param entitySyncConfig Required fields: DeliveryConfigID, SyncEntityChanged, SyncEntityDeleted
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async SaveInventoryRecords<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: EntitySyncConfig,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrations/entitysync/products/inventoryrecords`, { ...requestOptions, data: entitySyncConfig, impersonating,  } )
+        return await http.put(`/integrations/entitysync/products/inventoryrecords`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -624,7 +624,7 @@ class EntitySynchronization {
     * Check out the {@link https://ordercloud.io/api-reference/integrations/entity-synchronization/delete-inventory-records|api docs} for more info 
     * 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async DeleteInventoryRecords(requestOptions: RequestOptions = {} ): Promise<void>{
@@ -645,13 +645,13 @@ class EntitySynchronization {
     * 
     * @param entitySyncConfig 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async PatchInventoryRecords<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: PartialDeep<EntitySyncConfig>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrations/entitysync/products/inventoryrecords`, { ...requestOptions, data: entitySyncConfig, impersonating,  } )
+        return await http.patch(`/integrations/entitysync/products/inventoryrecords`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -666,13 +666,13 @@ class EntitySynchronization {
     * 
     * @param syncInventoryRecord Required fields: ProductID, InventoryRecordID
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async SyncInventoryRecord(syncInventoryRecord: SyncInventoryRecord,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/integrations/entitysync/products/inventoryrecords/sync`, { ...requestOptions, data: syncInventoryRecord, impersonating,  } )
+        return await http.post(`/integrations/entitysync/products/inventoryrecords/sync`, { ...requestOptions, body: syncInventoryRecord, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -687,13 +687,13 @@ class EntitySynchronization {
     * 
     * @param syncSupplier Required fields: SupplierID
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async SyncSupplier(syncSupplier: SyncSupplier,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/integrations/entitysync/supplier/sync`, { ...requestOptions, data: syncSupplier, impersonating,  } )
+        return await http.post(`/integrations/entitysync/supplier/sync`, { ...requestOptions, body: syncSupplier, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -707,7 +707,7 @@ class EntitySynchronization {
     * Check out the {@link https://ordercloud.io/api-reference/integrations/entity-synchronization/get-suppliers|api docs} for more info 
     * 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async GetSuppliers<TEntitySyncConfig extends EntitySyncConfig>(requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
@@ -728,13 +728,13 @@ class EntitySynchronization {
     * 
     * @param entitySyncConfig Required fields: DeliveryConfigID, SyncEntityChanged, SyncEntityDeleted
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async SaveSuppliers<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: EntitySyncConfig,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrations/entitysync/suppliers`, { ...requestOptions, data: entitySyncConfig, impersonating,  } )
+        return await http.put(`/integrations/entitysync/suppliers`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -748,7 +748,7 @@ class EntitySynchronization {
     * Check out the {@link https://ordercloud.io/api-reference/integrations/entity-synchronization/delete-suppliers|api docs} for more info 
     * 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async DeleteSuppliers(requestOptions: RequestOptions = {} ): Promise<void>{
@@ -769,13 +769,13 @@ class EntitySynchronization {
     * 
     * @param entitySyncConfig 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async PatchSuppliers<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: PartialDeep<EntitySyncConfig>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrations/entitysync/suppliers`, { ...requestOptions, data: entitySyncConfig, impersonating,  } )
+        return await http.patch(`/integrations/entitysync/suppliers`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -789,7 +789,7 @@ class EntitySynchronization {
     * Check out the {@link https://ordercloud.io/api-reference/integrations/entity-synchronization/get-supplier-users|api docs} for more info 
     * 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async GetSupplierUsers<TEntitySyncConfig extends EntitySyncConfig>(requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
@@ -810,13 +810,13 @@ class EntitySynchronization {
     * 
     * @param entitySyncConfig Required fields: DeliveryConfigID, SyncEntityChanged, SyncEntityDeleted
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async SaveSupplierUsers<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: EntitySyncConfig,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrations/entitysync/suppliers/users`, { ...requestOptions, data: entitySyncConfig, impersonating,  } )
+        return await http.put(`/integrations/entitysync/suppliers/users`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -830,7 +830,7 @@ class EntitySynchronization {
     * Check out the {@link https://ordercloud.io/api-reference/integrations/entity-synchronization/delete-supplier-users|api docs} for more info 
     * 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async DeleteSupplierUsers(requestOptions: RequestOptions = {} ): Promise<void>{
@@ -851,13 +851,13 @@ class EntitySynchronization {
     * 
     * @param entitySyncConfig 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async PatchSupplierUsers<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: PartialDeep<EntitySyncConfig>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrations/entitysync/suppliers/users`, { ...requestOptions, data: entitySyncConfig, impersonating,  } )
+        return await http.patch(`/integrations/entitysync/suppliers/users`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -872,13 +872,13 @@ class EntitySynchronization {
     * 
     * @param syncSupplierUser Required fields: SupplierID, UserID
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async SyncSupplierUser(syncSupplierUser: SyncSupplierUser,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/integrations/entitysync/suppliers/users/sync`, { ...requestOptions, data: syncSupplierUser, impersonating,  } )
+        return await http.post(`/integrations/entitysync/suppliers/users/sync`, { ...requestOptions, body: syncSupplierUser, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)

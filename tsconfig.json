@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "lib": ["ES2015", "DOM"],
+    "lib": ["ES2017", "DOM"],
     "declarationDir": "./dist",
     "module": "esnext",
     "moduleResolution": "node",

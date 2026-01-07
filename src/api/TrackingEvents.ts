@@ -36,7 +36,7 @@ class TrackingEvents {
     * @param listOptions.pageSize Number of results to return per page.
     * @param listOptions.filters An object or dictionary representing key/value pairs to apply as filters. Valid keys are top-level properties of the returned model or 'xp.???'
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async List<TTrackingEvent extends TrackingEvent>(listOptions: { search?: string, searchOn?: Searchable<'TrackingEvents.List'>, sortBy?: Sortable<'TrackingEvents.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TTrackingEvent>>>{
@@ -57,13 +57,13 @@ class TrackingEvents {
     * 
     * @param trackingEvent Required fields: EventType, ClientID, Name, DeliveryConfigID
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Create<TTrackingEvent extends TrackingEvent>(trackingEvent: TrackingEvent,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TTrackingEvent>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/integrations/trackingEvents`, { ...requestOptions, data: trackingEvent, impersonating,  } )
+        return await http.post(`/integrations/trackingEvents`, { ...requestOptions, body: trackingEvent, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -78,7 +78,7 @@ class TrackingEvents {
     * 
     * @param eventID ID of the event.
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Get<TTrackingEvent extends TrackingEvent>(eventID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TTrackingEvent>>{
@@ -100,13 +100,13 @@ class TrackingEvents {
     * @param eventID ID of the event.
     * @param trackingEvent Required fields: EventType, ClientID, Name, DeliveryConfigID
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Save<TTrackingEvent extends TrackingEvent>(eventID: string, trackingEvent: TrackingEvent,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TTrackingEvent>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrations/trackingEvents/${eventID}`, { ...requestOptions, data: trackingEvent, impersonating,  } )
+        return await http.put(`/integrations/trackingEvents/${eventID}`, { ...requestOptions, body: trackingEvent, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -121,7 +121,7 @@ class TrackingEvents {
     * 
     * @param eventID ID of the event.
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Delete(eventID: string, requestOptions: RequestOptions = {} ): Promise<void>{
@@ -143,13 +143,13 @@ class TrackingEvents {
     * @param eventID ID of the event.
     * @param trackingEvent 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Patch<TTrackingEvent extends TrackingEvent>(eventID: string, trackingEvent: PartialDeep<TrackingEvent>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TTrackingEvent>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrations/trackingEvents/${eventID}`, { ...requestOptions, data: trackingEvent, impersonating,  } )
+        return await http.patch(`/integrations/trackingEvents/${eventID}`, { ...requestOptions, body: trackingEvent, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)

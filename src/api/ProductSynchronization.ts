@@ -26,7 +26,7 @@ class ProductSynchronization {
     * Check out the {@link https://ordercloud.io/api-reference/integrations/product-synchronization/get|api docs} for more info 
     * 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Get<TProductSyncConfig extends ProductSyncConfig>(requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TProductSyncConfig>>{
@@ -47,13 +47,13 @@ class ProductSynchronization {
     * 
     * @param productSyncConfig Required fields: SyncProductChanged, SyncProductDeleted, DeliveryConfigID
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Save<TProductSyncConfig extends ProductSyncConfig>(productSyncConfig: ProductSyncConfig,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TProductSyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrations/productsync`, { ...requestOptions, data: productSyncConfig, impersonating,  } )
+        return await http.put(`/integrations/productsync`, { ...requestOptions, body: productSyncConfig, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -67,7 +67,7 @@ class ProductSynchronization {
     * Check out the {@link https://ordercloud.io/api-reference/integrations/product-synchronization/delete|api docs} for more info 
     * 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Delete(requestOptions: RequestOptions = {} ): Promise<void>{
@@ -88,13 +88,13 @@ class ProductSynchronization {
     * 
     * @param productSyncConfig 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Patch<TProductSyncConfig extends ProductSyncConfig>(productSyncConfig: PartialDeep<ProductSyncConfig>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TProductSyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrations/productsync`, { ...requestOptions, data: productSyncConfig, impersonating,  } )
+        return await http.patch(`/integrations/productsync`, { ...requestOptions, body: productSyncConfig, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -109,13 +109,13 @@ class ProductSynchronization {
     * 
     * @param syncProduct Required fields: ProductID
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Sync(syncProduct: SyncProduct,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/integrations/productsync/sync`, { ...requestOptions, data: syncProduct, impersonating,  } )
+        return await http.post(`/integrations/productsync/sync`, { ...requestOptions, body: syncProduct, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)

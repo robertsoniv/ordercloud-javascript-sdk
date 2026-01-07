@@ -4,6 +4,12 @@ interface ApiError {
   Data: any
 }
 
+interface FetchErrorResponse {
+  response: Response
+  data?: any
+  request?: any
+}
+
 export default class OrderCloudError extends Error {
   isOrderCloudError: true
   request?: any
@@ -13,7 +19,7 @@ export default class OrderCloudError extends Error {
   errorCode: string
   statusText: string
 
-  constructor(ex) {
+  constructor(ex: FetchErrorResponse | any) {
     const errors = safeParseErrors(ex) // extract ordercloud errors from response
     const firstError = errors?.[0] // most of the time there is just one error
 
@@ -22,10 +28,20 @@ export default class OrderCloudError extends Error {
     this.errors = errors
     this.name = 'OrderCloudError'
     this.errorCode = getErrorCode(firstError)
-    this.status = ex.response.status
-    this.statusText = ex.response.statusText
-    this.response = ex.response
-    this.request = ex.request
+
+    // Handle both new fetch error structure and legacy axios error structure
+    if (ex.response) {
+      this.status = ex.response.status
+      this.statusText = ex.response.statusText
+      this.response = ex.response
+      this.request = ex.request
+    } else {
+      // Fallback for unknown error structure
+      this.status = 0
+      this.statusText = 'Unknown error'
+      this.response = undefined
+      this.request = undefined
+    }
   }
 }
 
@@ -33,26 +49,30 @@ export default class OrderCloudError extends Error {
  * @ignore
  * not part of public api, don't include in generated docs
  */
-function safeParseErrors(ex): ApiError[] {
+function safeParseErrors(ex: FetchErrorResponse | any): ApiError[] {
   try {
+    // Handle new fetch error structure (data already parsed by HttpClient)
+    if (ex.data && typeof ex.data === 'object') {
+      return ex.data.Errors ?? []
+    }
+
+    // Handle legacy axios error structure
     let value = ex?.response?.data
     if (!value) {
       return []
     }
     if (typeof value === 'object') {
-      return value.Errors
+      return value.Errors ?? []
     }
     if (typeof value === 'string') {
-      // axios sometimes returns a string, so we must deserialize it ourselves
+      // Handle string responses (BOM character handling)
       if (value && value.charCodeAt(0) === 65279) {
-        // there seems to be a BOM character at the beginning
-        // of this string that causes json parsing to fail
         value = value.substring(1)
       }
       const data = JSON.parse(value)
-      return data.Errors
+      return data.Errors ?? []
     }
-    return value
+    return []
   } catch (e) {
     return []
   }
@@ -62,9 +82,9 @@ function safeParseErrors(ex): ApiError[] {
  * @ignore
  * not part of public api, don't include in generated docs
  */
-function getMessage(ex, error?: ApiError): string {
+function getMessage(ex: FetchErrorResponse | any, error?: ApiError): string {
   if (!error) {
-    return ex.response.statusText
+    return ex.response?.statusText ?? 'Unknown error'
   }
   switch (error.ErrorCode) {
     case 'NotFound':

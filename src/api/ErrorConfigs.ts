@@ -25,7 +25,7 @@ class ErrorConfigs {
     * Check out the {@link https://ordercloud.io/api-reference/integrations/error-configs/get|api docs} for more info 
     * 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Get<TErrorConfig extends ErrorConfig>(requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TErrorConfig>>{
@@ -46,13 +46,13 @@ class ErrorConfigs {
     * 
     * @param errorConfig Required fields: DeliveryConfigID
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Save<TErrorConfig extends ErrorConfig>(errorConfig: ErrorConfig,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TErrorConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrations/ErrorConfig`, { ...requestOptions, data: errorConfig, impersonating,  } )
+        return await http.put(`/integrations/ErrorConfig`, { ...requestOptions, body: errorConfig, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -66,7 +66,7 @@ class ErrorConfigs {
     * Check out the {@link https://ordercloud.io/api-reference/integrations/error-configs/delete|api docs} for more info 
     * 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Delete(requestOptions: RequestOptions = {} ): Promise<void>{
@@ -87,13 +87,13 @@ class ErrorConfigs {
     * 
     * @param errorConfig 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Patch<TErrorConfig extends ErrorConfig>(errorConfig: PartialDeep<ErrorConfig>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TErrorConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrations/ErrorConfig`, { ...requestOptions, data: errorConfig, impersonating,  } )
+        return await http.patch(`/integrations/ErrorConfig`, { ...requestOptions, body: errorConfig, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -107,7 +107,7 @@ class ErrorConfigs {
     * Check out the {@link https://ordercloud.io/api-reference/integrations/error-configs/validate|api docs} for more info 
     * 
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async Validate(requestOptions: RequestOptions = {} ): Promise<void>{

@@ -27,13 +27,13 @@ class ForgottenCredentials {
     * 
     * @param oneTimePasswordRequest Required fields: ClientID
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async SendOneTimePassword(oneTimePasswordRequest: OneTimePasswordRequest,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/password/onetimepassword`, { ...requestOptions, data: oneTimePasswordRequest, impersonating,  } )
+        return await http.post(`/password/onetimepassword`, { ...requestOptions, body: oneTimePasswordRequest, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -48,13 +48,13 @@ class ForgottenCredentials {
     * 
     * @param passwordResetRequest Required fields: ClientID
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async SendVerificationCode(passwordResetRequest: PasswordResetRequest,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/password/reset`, { ...requestOptions, data: passwordResetRequest, impersonating,  } )
+        return await http.post(`/password/reset`, { ...requestOptions, body: passwordResetRequest, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -70,13 +70,13 @@ class ForgottenCredentials {
     * @param verificationCode Verification code of the password reset.
     * @param passwordReset Required fields: ClientID, Username
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async ResetPasswordByVerificationCode(verificationCode: string, passwordReset: PasswordReset,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/password/reset/${verificationCode}`, { ...requestOptions, data: passwordReset, impersonating,  } )
+        return await http.put(`/password/reset/${verificationCode}`, { ...requestOptions, body: passwordReset, impersonating,  } )
         .catch(ex => {
             if(ex.response) {
                 throw new OrderCloudError(ex)
@@ -92,7 +92,7 @@ class ForgottenCredentials {
     * @param listOptions.clientID ID of the client.
     * @param listOptions.email Email of the forgotten credentials.
     * @param requestOptions.accessToken Provide an alternative token to the one stored in the sdk instance (useful for impersonation).
-    * @param requestOptions.cancelToken Provide an [axios cancelToken](https://github.com/axios/axios#cancellation) that can be used to cancel the request.
+    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
     * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
     */
     public async RetrieveUsername(listOptions: { clientID?: string, email?: string } = {}, requestOptions: RequestOptions = {} ): Promise<void>{
