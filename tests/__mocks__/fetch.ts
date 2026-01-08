@@ -31,7 +31,7 @@ export function createMockResponse(
     blob: jest.fn(() => Promise.resolve(new Blob())),
     arrayBuffer: jest.fn(() => Promise.resolve(new ArrayBuffer(0))),
     formData: jest.fn(() => Promise.resolve(new FormData())),
-    clone: jest.fn(function() {
+    clone: jest.fn(function(this: Response) {
       return this
     }),
     body: null,
@@ -82,7 +82,8 @@ export function createMockFetchErrorResponse(
 /**
  * Default mock fetch instance
  */
-const mockFetch = jest.fn((input: RequestInfo | URL, init?: RequestInit) =>
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const mockFetch = jest.fn((_input: RequestInfo | URL, _init?: RequestInit) =>
   Promise.resolve(createMockResponse({}))
 ) as jest.MockedFunction<typeof fetch>
 
@@ -99,8 +100,10 @@ export function setupMockFetch(
   responseInit?: MockResponseInit
 ) {
   mockFetch.mockClear()
-  mockFetch.mockImplementation((input: RequestInfo | URL, init?: RequestInit) =>
-    Promise.resolve(createMockResponse(responseBody, responseInit))
+  mockFetch.mockImplementation(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    (_input: RequestInfo | URL, _init?: RequestInit) =>
+      Promise.resolve(createMockResponse(responseBody, responseInit))
   )
   return mockFetch
 }

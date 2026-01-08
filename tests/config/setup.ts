@@ -2,8 +2,10 @@
  * Jest setup file for providing fetch API polyfills
  */
 
-// Import the fetch mock to ensure it's set up before any tests run
-import '../__mocks__/fetch'
+// Set up fetch mock
+/* eslint-disable jest/no-mocks-import */
+jest.mock('node-fetch', () => require('../__mocks__/fetch'), { virtual: true })
+/* eslint-enable jest/no-mocks-import */
 
 // Ensure Response is available in the test environment
 if (typeof global.Response === 'undefined') {
