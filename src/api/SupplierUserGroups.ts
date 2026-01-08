@@ -49,6 +49,11 @@ class SupplierUserGroups {
         this.impersonating = false;
         return await http.get(`/suppliers/${supplierID}/usergroups`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -71,6 +76,11 @@ class SupplierUserGroups {
         this.impersonating = false;
         return await http.post(`/suppliers/${supplierID}/usergroups`, { ...requestOptions, body: userGroup, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -93,6 +103,11 @@ class SupplierUserGroups {
         this.impersonating = false;
         return await http.get(`/suppliers/${supplierID}/usergroups/${userGroupID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -116,6 +131,11 @@ class SupplierUserGroups {
         this.impersonating = false;
         return await http.put(`/suppliers/${supplierID}/usergroups/${userGroupID}`, { ...requestOptions, body: userGroup, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -138,6 +158,11 @@ class SupplierUserGroups {
         this.impersonating = false;
         return await http.delete(`/suppliers/${supplierID}/usergroups/${userGroupID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -161,6 +186,11 @@ class SupplierUserGroups {
         this.impersonating = false;
         return await http.patch(`/suppliers/${supplierID}/usergroups/${userGroupID}`, { ...requestOptions, body: userGroup, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -184,6 +214,11 @@ class SupplierUserGroups {
         this.impersonating = false;
         return await http.delete(`/suppliers/${supplierID}/usergroups/${userGroupID}/assignments/${userID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -209,6 +244,11 @@ class SupplierUserGroups {
         this.impersonating = false;
         return await http.get(`/suppliers/${supplierID}/usergroups/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -231,6 +271,11 @@ class SupplierUserGroups {
         this.impersonating = false;
         return await http.post(`/suppliers/${supplierID}/usergroups/assignments`, { ...requestOptions, body: userGroupAssignment, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }

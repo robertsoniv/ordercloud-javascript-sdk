@@ -2,6 +2,8 @@ import { NativeDataFetcher } from '../core/NativeDataFetcher'
 import { RequestConfig } from '../core/types'
 import tokenService from '../api/Tokens'
 import Configuration from '../configuration'
+import { parseErrorResponse } from './parseErrorResponse'
+import OrderCloudError from './OrderCloudError'
 
 /**
  * @ignore
@@ -40,6 +42,8 @@ class HttpClient {
           'Content-Type': 'application/json',
         },
       })
+      // Use the shared interceptor container from Configuration
+      this.fetcher.interceptors = Configuration.interceptors
     }
     return this.fetcher
   }
@@ -125,39 +129,17 @@ class HttpClient {
 
       return response
     } catch (error) {
-      // Convert Response errors to a format OrderCloudError can handle
-      if (error instanceof Response) {
-        const errorWithData = await this._parseErrorResponse(error)
-        throw errorWithData
+      // Convert Response errors to OrderCloudError
+      // Check for Response-like object (supports both real Response and mocks)
+      if (
+        error &&
+        typeof error.status === 'number' &&
+        typeof error.ok === 'boolean'
+      ) {
+        const errorWithData = await parseErrorResponse(error)
+        throw new OrderCloudError(errorWithData)
       }
       throw error
-    }
-  }
-
-  /**
-   * Parses error Response objects to extract OrderCloud error data
-   */
-  private async _parseErrorResponse(response: Response): Promise<any> {
-    let data: any
-    try {
-      const contentType = response.headers.get('content-type')
-      if (contentType && contentType.includes('application/json')) {
-        const text = await response.text()
-        if (text) {
-          // Handle BOM character if present
-          const cleanText =
-            text.charCodeAt(0) === 65279 ? text.substring(1) : text
-          data = JSON.parse(cleanText)
-        }
-      }
-    } catch (e) {
-      // If parsing fails, data remains undefined
-    }
-
-    // Return an object with response and parsed data
-    return {
-      response,
-      data,
     }
   }
 

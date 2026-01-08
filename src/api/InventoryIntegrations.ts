@@ -32,6 +32,11 @@ class InventoryIntegrations {
         this.impersonating = false;
         return await http.get(`/integrations/inventory`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -53,6 +58,11 @@ class InventoryIntegrations {
         this.impersonating = false;
         return await http.put(`/integrations/inventory`, { ...requestOptions, body: inventoryIntegration, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -73,6 +83,11 @@ class InventoryIntegrations {
         this.impersonating = false;
         return await http.delete(`/integrations/inventory`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -94,6 +109,11 @@ class InventoryIntegrations {
         this.impersonating = false;
         return await http.patch(`/integrations/inventory`, { ...requestOptions, body: inventoryIntegration, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }

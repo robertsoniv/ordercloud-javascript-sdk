@@ -35,6 +35,11 @@ class ForgottenCredentials {
         this.impersonating = false;
         return await http.post(`/password/onetimepassword`, { ...requestOptions, body: oneTimePasswordRequest, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -56,6 +61,11 @@ class ForgottenCredentials {
         this.impersonating = false;
         return await http.post(`/password/reset`, { ...requestOptions, body: passwordResetRequest, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -78,6 +88,11 @@ class ForgottenCredentials {
         this.impersonating = false;
         return await http.put(`/password/reset/${verificationCode}`, { ...requestOptions, body: passwordReset, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -100,6 +115,11 @@ class ForgottenCredentials {
         this.impersonating = false;
         return await http.post(`/username/retrieve`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }

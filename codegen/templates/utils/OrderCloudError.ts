@@ -7,6 +7,7 @@ interface ApiError {
 interface FetchErrorResponse {
   response: Response
   data?: any
+  text?: string
   request?: any
 }
 
@@ -35,12 +36,33 @@ export default class OrderCloudError extends Error {
       this.statusText = ex.response.statusText
       this.response = ex.response
       this.request = ex.request
+
+      // Debug logging to help diagnose error handling issues
+      if (typeof console !== 'undefined' && console.debug) {
+        console.debug('[OrderCloudError] Error details:', {
+          status: this.status,
+          statusText: this.statusText,
+          errorCode: this.errorCode,
+          message: this.message,
+          errorsCount: errors?.length ?? 0,
+          hasData: !!ex.data,
+          hasText: !!ex.text,
+        })
+      }
     } else {
       // Fallback for unknown error structure
       this.status = 0
       this.statusText = 'Unknown error'
       this.response = undefined
       this.request = undefined
+
+      // Warn about unexpected error structure
+      if (typeof console !== 'undefined' && console.warn) {
+        console.warn(
+          '[OrderCloudError] Received error in unexpected format. Expected { response: Response, data?: any, text?: string }',
+          ex
+        )
+      }
     }
   }
 }
@@ -84,6 +106,15 @@ function safeParseErrors(ex: FetchErrorResponse | any): ApiError[] {
  */
 function getMessage(ex: FetchErrorResponse | any, error?: ApiError): string {
   if (!error) {
+    // Try to use text content from non-JSON responses as fallback
+    if (ex.text) {
+      // Truncate very long text responses (like HTML error pages)
+      const maxLength = 200
+      const text = ex.text.trim()
+      return text.length > maxLength
+        ? text.substring(0, maxLength) + '...'
+        : text
+    }
     return ex.response?.statusText ?? 'Unknown error'
   }
   switch (error.ErrorCode) {

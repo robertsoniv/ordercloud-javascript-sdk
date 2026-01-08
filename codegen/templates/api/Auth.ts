@@ -7,6 +7,7 @@ import { ApiRole } from '../models/ApiRole'
 import paramsSerializer from '../utils/paramsSerializer'
 import { RequiredDeep } from '../models/RequiredDeep'
 import OrderCloudError from '../utils/OrderCloudError'
+import { parseErrorResponse } from '../utils/parseErrorResponse'
 
 class Auth {
   private fetcher: NativeDataFetcher | null = null
@@ -33,6 +34,8 @@ class Auth {
         timeout: configuration.timeoutInMilliseconds,
         fetchImplementation: configuration.fetchImplementation,
       })
+      // Use the shared interceptor container from Configuration
+      this.fetcher.interceptors = Configuration.interceptors
     }
     return this.fetcher
   }
@@ -58,7 +61,13 @@ class Auth {
       )
       return response
     } catch (e) {
-      if (e instanceof Response || (e as any)?.response) {
+      // Check for Response-like object (supports both real Response and mocks)
+      if (e && typeof e.status === 'number' && typeof e.ok === 'boolean') {
+        // Parse the Response to extract error data before creating OrderCloudError
+        const parsedError = await parseErrorResponse(e)
+        throw new OrderCloudError(parsedError)
+      } else if (e?.response) {
+        // Already in the correct format (from HttpClient or elsewhere)
         throw new OrderCloudError(e)
       }
       throw e
@@ -70,7 +79,7 @@ class Auth {
    *
    * @param username of the user logging in
    * @param password of the user logging in
-   * @param client_id of the application the user is logging into
+   * @param clientID optional client ID of the application the user is logging into. Falls back to value set in Configuration.Set()
    * @param scope optional roles being requested, if omitted will return all assigned roles
    * @param customRoles optional custom roles being requested - string array
    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
@@ -79,7 +88,7 @@ class Auth {
   public async Login(
     username: string,
     password: string,
-    clientID: string,
+    clientID?: string,
     scope?: ApiRole[],
     customRoles?: string[],
     requestOptions: {
@@ -87,6 +96,13 @@ class Auth {
       requestType?: string
     } = {}
   ): Promise<RequiredDeep<AccessToken>> {
+    const effectiveClientID = clientID ?? Configuration.Get().clientID
+    if (!effectiveClientID) {
+      throw new Error(
+        'clientID must be provided either as a parameter or via Configuration.Set()'
+      )
+    }
+
     if (scope && !Array.isArray(scope)) {
       throw new Error('scope must be a string array')
     }
@@ -107,7 +123,7 @@ class Auth {
       grant_type: 'password',
       username,
       password,
-      client_id: clientID,
+      client_id: effectiveClientID,
       scope: _scope,
     }
     return this._makeOAuthRequest(body, requestOptions)
@@ -170,7 +186,7 @@ class Auth {
    * @description this workflow is best suited for a backend system
    *
    * @param clientSecret of the application
-   * @param clientID of the application the user is logging into
+   * @param clientID optional client ID of the application the user is logging into. Falls back to value set in Configuration.Set()
    * @param scope roles being requested - space delimited string or array
    * @param customRoles optional custom roles being requested - string array
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -180,7 +196,7 @@ class Auth {
    */
   public async ClientCredentials(
     clientSecret: string,
-    clientID: string,
+    clientID?: string,
     scope?: ApiRole[],
     customRoles?: string[],
     requestOptions: {
@@ -188,6 +204,13 @@ class Auth {
       requestType?: string
     } = {}
   ): Promise<RequiredDeep<AccessToken>> {
+    const effectiveClientID = clientID ?? Configuration.Get().clientID
+    if (!effectiveClientID) {
+      throw new Error(
+        'clientID must be provided either as a parameter or via Configuration.Set()'
+      )
+    }
+
     if (scope && !Array.isArray(scope)) {
       throw new Error('scope must be a string array')
     }
@@ -207,7 +230,7 @@ class Auth {
     const body = {
       grant_type: 'client_credentials',
       scope: _scope,
-      client_id: clientID,
+      client_id: effectiveClientID,
       client_secret: clientSecret,
     }
     return this._makeOAuthRequest(body, requestOptions)
@@ -217,21 +240,28 @@ class Auth {
    * @description extend your users' session by getting a new access token with a refresh token. refresh tokens must be enabled in the dashboard
    *
    * @param refreshToken of the application
-   * @param clientID of the application the user is logging into
+   * @param clientID optional client ID of the application the user is logging into. Falls back to value set in Configuration.Set()
    * @param requestOptions.cancelToken Provide a cancel token that can be used to cancel the request. Create using `AbortManager.createCancelToken()`.
    * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
    */
   public async RefreshToken(
     refreshToken: string,
-    clientID: string,
+    clientID?: string,
     requestOptions: {
       cancelToken?: CancelToken
       requestType?: string
     } = {}
   ): Promise<RequiredDeep<AccessToken>> {
+    const effectiveClientID = clientID ?? Configuration.Get().clientID
+    if (!effectiveClientID) {
+      throw new Error(
+        'clientID must be provided either as a parameter or via Configuration.Set()'
+      )
+    }
+
     const body = {
       grant_type: 'refresh_token',
-      client_id: clientID,
+      client_id: effectiveClientID,
       refresh_token: refreshToken,
     }
     return this._makeOAuthRequest(body, requestOptions)
@@ -240,7 +270,7 @@ class Auth {
   /**
    * @description allow users to browse your catalog without signing in - must have anonymous template user set in dashboard
    *
-   * @param clientID of the application the user is logging into
+   * @param clientID optional client ID of the application the user is logging into. Falls back to value set in Configuration.Set()
    * @param scope roles being requested - space delimited string or array
    * @param customRoles optional custom roles being requested - string array
    * @param requestOptions.anonuserid Provide an externally generated id to track this user session, used specifically for the tracking events feature for integrating with Send and Discover
@@ -248,7 +278,7 @@ class Auth {
    * @param requestOptions.requestType Provide a value that can be used to identify the type of request. Useful for error logs.
    */
   public async Anonymous(
-    clientID: string,
+    clientID?: string,
     scope?: ApiRole[],
     customRoles?: string[],
     requestOptions: {
@@ -257,6 +287,13 @@ class Auth {
       requestType?: string
     } = {}
   ): Promise<RequiredDeep<AccessToken>> {
+    const effectiveClientID = clientID ?? Configuration.Get().clientID
+    if (!effectiveClientID) {
+      throw new Error(
+        'clientID must be provided either as a parameter or via Configuration.Set()'
+      )
+    }
+
     if (scope && !Array.isArray(scope)) {
       throw new Error('scope must be a string array')
     }
@@ -275,7 +312,7 @@ class Auth {
 
     const body = {
       grant_type: 'client_credentials',
-      client_id: clientID,
+      client_id: effectiveClientID,
       scope: _scope,
     }
     if (requestOptions.anonuserid) {

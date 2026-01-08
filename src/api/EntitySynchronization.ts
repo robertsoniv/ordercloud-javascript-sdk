@@ -76,6 +76,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.get(`/integrations/entitysync/adminusers`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -97,6 +102,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.put(`/integrations/entitysync/adminusers`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -117,6 +127,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.delete(`/integrations/entitysync/adminusers`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -138,6 +153,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.patch(`/integrations/entitysync/adminusers`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -159,6 +179,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.post(`/integrations/entitysync/adminusers/sync`, { ...requestOptions, body: syncAdminUser, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -179,6 +204,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.get(`/integrations/entitysync/buyers`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -200,6 +230,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.put(`/integrations/entitysync/buyers`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -220,6 +255,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.delete(`/integrations/entitysync/buyers`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -241,6 +281,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.patch(`/integrations/entitysync/buyers`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -262,6 +307,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.post(`/integrations/entitysync/buyers/sync`, { ...requestOptions, body: syncBuyer, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -282,6 +332,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.get(`/integrations/entitysync/buyers/usergroups`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -303,6 +358,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.put(`/integrations/entitysync/buyers/usergroups`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -323,6 +383,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.delete(`/integrations/entitysync/buyers/usergroups`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -344,6 +409,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.patch(`/integrations/entitysync/buyers/usergroups`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -365,6 +435,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.post(`/integrations/entitysync/buyers/usergroups/sync`, { ...requestOptions, body: syncBuyerUserGroup, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -385,6 +460,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.get(`/integrations/entitysync/buyers/users`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -406,6 +486,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.put(`/integrations/entitysync/buyers/users`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -426,6 +511,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.delete(`/integrations/entitysync/buyers/users`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -447,6 +537,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.patch(`/integrations/entitysync/buyers/users`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -468,6 +563,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.post(`/integrations/entitysync/buyers/users/sync`, { ...requestOptions, body: syncBuyerUser, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -488,6 +588,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.get(`/integrations/entitysync/categories`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -509,6 +614,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.put(`/integrations/entitysync/categories`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -529,6 +639,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.delete(`/integrations/entitysync/categories`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -550,6 +665,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.patch(`/integrations/entitysync/categories`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -571,6 +691,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.post(`/integrations/entitysync/categories/sync`, { ...requestOptions, body: syncCategory, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -591,6 +716,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.get(`/integrations/entitysync/products/inventoryrecords`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -612,6 +742,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.put(`/integrations/entitysync/products/inventoryrecords`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -632,6 +767,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.delete(`/integrations/entitysync/products/inventoryrecords`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -653,6 +793,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.patch(`/integrations/entitysync/products/inventoryrecords`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -674,6 +819,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.post(`/integrations/entitysync/products/inventoryrecords/sync`, { ...requestOptions, body: syncInventoryRecord, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -695,6 +845,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.post(`/integrations/entitysync/supplier/sync`, { ...requestOptions, body: syncSupplier, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -715,6 +870,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.get(`/integrations/entitysync/suppliers`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -736,6 +896,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.put(`/integrations/entitysync/suppliers`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -756,6 +921,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.delete(`/integrations/entitysync/suppliers`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -777,6 +947,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.patch(`/integrations/entitysync/suppliers`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -797,6 +972,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.get(`/integrations/entitysync/suppliers/users`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -818,6 +998,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.put(`/integrations/entitysync/suppliers/users`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -838,6 +1023,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.delete(`/integrations/entitysync/suppliers/users`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -859,6 +1049,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.patch(`/integrations/entitysync/suppliers/users`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -880,6 +1075,11 @@ class EntitySynchronization {
         this.impersonating = false;
         return await http.post(`/integrations/entitysync/suppliers/users/sync`, { ...requestOptions, body: syncSupplierUser, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }

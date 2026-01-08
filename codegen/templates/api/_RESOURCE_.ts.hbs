@@ -35,6 +35,11 @@ class {{resource.id}} {
         this.impersonating = false;
         return await http.{{verb}}(`{{parameterizePath path}}`, { ...requestOptions, {{#if hasBodyParam}}body: {{bodyParam.name}}, {{/if}}impersonating, {{#if hasQueryParams}}params: listOptions {{/if}} } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }

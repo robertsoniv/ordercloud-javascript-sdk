@@ -45,6 +45,11 @@ class ApprovalRules {
         this.impersonating = false;
         return await http.get(`/buyers/${buyerID}/approvalrules`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -67,6 +72,11 @@ class ApprovalRules {
         this.impersonating = false;
         return await http.post(`/buyers/${buyerID}/approvalrules`, { ...requestOptions, body: approvalRule, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -89,6 +99,11 @@ class ApprovalRules {
         this.impersonating = false;
         return await http.get(`/buyers/${buyerID}/approvalrules/${approvalRuleID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -112,6 +127,11 @@ class ApprovalRules {
         this.impersonating = false;
         return await http.put(`/buyers/${buyerID}/approvalrules/${approvalRuleID}`, { ...requestOptions, body: approvalRule, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -134,6 +154,11 @@ class ApprovalRules {
         this.impersonating = false;
         return await http.delete(`/buyers/${buyerID}/approvalrules/${approvalRuleID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -157,6 +182,11 @@ class ApprovalRules {
         this.impersonating = false;
         return await http.patch(`/buyers/${buyerID}/approvalrules/${approvalRuleID}`, { ...requestOptions, body: approvalRule, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }

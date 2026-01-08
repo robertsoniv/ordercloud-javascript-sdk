@@ -1,4 +1,5 @@
 import { SdkConfiguration } from './models'
+import { InterceptorContainer } from './core/InterceptorManager'
 
 class Configuration {
   private defaultConfig: SdkConfiguration = {
@@ -15,6 +16,18 @@ class Configuration {
     },
   }
   private config: SdkConfiguration = cloneDeep(this.defaultConfig)
+
+  /**
+   * Public interceptor container for adding request/response interceptors
+   * @example
+   * Configuration.interceptors.request.use(
+   *   (config) => {
+   *     config.headers = { ...config.headers, 'X-Custom': 'value' }
+   *     return config
+   *   }
+   * )
+   */
+  public interceptors: InterceptorContainer = new InterceptorContainer()
 
   /**
    * @ignore

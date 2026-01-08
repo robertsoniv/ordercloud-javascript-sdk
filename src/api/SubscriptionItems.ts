@@ -45,6 +45,11 @@ class SubscriptionItems {
         this.impersonating = false;
         return await http.get(`/subscriptions/${subscriptionID}/items`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -67,6 +72,11 @@ class SubscriptionItems {
         this.impersonating = false;
         return await http.post(`/subscriptions/${subscriptionID}/items`, { ...requestOptions, body: lineItem, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -89,6 +99,11 @@ class SubscriptionItems {
         this.impersonating = false;
         return await http.get(`/subscriptions/${subscriptionID}/items/${subscriptionItemID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -112,6 +127,11 @@ class SubscriptionItems {
         this.impersonating = false;
         return await http.put(`/subscriptions/${subscriptionID}/items/${subscriptionItemID}`, { ...requestOptions, body: lineItem, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -134,6 +154,11 @@ class SubscriptionItems {
         this.impersonating = false;
         return await http.delete(`/subscriptions/${subscriptionID}/items/${subscriptionItemID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
@@ -157,6 +182,11 @@ class SubscriptionItems {
         this.impersonating = false;
         return await http.patch(`/subscriptions/${subscriptionID}/items/${subscriptionItemID}`, { ...requestOptions, body: lineItem, impersonating,  } )
         .catch(ex => {
+            // If it's already an OrderCloudError from HttpClient, just re-throw
+            if(ex.isOrderCloudError) {
+                throw ex;
+            }
+            // Legacy support: if it has .response but isn't OrderCloudError yet
             if(ex.response) {
                 throw new OrderCloudError(ex)
             }
