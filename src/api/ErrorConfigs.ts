@@ -2,17 +2,19 @@ import { ErrorConfig } from '../models/ErrorConfig';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class ErrorConfigs {
+export default class ErrorConfigs {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.Get = this.Get.bind(this);
         this.Save = this.Save.bind(this);
         this.Delete = this.Delete.bind(this);
@@ -31,7 +33,7 @@ class ErrorConfigs {
     public async Get<TErrorConfig extends ErrorConfig>(requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TErrorConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/integrations/ErrorConfig`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/integrations/ErrorConfig`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -57,7 +59,7 @@ class ErrorConfigs {
     public async Save<TErrorConfig extends ErrorConfig>(errorConfig: ErrorConfig,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TErrorConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrations/ErrorConfig`, { ...requestOptions, body: errorConfig, impersonating,  } )
+        return await this.http.put(`/integrations/ErrorConfig`, { ...requestOptions, body: errorConfig, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -82,7 +84,7 @@ class ErrorConfigs {
     public async Delete(requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/integrations/ErrorConfig`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/integrations/ErrorConfig`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -108,7 +110,7 @@ class ErrorConfigs {
     public async Patch<TErrorConfig extends ErrorConfig>(errorConfig: PartialDeep<ErrorConfig>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TErrorConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrations/ErrorConfig`, { ...requestOptions, body: errorConfig, impersonating,  } )
+        return await this.http.patch(`/integrations/ErrorConfig`, { ...requestOptions, body: errorConfig, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -133,7 +135,7 @@ class ErrorConfigs {
     public async Validate(requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/integrations/ErrorConfig/validate`, { ...requestOptions, impersonating,  } )
+        return await this.http.post(`/integrations/ErrorConfig/validate`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -159,5 +161,3 @@ class ErrorConfigs {
         return this;
     }
 }
-
-export default new ErrorConfigs();

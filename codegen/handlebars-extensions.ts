@@ -18,6 +18,10 @@ function handlebarsExt(Handlebars) {
       .toLowerCase() // convert to lower case
   })
 
+  Handlebars.registerHelper('toLowerCase', (text: string) => {
+    return text.charAt(0).toLowerCase() + text.slice(1)
+  })
+
   Handlebars.registerHelper(
     'commaSeparateWithDefaultAny',
     (types: string[]) => {

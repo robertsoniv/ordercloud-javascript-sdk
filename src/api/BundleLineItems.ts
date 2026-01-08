@@ -4,17 +4,19 @@ import { OrderDirection } from '../models/OrderDirection';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class BundleLineItems {
+export default class BundleLineItems {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.Create = this.Create.bind(this);
         this.Delete = this.Delete.bind(this);
     }
@@ -34,7 +36,7 @@ class BundleLineItems {
     public async Create<TLineItem extends LineItem>(direction: OrderDirection, orderID: string, bundleID: string, bundleItems: BundleItems,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TLineItem>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/orders/${direction}/${orderID}/bundles/${bundleID}`, { ...requestOptions, body: bundleItems, impersonating,  } )
+        return await this.http.post(`/orders/${direction}/${orderID}/bundles/${bundleID}`, { ...requestOptions, body: bundleItems, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -63,7 +65,7 @@ class BundleLineItems {
     public async Delete(direction: OrderDirection, orderID: string, bundleID: string, bundleItemID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/orders/${direction}/${orderID}/bundles/${bundleID}/${bundleItemID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/orders/${direction}/${orderID}/bundles/${bundleID}/${bundleItemID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -89,5 +91,3 @@ class BundleLineItems {
         return this;
     }
 }
-
-export default new BundleLineItems();

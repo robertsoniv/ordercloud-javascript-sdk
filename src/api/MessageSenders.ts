@@ -8,17 +8,19 @@ import { MessageCCListenerAssignment } from '../models/MessageCCListenerAssignme
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class MessageSenders {
+export default class MessageSenders {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.List = this.List.bind(this);
         this.Create = this.Create.bind(this);
         this.Get = this.Get.bind(this);
@@ -49,7 +51,7 @@ class MessageSenders {
     public async List<TMessageSender extends MessageSender>(listOptions: { search?: string, searchOn?: Searchable<'MessageSenders.List'>, sortBy?: Sortable<'MessageSenders.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TMessageSender>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/messagesenders`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/messagesenders`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -75,7 +77,7 @@ class MessageSenders {
     public async Create<TMessageSender extends MessageSender>(messageSender: MessageSender,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TMessageSender>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/messagesenders`, { ...requestOptions, body: messageSender, impersonating,  } )
+        return await this.http.post(`/messagesenders`, { ...requestOptions, body: messageSender, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -101,7 +103,7 @@ class MessageSenders {
     public async Get<TMessageSender extends MessageSender>(messageSenderID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TMessageSender>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/messagesenders/${messageSenderID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/messagesenders/${messageSenderID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -128,7 +130,7 @@ class MessageSenders {
     public async Save<TMessageSender extends MessageSender>(messageSenderID: string, messageSender: MessageSender,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TMessageSender>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/messagesenders/${messageSenderID}`, { ...requestOptions, body: messageSender, impersonating,  } )
+        return await this.http.put(`/messagesenders/${messageSenderID}`, { ...requestOptions, body: messageSender, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -154,7 +156,7 @@ class MessageSenders {
     public async Delete(messageSenderID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/messagesenders/${messageSenderID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/messagesenders/${messageSenderID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -181,7 +183,7 @@ class MessageSenders {
     public async Patch<TMessageSender extends MessageSender>(messageSenderID: string, messageSender: PartialDeep<MessageSender>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TMessageSender>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/messagesenders/${messageSenderID}`, { ...requestOptions, body: messageSender, impersonating,  } )
+        return await this.http.patch(`/messagesenders/${messageSenderID}`, { ...requestOptions, body: messageSender, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -211,7 +213,7 @@ class MessageSenders {
     public async DeleteAssignment(messageSenderID: string, listOptions: { buyerID?: string, userID?: string, userGroupID?: string, supplierID?: string } = {}, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/messagesenders/${messageSenderID}/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.delete(`/messagesenders/${messageSenderID}/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -243,7 +245,7 @@ class MessageSenders {
     public async ListAssignments<TMessageSenderAssignment extends MessageSenderAssignment>(listOptions: { buyerID?: string, messageSenderID?: string, userGroupID?: string, level?: 'Group' | 'Company', page?: number, pageSize?: number, supplierID?: string } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TMessageSenderAssignment>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/messagesenders/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/messagesenders/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -269,7 +271,7 @@ class MessageSenders {
     public async SaveAssignment(messageSenderAssignment: MessageSenderAssignment,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/messagesenders/assignments`, { ...requestOptions, body: messageSenderAssignment, impersonating,  } )
+        return await this.http.post(`/messagesenders/assignments`, { ...requestOptions, body: messageSenderAssignment, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -300,7 +302,7 @@ class MessageSenders {
     public async ListCCListenerAssignments<TMessageCCListenerAssignment extends MessageCCListenerAssignment>(listOptions: { search?: string, searchOn?: Searchable<'MessageSenders.ListCCListenerAssignments'>, sortBy?: Sortable<'MessageSenders.ListCCListenerAssignments'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TMessageCCListenerAssignment>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/messagesenders/CCListenerAssignments`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/messagesenders/CCListenerAssignments`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -326,7 +328,7 @@ class MessageSenders {
     public async SaveCCListenerAssignment(messageCCListenerAssignment: MessageCCListenerAssignment,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/messagesenders/CCListenerAssignments`, { ...requestOptions, body: messageCCListenerAssignment, impersonating,  } )
+        return await this.http.post(`/messagesenders/CCListenerAssignments`, { ...requestOptions, body: messageCCListenerAssignment, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -352,5 +354,3 @@ class MessageSenders {
         return this;
     }
 }
-
-export default new MessageSenders();

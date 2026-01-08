@@ -6,17 +6,19 @@ import { Incrementor } from '../models/Incrementor';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class Incrementors {
+export default class Incrementors {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.List = this.List.bind(this);
         this.Create = this.Create.bind(this);
         this.Get = this.Get.bind(this);
@@ -42,7 +44,7 @@ class Incrementors {
     public async List<TIncrementor extends Incrementor>(listOptions: { search?: string, searchOn?: Searchable<'Incrementors.List'>, sortBy?: Sortable<'Incrementors.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TIncrementor>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/incrementors`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/incrementors`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -68,7 +70,7 @@ class Incrementors {
     public async Create<TIncrementor extends Incrementor>(incrementor: Incrementor,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TIncrementor>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/incrementors`, { ...requestOptions, body: incrementor, impersonating,  } )
+        return await this.http.post(`/incrementors`, { ...requestOptions, body: incrementor, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -94,7 +96,7 @@ class Incrementors {
     public async Get<TIncrementor extends Incrementor>(incrementorID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TIncrementor>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/incrementors/${incrementorID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/incrementors/${incrementorID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -121,7 +123,7 @@ class Incrementors {
     public async Save<TIncrementor extends Incrementor>(incrementorID: string, incrementor: Incrementor,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TIncrementor>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/incrementors/${incrementorID}`, { ...requestOptions, body: incrementor, impersonating,  } )
+        return await this.http.put(`/incrementors/${incrementorID}`, { ...requestOptions, body: incrementor, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -147,7 +149,7 @@ class Incrementors {
     public async Delete(incrementorID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/incrementors/${incrementorID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/incrementors/${incrementorID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -174,7 +176,7 @@ class Incrementors {
     public async Patch<TIncrementor extends Incrementor>(incrementorID: string, incrementor: PartialDeep<Incrementor>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TIncrementor>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/incrementors/${incrementorID}`, { ...requestOptions, body: incrementor, impersonating,  } )
+        return await this.http.patch(`/incrementors/${incrementorID}`, { ...requestOptions, body: incrementor, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -200,5 +202,3 @@ class Incrementors {
         return this;
     }
 }
-
-export default new Incrementors();

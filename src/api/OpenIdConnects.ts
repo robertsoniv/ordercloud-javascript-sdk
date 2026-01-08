@@ -6,17 +6,19 @@ import { OpenIdConnect } from '../models/OpenIdConnect';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class OpenIdConnects {
+export default class OpenIdConnects {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.List = this.List.bind(this);
         this.Create = this.Create.bind(this);
         this.Get = this.Get.bind(this);
@@ -42,7 +44,7 @@ class OpenIdConnects {
     public async List<TOpenIdConnect extends OpenIdConnect>(listOptions: { search?: string, searchOn?: Searchable<'OpenIdConnects.List'>, sortBy?: Sortable<'OpenIdConnects.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TOpenIdConnect>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/openidconnects`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/openidconnects`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -68,7 +70,7 @@ class OpenIdConnects {
     public async Create<TOpenIdConnect extends OpenIdConnect>(openIdConnect: OpenIdConnect,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TOpenIdConnect>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/openidconnects`, { ...requestOptions, body: openIdConnect, impersonating,  } )
+        return await this.http.post(`/openidconnects`, { ...requestOptions, body: openIdConnect, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -94,7 +96,7 @@ class OpenIdConnects {
     public async Get<TOpenIdConnect extends OpenIdConnect>(openidconnectID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TOpenIdConnect>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/openidconnects/${openidconnectID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/openidconnects/${openidconnectID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -121,7 +123,7 @@ class OpenIdConnects {
     public async Save<TOpenIdConnect extends OpenIdConnect>(openidconnectID: string, openIdConnect: OpenIdConnect,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TOpenIdConnect>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/openidconnects/${openidconnectID}`, { ...requestOptions, body: openIdConnect, impersonating,  } )
+        return await this.http.put(`/openidconnects/${openidconnectID}`, { ...requestOptions, body: openIdConnect, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -147,7 +149,7 @@ class OpenIdConnects {
     public async Delete(openidconnectID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/openidconnects/${openidconnectID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/openidconnects/${openidconnectID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -174,7 +176,7 @@ class OpenIdConnects {
     public async Patch<TOpenIdConnect extends OpenIdConnect>(openidconnectID: string, openIdConnect: PartialDeep<OpenIdConnect>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TOpenIdConnect>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/openidconnects/${openidconnectID}`, { ...requestOptions, body: openIdConnect, impersonating,  } )
+        return await this.http.patch(`/openidconnects/${openidconnectID}`, { ...requestOptions, body: openIdConnect, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -200,5 +202,3 @@ class OpenIdConnects {
         return this;
     }
 }
-
-export default new OpenIdConnects();

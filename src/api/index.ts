@@ -58,7 +58,6 @@ import PromotionIntegrations from './PromotionIntegrations';
 import SubscriptionIntegrations from './SubscriptionIntegrations';
 import Auth from './Auth';
 import UserInfo from './UserInfo';
-import Tokens from './Tokens';
 import Certs from './Certs';
 
 export {
@@ -122,6 +121,5 @@ export {
     SubscriptionIntegrations,
     Auth,
     UserInfo,
-    Tokens,
     Certs
 }

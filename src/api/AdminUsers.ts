@@ -6,17 +6,19 @@ import { User } from '../models/User';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class AdminUsers {
+export default class AdminUsers {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.List = this.List.bind(this);
         this.Create = this.Create.bind(this);
         this.Get = this.Get.bind(this);
@@ -44,7 +46,7 @@ class AdminUsers {
     public async List<TUser extends User>(listOptions: { search?: string, searchOn?: Searchable<'AdminUsers.List'>, sortBy?: Sortable<'AdminUsers.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TUser>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/adminusers`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/adminusers`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -70,7 +72,7 @@ class AdminUsers {
     public async Create<TUser extends User>(user: User,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TUser>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/adminusers`, { ...requestOptions, body: user, impersonating,  } )
+        return await this.http.post(`/adminusers`, { ...requestOptions, body: user, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -96,7 +98,7 @@ class AdminUsers {
     public async Get<TUser extends User>(userID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TUser>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/adminusers/${userID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/adminusers/${userID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -123,7 +125,7 @@ class AdminUsers {
     public async Save<TUser extends User>(userID: string, user: User,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TUser>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/adminusers/${userID}`, { ...requestOptions, body: user, impersonating,  } )
+        return await this.http.put(`/adminusers/${userID}`, { ...requestOptions, body: user, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -149,7 +151,7 @@ class AdminUsers {
     public async Delete(userID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/adminusers/${userID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/adminusers/${userID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -176,7 +178,7 @@ class AdminUsers {
     public async Patch<TUser extends User>(userID: string, user: PartialDeep<User>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TUser>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/adminusers/${userID}`, { ...requestOptions, body: user, impersonating,  } )
+        return await this.http.patch(`/adminusers/${userID}`, { ...requestOptions, body: user, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -202,7 +204,7 @@ class AdminUsers {
     public async RevokeUserTokens(userID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/adminusers/${userID}/tokens`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/adminusers/${userID}/tokens`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -228,7 +230,7 @@ class AdminUsers {
     public async UnlockUserAccount(userID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/adminusers/${userID}/unlock`, { ...requestOptions, impersonating,  } )
+        return await this.http.post(`/adminusers/${userID}/unlock`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -254,5 +256,3 @@ class AdminUsers {
         return this;
     }
 }
-
-export default new AdminUsers();

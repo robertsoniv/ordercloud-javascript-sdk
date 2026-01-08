@@ -9,17 +9,19 @@ import { OrderShipMethodSelection } from '../models/OrderShipMethodSelection';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class IntegrationEvents {
+export default class IntegrationEvents {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.List = this.List.bind(this);
         this.Create = this.Create.bind(this);
         this.Get = this.Get.bind(this);
@@ -49,7 +51,7 @@ class IntegrationEvents {
     public async List<TIntegrationEvent extends IntegrationEvent>(listOptions: { search?: string, searchOn?: Searchable<'IntegrationEvents.List'>, sortBy?: Sortable<'IntegrationEvents.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TIntegrationEvent>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/integrationEvents`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/integrationEvents`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -75,7 +77,7 @@ class IntegrationEvents {
     public async Create<TIntegrationEvent extends IntegrationEvent>(integrationEvent: IntegrationEvent,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TIntegrationEvent>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/integrationEvents`, { ...requestOptions, body: integrationEvent, impersonating,  } )
+        return await this.http.post(`/integrationEvents`, { ...requestOptions, body: integrationEvent, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -101,7 +103,7 @@ class IntegrationEvents {
     public async Get<TIntegrationEvent extends IntegrationEvent>(integrationEventID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TIntegrationEvent>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/integrationEvents/${integrationEventID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/integrationEvents/${integrationEventID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -128,7 +130,7 @@ class IntegrationEvents {
     public async Save<TIntegrationEvent extends IntegrationEvent>(integrationEventID: string, integrationEvent: IntegrationEvent,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TIntegrationEvent>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrationEvents/${integrationEventID}`, { ...requestOptions, body: integrationEvent, impersonating,  } )
+        return await this.http.put(`/integrationEvents/${integrationEventID}`, { ...requestOptions, body: integrationEvent, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -154,7 +156,7 @@ class IntegrationEvents {
     public async Delete(integrationEventID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/integrationEvents/${integrationEventID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/integrationEvents/${integrationEventID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -181,7 +183,7 @@ class IntegrationEvents {
     public async Patch<TIntegrationEvent extends IntegrationEvent>(integrationEventID: string, integrationEvent: PartialDeep<IntegrationEvent>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TIntegrationEvent>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrationEvents/${integrationEventID}`, { ...requestOptions, body: integrationEvent, impersonating,  } )
+        return await this.http.patch(`/integrationEvents/${integrationEventID}`, { ...requestOptions, body: integrationEvent, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -208,7 +210,7 @@ class IntegrationEvents {
     public async Calculate<TOrderWorksheet extends OrderWorksheet>(direction: OrderDirection, orderID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TOrderWorksheet>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/orders/${direction}/${orderID}/calculate`, { ...requestOptions, impersonating,  } )
+        return await this.http.post(`/orders/${direction}/${orderID}/calculate`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -235,7 +237,7 @@ class IntegrationEvents {
     public async EstimateShipping<TOrderWorksheet extends OrderWorksheet>(direction: OrderDirection, orderID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TOrderWorksheet>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/orders/${direction}/${orderID}/estimateshipping`, { ...requestOptions, impersonating,  } )
+        return await this.http.post(`/orders/${direction}/${orderID}/estimateshipping`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -263,7 +265,7 @@ class IntegrationEvents {
     public async SelectShipmethods<TOrderWorksheet extends OrderWorksheet>(direction: OrderDirection, orderID: string, orderShipMethodSelection: OrderShipMethodSelection,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TOrderWorksheet>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/orders/${direction}/${orderID}/shipmethods`, { ...requestOptions, body: orderShipMethodSelection, impersonating,  } )
+        return await this.http.post(`/orders/${direction}/${orderID}/shipmethods`, { ...requestOptions, body: orderShipMethodSelection, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -290,7 +292,7 @@ class IntegrationEvents {
     public async GetWorksheet<TOrderWorksheet extends OrderWorksheet>(direction: OrderDirection, orderID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TOrderWorksheet>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/orders/${direction}/${orderID}/worksheet`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/orders/${direction}/${orderID}/worksheet`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -316,5 +318,3 @@ class IntegrationEvents {
         return this;
     }
 }
-
-export default new IntegrationEvents();

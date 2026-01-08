@@ -7,17 +7,19 @@ import { PriceBreak } from '../models/PriceBreak';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class PriceSchedules {
+export default class PriceSchedules {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.List = this.List.bind(this);
         this.Create = this.Create.bind(this);
         this.Get = this.Get.bind(this);
@@ -45,7 +47,7 @@ class PriceSchedules {
     public async List<TPriceSchedule extends PriceSchedule>(listOptions: { search?: string, searchOn?: Searchable<'PriceSchedules.List'>, sortBy?: Sortable<'PriceSchedules.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TPriceSchedule>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/priceschedules`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/priceschedules`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -71,7 +73,7 @@ class PriceSchedules {
     public async Create<TPriceSchedule extends PriceSchedule>(priceSchedule: PriceSchedule,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TPriceSchedule>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/priceschedules`, { ...requestOptions, body: priceSchedule, impersonating,  } )
+        return await this.http.post(`/priceschedules`, { ...requestOptions, body: priceSchedule, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -97,7 +99,7 @@ class PriceSchedules {
     public async Get<TPriceSchedule extends PriceSchedule>(priceScheduleID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TPriceSchedule>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/priceschedules/${priceScheduleID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/priceschedules/${priceScheduleID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -124,7 +126,7 @@ class PriceSchedules {
     public async Save<TPriceSchedule extends PriceSchedule>(priceScheduleID: string, priceSchedule: PriceSchedule,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TPriceSchedule>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/priceschedules/${priceScheduleID}`, { ...requestOptions, body: priceSchedule, impersonating,  } )
+        return await this.http.put(`/priceschedules/${priceScheduleID}`, { ...requestOptions, body: priceSchedule, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -150,7 +152,7 @@ class PriceSchedules {
     public async Delete(priceScheduleID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/priceschedules/${priceScheduleID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/priceschedules/${priceScheduleID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -177,7 +179,7 @@ class PriceSchedules {
     public async Patch<TPriceSchedule extends PriceSchedule>(priceScheduleID: string, priceSchedule: PartialDeep<PriceSchedule>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TPriceSchedule>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/priceschedules/${priceScheduleID}`, { ...requestOptions, body: priceSchedule, impersonating,  } )
+        return await this.http.patch(`/priceschedules/${priceScheduleID}`, { ...requestOptions, body: priceSchedule, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -204,7 +206,7 @@ class PriceSchedules {
     public async SavePriceBreak<TPriceSchedule extends PriceSchedule>(priceScheduleID: string, priceBreak: PriceBreak,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TPriceSchedule>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/priceschedules/${priceScheduleID}/PriceBreaks`, { ...requestOptions, body: priceBreak, impersonating,  } )
+        return await this.http.post(`/priceschedules/${priceScheduleID}/PriceBreaks`, { ...requestOptions, body: priceBreak, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -231,7 +233,7 @@ class PriceSchedules {
     public async DeletePriceBreak(priceScheduleID: string, listOptions: { quantity?: number } = {}, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/priceschedules/${priceScheduleID}/PriceBreaks`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.delete(`/priceschedules/${priceScheduleID}/PriceBreaks`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -257,5 +259,3 @@ class PriceSchedules {
         return this;
     }
 }
-
-export default new PriceSchedules();

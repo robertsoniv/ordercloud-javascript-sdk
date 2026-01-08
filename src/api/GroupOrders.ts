@@ -2,17 +2,19 @@ import { AccessToken } from '../models/AccessToken';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class GroupOrders {
+export default class GroupOrders {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.GetToken = this.GetToken.bind(this);
     }
 
@@ -28,7 +30,7 @@ class GroupOrders {
     public async GetToken<TAccessToken extends AccessToken>(invitationID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TAccessToken>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/grouporders/${invitationID}/token`, { ...requestOptions, impersonating,  } )
+        return await this.http.post(`/grouporders/${invitationID}/token`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -54,5 +56,3 @@ class GroupOrders {
         return this;
     }
 }
-
-export default new GroupOrders();

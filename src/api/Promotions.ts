@@ -7,17 +7,19 @@ import { PromotionAssignment } from '../models/PromotionAssignment';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class Promotions {
+export default class Promotions {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.List = this.List.bind(this);
         this.Create = this.Create.bind(this);
         this.Get = this.Get.bind(this);
@@ -46,7 +48,7 @@ class Promotions {
     public async List<TPromotion extends Promotion>(listOptions: { search?: string, searchOn?: Searchable<'Promotions.List'>, sortBy?: Sortable<'Promotions.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TPromotion>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/promotions`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/promotions`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -72,7 +74,7 @@ class Promotions {
     public async Create<TPromotion extends Promotion>(promotion: Promotion,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TPromotion>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/promotions`, { ...requestOptions, body: promotion, impersonating,  } )
+        return await this.http.post(`/promotions`, { ...requestOptions, body: promotion, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -98,7 +100,7 @@ class Promotions {
     public async Get<TPromotion extends Promotion>(promotionID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TPromotion>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/promotions/${promotionID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/promotions/${promotionID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -125,7 +127,7 @@ class Promotions {
     public async Save<TPromotion extends Promotion>(promotionID: string, promotion: Promotion,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TPromotion>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/promotions/${promotionID}`, { ...requestOptions, body: promotion, impersonating,  } )
+        return await this.http.put(`/promotions/${promotionID}`, { ...requestOptions, body: promotion, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -151,7 +153,7 @@ class Promotions {
     public async Delete(promotionID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/promotions/${promotionID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/promotions/${promotionID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -178,7 +180,7 @@ class Promotions {
     public async Patch<TPromotion extends Promotion>(promotionID: string, promotion: PartialDeep<Promotion>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TPromotion>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/promotions/${promotionID}`, { ...requestOptions, body: promotion, impersonating,  } )
+        return await this.http.patch(`/promotions/${promotionID}`, { ...requestOptions, body: promotion, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -207,7 +209,7 @@ class Promotions {
     public async DeleteAssignment(promotionID: string, listOptions: { buyerID?: string, userID?: string, userGroupID?: string } = {}, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/promotions/${promotionID}/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.delete(`/promotions/${promotionID}/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -238,7 +240,7 @@ class Promotions {
     public async ListAssignments<TPromotionAssignment extends PromotionAssignment>(listOptions: { buyerID?: string, promotionID?: string, userGroupID?: string, level?: 'Group' | 'Company', page?: number, pageSize?: number } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TPromotionAssignment>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/promotions/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/promotions/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -264,7 +266,7 @@ class Promotions {
     public async SaveAssignment(promotionAssignment: PromotionAssignment,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/promotions/assignments`, { ...requestOptions, body: promotionAssignment, impersonating,  } )
+        return await this.http.post(`/promotions/assignments`, { ...requestOptions, body: promotionAssignment, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -290,5 +292,3 @@ class Promotions {
         return this;
     }
 }
-
-export default new Promotions();

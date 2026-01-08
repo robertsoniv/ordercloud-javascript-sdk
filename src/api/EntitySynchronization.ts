@@ -10,17 +10,19 @@ import { SyncSupplierUser } from '../models/SyncSupplierUser';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class EntitySynchronization {
+export default class EntitySynchronization {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.GetAdminUsers = this.GetAdminUsers.bind(this);
         this.SaveAdminUsers = this.SaveAdminUsers.bind(this);
         this.DeleteAdminUsers = this.DeleteAdminUsers.bind(this);
@@ -74,7 +76,7 @@ class EntitySynchronization {
     public async GetAdminUsers<TEntitySyncConfig extends EntitySyncConfig>(requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/integrations/entitysync/adminusers`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/integrations/entitysync/adminusers`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -100,7 +102,7 @@ class EntitySynchronization {
     public async SaveAdminUsers<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: EntitySyncConfig,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrations/entitysync/adminusers`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
+        return await this.http.put(`/integrations/entitysync/adminusers`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -125,7 +127,7 @@ class EntitySynchronization {
     public async DeleteAdminUsers(requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/integrations/entitysync/adminusers`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/integrations/entitysync/adminusers`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -151,7 +153,7 @@ class EntitySynchronization {
     public async PatchAdminUsers<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: PartialDeep<EntitySyncConfig>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrations/entitysync/adminusers`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
+        return await this.http.patch(`/integrations/entitysync/adminusers`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -177,7 +179,7 @@ class EntitySynchronization {
     public async SyncAdminUser(syncAdminUser: SyncAdminUser,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/integrations/entitysync/adminusers/sync`, { ...requestOptions, body: syncAdminUser, impersonating,  } )
+        return await this.http.post(`/integrations/entitysync/adminusers/sync`, { ...requestOptions, body: syncAdminUser, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -202,7 +204,7 @@ class EntitySynchronization {
     public async GetBuyers<TEntitySyncConfig extends EntitySyncConfig>(requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/integrations/entitysync/buyers`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/integrations/entitysync/buyers`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -228,7 +230,7 @@ class EntitySynchronization {
     public async SaveBuyers<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: EntitySyncConfig,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrations/entitysync/buyers`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
+        return await this.http.put(`/integrations/entitysync/buyers`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -253,7 +255,7 @@ class EntitySynchronization {
     public async DeleteBuyers(requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/integrations/entitysync/buyers`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/integrations/entitysync/buyers`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -279,7 +281,7 @@ class EntitySynchronization {
     public async PatchBuyers<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: PartialDeep<EntitySyncConfig>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrations/entitysync/buyers`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
+        return await this.http.patch(`/integrations/entitysync/buyers`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -305,7 +307,7 @@ class EntitySynchronization {
     public async SyncBuyer(syncBuyer: SyncBuyer,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/integrations/entitysync/buyers/sync`, { ...requestOptions, body: syncBuyer, impersonating,  } )
+        return await this.http.post(`/integrations/entitysync/buyers/sync`, { ...requestOptions, body: syncBuyer, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -330,7 +332,7 @@ class EntitySynchronization {
     public async GetBuyerUserGroups<TEntitySyncConfig extends EntitySyncConfig>(requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/integrations/entitysync/buyers/usergroups`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/integrations/entitysync/buyers/usergroups`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -356,7 +358,7 @@ class EntitySynchronization {
     public async SaveUserGroups<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: EntitySyncConfig,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrations/entitysync/buyers/usergroups`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
+        return await this.http.put(`/integrations/entitysync/buyers/usergroups`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -381,7 +383,7 @@ class EntitySynchronization {
     public async DeleteUserGroups(requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/integrations/entitysync/buyers/usergroups`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/integrations/entitysync/buyers/usergroups`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -407,7 +409,7 @@ class EntitySynchronization {
     public async PatchBuyerUserGroups<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: PartialDeep<EntitySyncConfig>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrations/entitysync/buyers/usergroups`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
+        return await this.http.patch(`/integrations/entitysync/buyers/usergroups`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -433,7 +435,7 @@ class EntitySynchronization {
     public async SyncBuyerUserGroup(syncBuyerUserGroup: SyncBuyerUserGroup,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/integrations/entitysync/buyers/usergroups/sync`, { ...requestOptions, body: syncBuyerUserGroup, impersonating,  } )
+        return await this.http.post(`/integrations/entitysync/buyers/usergroups/sync`, { ...requestOptions, body: syncBuyerUserGroup, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -458,7 +460,7 @@ class EntitySynchronization {
     public async GetBuyerUsers<TEntitySyncConfig extends EntitySyncConfig>(requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/integrations/entitysync/buyers/users`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/integrations/entitysync/buyers/users`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -484,7 +486,7 @@ class EntitySynchronization {
     public async SaveBuyerUsers<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: EntitySyncConfig,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrations/entitysync/buyers/users`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
+        return await this.http.put(`/integrations/entitysync/buyers/users`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -509,7 +511,7 @@ class EntitySynchronization {
     public async DeleteBuyerUsers(requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/integrations/entitysync/buyers/users`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/integrations/entitysync/buyers/users`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -535,7 +537,7 @@ class EntitySynchronization {
     public async PatchBuyerUsers<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: PartialDeep<EntitySyncConfig>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrations/entitysync/buyers/users`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
+        return await this.http.patch(`/integrations/entitysync/buyers/users`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -561,7 +563,7 @@ class EntitySynchronization {
     public async SyncBuyerUser(syncBuyerUser: SyncBuyerUser,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/integrations/entitysync/buyers/users/sync`, { ...requestOptions, body: syncBuyerUser, impersonating,  } )
+        return await this.http.post(`/integrations/entitysync/buyers/users/sync`, { ...requestOptions, body: syncBuyerUser, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -586,7 +588,7 @@ class EntitySynchronization {
     public async GetCategories<TEntitySyncConfig extends EntitySyncConfig>(requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/integrations/entitysync/categories`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/integrations/entitysync/categories`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -612,7 +614,7 @@ class EntitySynchronization {
     public async SaveCategories<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: EntitySyncConfig,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrations/entitysync/categories`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
+        return await this.http.put(`/integrations/entitysync/categories`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -637,7 +639,7 @@ class EntitySynchronization {
     public async DeleteCategories(requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/integrations/entitysync/categories`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/integrations/entitysync/categories`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -663,7 +665,7 @@ class EntitySynchronization {
     public async PatchCategories<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: PartialDeep<EntitySyncConfig>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrations/entitysync/categories`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
+        return await this.http.patch(`/integrations/entitysync/categories`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -689,7 +691,7 @@ class EntitySynchronization {
     public async SyncCategory(syncCategory: SyncCategory,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/integrations/entitysync/categories/sync`, { ...requestOptions, body: syncCategory, impersonating,  } )
+        return await this.http.post(`/integrations/entitysync/categories/sync`, { ...requestOptions, body: syncCategory, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -714,7 +716,7 @@ class EntitySynchronization {
     public async GetInventoryRecords<TEntitySyncConfig extends EntitySyncConfig>(requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/integrations/entitysync/products/inventoryrecords`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/integrations/entitysync/products/inventoryrecords`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -740,7 +742,7 @@ class EntitySynchronization {
     public async SaveInventoryRecords<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: EntitySyncConfig,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrations/entitysync/products/inventoryrecords`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
+        return await this.http.put(`/integrations/entitysync/products/inventoryrecords`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -765,7 +767,7 @@ class EntitySynchronization {
     public async DeleteInventoryRecords(requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/integrations/entitysync/products/inventoryrecords`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/integrations/entitysync/products/inventoryrecords`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -791,7 +793,7 @@ class EntitySynchronization {
     public async PatchInventoryRecords<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: PartialDeep<EntitySyncConfig>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrations/entitysync/products/inventoryrecords`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
+        return await this.http.patch(`/integrations/entitysync/products/inventoryrecords`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -817,7 +819,7 @@ class EntitySynchronization {
     public async SyncInventoryRecord(syncInventoryRecord: SyncInventoryRecord,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/integrations/entitysync/products/inventoryrecords/sync`, { ...requestOptions, body: syncInventoryRecord, impersonating,  } )
+        return await this.http.post(`/integrations/entitysync/products/inventoryrecords/sync`, { ...requestOptions, body: syncInventoryRecord, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -843,7 +845,7 @@ class EntitySynchronization {
     public async SyncSupplier(syncSupplier: SyncSupplier,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/integrations/entitysync/supplier/sync`, { ...requestOptions, body: syncSupplier, impersonating,  } )
+        return await this.http.post(`/integrations/entitysync/supplier/sync`, { ...requestOptions, body: syncSupplier, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -868,7 +870,7 @@ class EntitySynchronization {
     public async GetSuppliers<TEntitySyncConfig extends EntitySyncConfig>(requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/integrations/entitysync/suppliers`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/integrations/entitysync/suppliers`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -894,7 +896,7 @@ class EntitySynchronization {
     public async SaveSuppliers<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: EntitySyncConfig,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrations/entitysync/suppliers`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
+        return await this.http.put(`/integrations/entitysync/suppliers`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -919,7 +921,7 @@ class EntitySynchronization {
     public async DeleteSuppliers(requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/integrations/entitysync/suppliers`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/integrations/entitysync/suppliers`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -945,7 +947,7 @@ class EntitySynchronization {
     public async PatchSuppliers<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: PartialDeep<EntitySyncConfig>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrations/entitysync/suppliers`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
+        return await this.http.patch(`/integrations/entitysync/suppliers`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -970,7 +972,7 @@ class EntitySynchronization {
     public async GetSupplierUsers<TEntitySyncConfig extends EntitySyncConfig>(requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/integrations/entitysync/suppliers/users`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/integrations/entitysync/suppliers/users`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -996,7 +998,7 @@ class EntitySynchronization {
     public async SaveSupplierUsers<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: EntitySyncConfig,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrations/entitysync/suppliers/users`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
+        return await this.http.put(`/integrations/entitysync/suppliers/users`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -1021,7 +1023,7 @@ class EntitySynchronization {
     public async DeleteSupplierUsers(requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/integrations/entitysync/suppliers/users`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/integrations/entitysync/suppliers/users`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -1047,7 +1049,7 @@ class EntitySynchronization {
     public async PatchSupplierUsers<TEntitySyncConfig extends EntitySyncConfig>(entitySyncConfig: PartialDeep<EntitySyncConfig>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TEntitySyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrations/entitysync/suppliers/users`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
+        return await this.http.patch(`/integrations/entitysync/suppliers/users`, { ...requestOptions, body: entitySyncConfig, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -1073,7 +1075,7 @@ class EntitySynchronization {
     public async SyncSupplierUser(syncSupplierUser: SyncSupplierUser,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/integrations/entitysync/suppliers/users/sync`, { ...requestOptions, body: syncSupplierUser, impersonating,  } )
+        return await this.http.post(`/integrations/entitysync/suppliers/users/sync`, { ...requestOptions, body: syncSupplierUser, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -1099,5 +1101,3 @@ class EntitySynchronization {
         return this;
     }
 }
-
-export default new EntitySynchronization();

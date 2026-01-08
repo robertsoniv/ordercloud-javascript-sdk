@@ -6,17 +6,19 @@ import { Subscription } from '../models/Subscription';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class Subscriptions {
+export default class Subscriptions {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.List = this.List.bind(this);
         this.Create = this.Create.bind(this);
         this.Get = this.Get.bind(this);
@@ -42,7 +44,7 @@ class Subscriptions {
     public async List<TSubscription extends Subscription>(listOptions: { search?: string, searchOn?: Searchable<'Subscriptions.List'>, sortBy?: Sortable<'Subscriptions.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TSubscription>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/subscriptions`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/subscriptions`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -68,7 +70,7 @@ class Subscriptions {
     public async Create<TSubscription extends Subscription>(subscription: Subscription,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TSubscription>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/subscriptions`, { ...requestOptions, body: subscription, impersonating,  } )
+        return await this.http.post(`/subscriptions`, { ...requestOptions, body: subscription, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -94,7 +96,7 @@ class Subscriptions {
     public async Get<TSubscription extends Subscription>(subscriptionID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TSubscription>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/subscriptions/${subscriptionID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/subscriptions/${subscriptionID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -121,7 +123,7 @@ class Subscriptions {
     public async Save<TSubscription extends Subscription>(subscriptionID: string, subscription: Subscription,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TSubscription>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/subscriptions/${subscriptionID}`, { ...requestOptions, body: subscription, impersonating,  } )
+        return await this.http.put(`/subscriptions/${subscriptionID}`, { ...requestOptions, body: subscription, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -147,7 +149,7 @@ class Subscriptions {
     public async Delete(subscriptionID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/subscriptions/${subscriptionID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/subscriptions/${subscriptionID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -174,7 +176,7 @@ class Subscriptions {
     public async Patch<TSubscription extends Subscription>(subscriptionID: string, subscription: PartialDeep<Subscription>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TSubscription>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/subscriptions/${subscriptionID}`, { ...requestOptions, body: subscription, impersonating,  } )
+        return await this.http.patch(`/subscriptions/${subscriptionID}`, { ...requestOptions, body: subscription, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -200,5 +202,3 @@ class Subscriptions {
         return this;
     }
 }
-
-export default new Subscriptions();

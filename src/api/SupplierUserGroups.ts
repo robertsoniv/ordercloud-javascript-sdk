@@ -7,17 +7,19 @@ import { UserGroupAssignment } from '../models/UserGroupAssignment';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class SupplierUserGroups {
+export default class SupplierUserGroups {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.List = this.List.bind(this);
         this.Create = this.Create.bind(this);
         this.Get = this.Get.bind(this);
@@ -47,7 +49,7 @@ class SupplierUserGroups {
     public async List<TUserGroup extends UserGroup>(supplierID: string, listOptions: { search?: string, searchOn?: Searchable<'SupplierUserGroups.List'>, sortBy?: Sortable<'SupplierUserGroups.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TUserGroup>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/suppliers/${supplierID}/usergroups`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/suppliers/${supplierID}/usergroups`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -74,7 +76,7 @@ class SupplierUserGroups {
     public async Create<TUserGroup extends UserGroup>(supplierID: string, userGroup: UserGroup,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TUserGroup>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/suppliers/${supplierID}/usergroups`, { ...requestOptions, body: userGroup, impersonating,  } )
+        return await this.http.post(`/suppliers/${supplierID}/usergroups`, { ...requestOptions, body: userGroup, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -101,7 +103,7 @@ class SupplierUserGroups {
     public async Get<TUserGroup extends UserGroup>(supplierID: string, userGroupID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TUserGroup>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/suppliers/${supplierID}/usergroups/${userGroupID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/suppliers/${supplierID}/usergroups/${userGroupID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -129,7 +131,7 @@ class SupplierUserGroups {
     public async Save<TUserGroup extends UserGroup>(supplierID: string, userGroupID: string, userGroup: UserGroup,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TUserGroup>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/suppliers/${supplierID}/usergroups/${userGroupID}`, { ...requestOptions, body: userGroup, impersonating,  } )
+        return await this.http.put(`/suppliers/${supplierID}/usergroups/${userGroupID}`, { ...requestOptions, body: userGroup, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -156,7 +158,7 @@ class SupplierUserGroups {
     public async Delete(supplierID: string, userGroupID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/suppliers/${supplierID}/usergroups/${userGroupID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/suppliers/${supplierID}/usergroups/${userGroupID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -184,7 +186,7 @@ class SupplierUserGroups {
     public async Patch<TUserGroup extends UserGroup>(supplierID: string, userGroupID: string, userGroup: PartialDeep<UserGroup>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TUserGroup>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/suppliers/${supplierID}/usergroups/${userGroupID}`, { ...requestOptions, body: userGroup, impersonating,  } )
+        return await this.http.patch(`/suppliers/${supplierID}/usergroups/${userGroupID}`, { ...requestOptions, body: userGroup, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -212,7 +214,7 @@ class SupplierUserGroups {
     public async DeleteUserAssignment(supplierID: string, userGroupID: string, userID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/suppliers/${supplierID}/usergroups/${userGroupID}/assignments/${userID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/suppliers/${supplierID}/usergroups/${userGroupID}/assignments/${userID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -242,7 +244,7 @@ class SupplierUserGroups {
     public async ListUserAssignments<TUserGroupAssignment extends UserGroupAssignment>(supplierID: string, listOptions: { userGroupID?: string, userID?: string, page?: number, pageSize?: number } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TUserGroupAssignment>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/suppliers/${supplierID}/usergroups/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/suppliers/${supplierID}/usergroups/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -269,7 +271,7 @@ class SupplierUserGroups {
     public async SaveUserAssignment(supplierID: string, userGroupAssignment: UserGroupAssignment,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/suppliers/${supplierID}/usergroups/assignments`, { ...requestOptions, body: userGroupAssignment, impersonating,  } )
+        return await this.http.post(`/suppliers/${supplierID}/usergroups/assignments`, { ...requestOptions, body: userGroupAssignment, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -295,5 +297,3 @@ class SupplierUserGroups {
         return this;
     }
 }
-
-export default new SupplierUserGroups();

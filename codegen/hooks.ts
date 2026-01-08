@@ -10,8 +10,13 @@ import {
 } from '@ordercloud/oc-codegen'
 
 const filterResources: FilterResourcesHook = function(resource) {
-  // we want to manually remove Certs from the resource array so that we can add custom logic in the codegen template
-  return resource.name !== 'Certs'
+  // we want to manually remove Certs, UserInfo, and Tokens from the resource array
+  // so that we can add custom logic in the codegen templates
+  return (
+    resource.name !== 'Certs' &&
+    resource.name !== 'UserInfo' &&
+    resource.name !== 'Tokens'
+  )
 }
 
 const postFormatModel: PostFormatModelHook = function(model, models) {

@@ -2,6 +2,38 @@
  * Mock fetch implementation for testing
  */
 
+/**
+ * Creates a valid mock JWT token for testing
+ * Format: header.payload.signature (base64url encoded)
+ */
+export function createMockJWT(overrides?: {
+  cid?: string
+  exp?: number
+  usr?: string
+}): string {
+  const header = { alg: 'HS256', typ: 'JWT' }
+  const payload = {
+    cid: overrides?.cid || 'test-client-id',
+    exp: overrides?.exp || Math.floor(Date.now() / 1000) + 3600, // 1 hour from now
+    usr: overrides?.usr || 'test-user-id',
+    usrtype: 'buyer',
+  }
+  
+  // Base64url encode (simplified for testing)
+  const base64url = (obj: any) =>
+    Buffer.from(JSON.stringify(obj))
+      .toString('base64')
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=/g, '')
+  
+  const encodedHeader = base64url(header)
+  const encodedPayload = base64url(payload)
+  const signature = 'mock-signature'
+  
+  return `${encodedHeader}.${encodedPayload}.${signature}`
+}
+
 export interface MockResponseInit {
   status?: number
   statusText?: string
@@ -99,6 +131,19 @@ export function setupMockFetch(
   responseBody: any = {},
   responseInit?: MockResponseInit
 ) {
+  // If responseBody has an access_token and it's the mock value, replace with valid JWT
+  if (responseBody.access_token && typeof responseBody.access_token === 'string') {
+    if (responseBody.access_token === 'mock-token' || !responseBody.access_token.includes('.')) {
+      responseBody = {
+        ...responseBody,
+        access_token: createMockJWT(),
+        refresh_token: responseBody.refresh_token === 'mock-refresh-token' 
+          ? createMockJWT({ exp: Math.floor(Date.now() / 1000) + 7200 })
+          : responseBody.refresh_token
+      }
+    }
+  }
+  
   mockFetch.mockClear()
   mockFetch.mockImplementation(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

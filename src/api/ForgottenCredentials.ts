@@ -4,17 +4,19 @@ import { PasswordReset } from '../models/PasswordReset';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class ForgottenCredentials {
+export default class ForgottenCredentials {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.SendOneTimePassword = this.SendOneTimePassword.bind(this);
         this.SendVerificationCode = this.SendVerificationCode.bind(this);
         this.ResetPasswordByVerificationCode = this.ResetPasswordByVerificationCode.bind(this);
@@ -33,7 +35,7 @@ class ForgottenCredentials {
     public async SendOneTimePassword(oneTimePasswordRequest: OneTimePasswordRequest,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/password/onetimepassword`, { ...requestOptions, body: oneTimePasswordRequest, impersonating,  } )
+        return await this.http.post(`/password/onetimepassword`, { ...requestOptions, body: oneTimePasswordRequest, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -59,7 +61,7 @@ class ForgottenCredentials {
     public async SendVerificationCode(passwordResetRequest: PasswordResetRequest,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/password/reset`, { ...requestOptions, body: passwordResetRequest, impersonating,  } )
+        return await this.http.post(`/password/reset`, { ...requestOptions, body: passwordResetRequest, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -86,7 +88,7 @@ class ForgottenCredentials {
     public async ResetPasswordByVerificationCode(verificationCode: string, passwordReset: PasswordReset,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/password/reset/${verificationCode}`, { ...requestOptions, body: passwordReset, impersonating,  } )
+        return await this.http.put(`/password/reset/${verificationCode}`, { ...requestOptions, body: passwordReset, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -113,7 +115,7 @@ class ForgottenCredentials {
     public async RetrieveUsername(listOptions: { clientID?: string, email?: string } = {}, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/username/retrieve`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.post(`/username/retrieve`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -139,5 +141,3 @@ class ForgottenCredentials {
         return this;
     }
 }
-
-export default new ForgottenCredentials();

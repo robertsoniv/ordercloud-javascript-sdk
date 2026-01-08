@@ -6,17 +6,19 @@ import { SellerApprovalRule } from '../models/SellerApprovalRule';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class SellerApprovalRules {
+export default class SellerApprovalRules {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.List = this.List.bind(this);
         this.Create = this.Create.bind(this);
         this.Get = this.Get.bind(this);
@@ -42,7 +44,7 @@ class SellerApprovalRules {
     public async List<TSellerApprovalRule extends SellerApprovalRule>(listOptions: { search?: string, searchOn?: Searchable<'SellerApprovalRules.List'>, sortBy?: Sortable<'SellerApprovalRules.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TSellerApprovalRule>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/approvalrules`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/approvalrules`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -68,7 +70,7 @@ class SellerApprovalRules {
     public async Create<TSellerApprovalRule extends SellerApprovalRule>(sellerApprovalRule: SellerApprovalRule,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TSellerApprovalRule>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/approvalrules`, { ...requestOptions, body: sellerApprovalRule, impersonating,  } )
+        return await this.http.post(`/approvalrules`, { ...requestOptions, body: sellerApprovalRule, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -94,7 +96,7 @@ class SellerApprovalRules {
     public async Get<TSellerApprovalRule extends SellerApprovalRule>(approvalRuleID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TSellerApprovalRule>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/approvalrules/${approvalRuleID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/approvalrules/${approvalRuleID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -121,7 +123,7 @@ class SellerApprovalRules {
     public async Save<TSellerApprovalRule extends SellerApprovalRule>(approvalRuleID: string, sellerApprovalRule: SellerApprovalRule,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TSellerApprovalRule>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/approvalrules/${approvalRuleID}`, { ...requestOptions, body: sellerApprovalRule, impersonating,  } )
+        return await this.http.put(`/approvalrules/${approvalRuleID}`, { ...requestOptions, body: sellerApprovalRule, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -147,7 +149,7 @@ class SellerApprovalRules {
     public async Delete(approvalRuleID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/approvalrules/${approvalRuleID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/approvalrules/${approvalRuleID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -174,7 +176,7 @@ class SellerApprovalRules {
     public async Patch<TSellerApprovalRule extends SellerApprovalRule>(approvalRuleID: string, sellerApprovalRule: PartialDeep<SellerApprovalRule>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TSellerApprovalRule>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/approvalrules/${approvalRuleID}`, { ...requestOptions, body: sellerApprovalRule, impersonating,  } )
+        return await this.http.patch(`/approvalrules/${approvalRuleID}`, { ...requestOptions, body: sellerApprovalRule, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -200,5 +202,3 @@ class SellerApprovalRules {
         return this;
     }
 }
-
-export default new SellerApprovalRules();

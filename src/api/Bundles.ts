@@ -10,17 +10,19 @@ import { BundleProductAssignment } from '../models/BundleProductAssignment';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class Bundles {
+export default class Bundles {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.List = this.List.bind(this);
         this.Create = this.Create.bind(this);
         this.Get = this.Get.bind(this);
@@ -56,7 +58,7 @@ class Bundles {
     public async List<TBundle extends Bundle>(listOptions: { catalogID?: string, categoryID?: string, supplierID?: string, search?: string, searchOn?: Searchable<'Bundles.List'>, searchType?: SearchType, sortBy?: Sortable<'Bundles.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPageWithFacets<TBundle>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/bundles`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/bundles`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -82,7 +84,7 @@ class Bundles {
     public async Create<TBundle extends Bundle>(bundle: Bundle,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TBundle>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/bundles`, { ...requestOptions, body: bundle, impersonating,  } )
+        return await this.http.post(`/bundles`, { ...requestOptions, body: bundle, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -108,7 +110,7 @@ class Bundles {
     public async Get<TBundle extends Bundle>(bundleID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TBundle>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/bundles/${bundleID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/bundles/${bundleID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -135,7 +137,7 @@ class Bundles {
     public async Save<TBundle extends Bundle>(bundleID: string, bundle: Bundle,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TBundle>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/bundles/${bundleID}`, { ...requestOptions, body: bundle, impersonating,  } )
+        return await this.http.put(`/bundles/${bundleID}`, { ...requestOptions, body: bundle, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -161,7 +163,7 @@ class Bundles {
     public async Delete(bundleID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/bundles/${bundleID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/bundles/${bundleID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -188,7 +190,7 @@ class Bundles {
     public async Patch<TBundle extends Bundle>(bundleID: string, bundle: PartialDeep<Bundle>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TBundle>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/bundles/${bundleID}`, { ...requestOptions, body: bundle, impersonating,  } )
+        return await this.http.patch(`/bundles/${bundleID}`, { ...requestOptions, body: bundle, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -218,7 +220,7 @@ class Bundles {
     public async DeleteAssignment(bundleID: string, buyerID: string, listOptions: { userID?: string, userGroupID?: string, sellerID?: string } = {}, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/bundles/${bundleID}/assignments/${buyerID}`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.delete(`/bundles/${bundleID}/assignments/${buyerID}`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -245,7 +247,7 @@ class Bundles {
     public async DeleteProductAssignment(bundleID: string, productID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/bundles/${bundleID}/productassignments/${productID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/bundles/${bundleID}/productassignments/${productID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -276,7 +278,7 @@ class Bundles {
     public async ListAssignments<TBundleAssignment extends BundleAssignment>(listOptions: { bundleID?: string, buyerID?: string, userGroupID?: string, level?: 'Group' | 'Company', page?: number, pageSize?: number } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TBundleAssignment>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/bundles/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/bundles/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -302,7 +304,7 @@ class Bundles {
     public async SaveAssignment(bundleAssignment: BundleAssignment,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/bundles/assignments`, { ...requestOptions, body: bundleAssignment, impersonating,  } )
+        return await this.http.post(`/bundles/assignments`, { ...requestOptions, body: bundleAssignment, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -331,7 +333,7 @@ class Bundles {
     public async ListProductAssignments<TBundleProductAssignment extends BundleProductAssignment>(listOptions: { bundleID?: string, productID?: string, page?: number, pageSize?: number } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TBundleProductAssignment>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/bundles/productassignments`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/bundles/productassignments`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -357,7 +359,7 @@ class Bundles {
     public async SaveProductAssignment(bundleProductAssignment: BundleProductAssignment,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/bundles/productassignments`, { ...requestOptions, body: bundleProductAssignment, impersonating,  } )
+        return await this.http.post(`/bundles/productassignments`, { ...requestOptions, body: bundleProductAssignment, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -383,5 +385,3 @@ class Bundles {
         return this;
     }
 }
-
-export default new Bundles();

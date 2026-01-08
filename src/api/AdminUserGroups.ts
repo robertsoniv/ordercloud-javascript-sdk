@@ -7,17 +7,19 @@ import { UserGroupAssignment } from '../models/UserGroupAssignment';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class AdminUserGroups {
+export default class AdminUserGroups {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.List = this.List.bind(this);
         this.Create = this.Create.bind(this);
         this.Get = this.Get.bind(this);
@@ -46,7 +48,7 @@ class AdminUserGroups {
     public async List<TUserGroup extends UserGroup>(listOptions: { search?: string, searchOn?: Searchable<'AdminUserGroups.List'>, sortBy?: Sortable<'AdminUserGroups.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TUserGroup>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/usergroups`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/usergroups`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -72,7 +74,7 @@ class AdminUserGroups {
     public async Create<TUserGroup extends UserGroup>(userGroup: UserGroup,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TUserGroup>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/usergroups`, { ...requestOptions, body: userGroup, impersonating,  } )
+        return await this.http.post(`/usergroups`, { ...requestOptions, body: userGroup, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -98,7 +100,7 @@ class AdminUserGroups {
     public async Get<TUserGroup extends UserGroup>(userGroupID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TUserGroup>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/usergroups/${userGroupID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/usergroups/${userGroupID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -125,7 +127,7 @@ class AdminUserGroups {
     public async Save<TUserGroup extends UserGroup>(userGroupID: string, userGroup: UserGroup,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TUserGroup>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/usergroups/${userGroupID}`, { ...requestOptions, body: userGroup, impersonating,  } )
+        return await this.http.put(`/usergroups/${userGroupID}`, { ...requestOptions, body: userGroup, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -151,7 +153,7 @@ class AdminUserGroups {
     public async Delete(userGroupID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/usergroups/${userGroupID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/usergroups/${userGroupID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -178,7 +180,7 @@ class AdminUserGroups {
     public async Patch<TUserGroup extends UserGroup>(userGroupID: string, userGroup: PartialDeep<UserGroup>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TUserGroup>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/usergroups/${userGroupID}`, { ...requestOptions, body: userGroup, impersonating,  } )
+        return await this.http.patch(`/usergroups/${userGroupID}`, { ...requestOptions, body: userGroup, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -205,7 +207,7 @@ class AdminUserGroups {
     public async DeleteUserAssignment(userGroupID: string, userID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/usergroups/${userGroupID}/assignments/${userID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/usergroups/${userGroupID}/assignments/${userID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -234,7 +236,7 @@ class AdminUserGroups {
     public async ListUserAssignments<TUserGroupAssignment extends UserGroupAssignment>(listOptions: { userGroupID?: string, userID?: string, page?: number, pageSize?: number } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TUserGroupAssignment>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/usergroups/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/usergroups/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -260,7 +262,7 @@ class AdminUserGroups {
     public async SaveUserAssignment(userGroupAssignment: UserGroupAssignment,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/usergroups/assignments`, { ...requestOptions, body: userGroupAssignment, impersonating,  } )
+        return await this.http.post(`/usergroups/assignments`, { ...requestOptions, body: userGroupAssignment, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -286,5 +288,3 @@ class AdminUserGroups {
         return this;
     }
 }
-
-export default new AdminUserGroups();

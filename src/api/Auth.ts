@@ -2,17 +2,36 @@
 import { NativeDataFetcher } from '../core/NativeDataFetcher'
 import { CancelToken } from '../core/types'
 import { AccessToken } from '../models/AccessToken'
-import Configuration from '../configuration'
+import { Configuration } from '../configuration'
+import { AuthManager } from './AuthManager'
 import { ApiRole } from '../models/ApiRole'
 import paramsSerializer from '../utils/paramsSerializer'
 import { RequiredDeep } from '../models/RequiredDeep'
 import OrderCloudError from '../utils/OrderCloudError'
 import { parseErrorResponse } from '../utils/parseErrorResponse'
 
-class Auth {
-  private fetcher: NativeDataFetcher | null = null
+export default class Auth {
+  private readonly fetcher: NativeDataFetcher
+  private readonly config: Configuration
+  private readonly authManager: AuthManager
 
-  constructor() {
+  constructor(config: Configuration, authManager: AuthManager) {
+    this.config = config
+    this.authManager = authManager
+
+    // Set this Auth instance on AuthManager to enable token refresh
+    authManager.setAuthInstance(this)
+
+    // Initialize fetcher immediately (not lazy)
+    const configuration = config.Get()
+    this.fetcher = new NativeDataFetcher({
+      baseURL: configuration.baseApiUrl || 'https://api.ordercloud.io',
+      timeout: configuration.timeoutInMilliseconds,
+      fetchImplementation: configuration.fetchImplementation,
+    })
+    // Use the client's interceptor container
+    this.fetcher.interceptors = config.interceptors
+
     /**
      * @ignore
      * not part of public api, don't include in generated docs
@@ -21,34 +40,19 @@ class Auth {
     this.ClientCredentials = this.ClientCredentials.bind(this)
     this.ElevatedLogin = this.ElevatedLogin.bind(this)
     this.Login = this.Login.bind(this)
+    this.Logout = this.Logout.bind(this)
     this.RefreshToken = this.RefreshToken.bind(this)
-    this._initializeFetcher = this._initializeFetcher.bind(this)
     this._makeOAuthRequest = this._makeOAuthRequest.bind(this)
-  }
-
-  private _initializeFetcher(): NativeDataFetcher {
-    if (!this.fetcher) {
-      const configuration = Configuration.Get()
-      this.fetcher = new NativeDataFetcher({
-        baseURL: configuration.baseApiUrl || 'https://api.ordercloud.io',
-        timeout: configuration.timeoutInMilliseconds,
-        fetchImplementation: configuration.fetchImplementation,
-      })
-      // Use the shared interceptor container from Configuration
-      this.fetcher.interceptors = Configuration.interceptors
-    }
-    return this.fetcher
   }
 
   private async _makeOAuthRequest(
     body: Record<string, any>,
     requestOptions: { cancelToken?: CancelToken; requestType?: string } = {}
   ): Promise<RequiredDeep<AccessToken>> {
-    const fetcher = this._initializeFetcher()
     const formBody = paramsSerializer.serialize(body)
 
     try {
-      const response = await fetcher.post<RequiredDeep<AccessToken>>(
+      const response = await this.fetcher.post<RequiredDeep<AccessToken>>(
         '/oauth/token',
         formBody,
         {
@@ -96,7 +100,7 @@ class Auth {
       requestType?: string
     } = {}
   ): Promise<RequiredDeep<AccessToken>> {
-    const effectiveClientID = clientID ?? Configuration.Get().clientID
+    const effectiveClientID = clientID ?? this.config.clientID
     if (!effectiveClientID) {
       throw new Error(
         'clientID must be provided either as a parameter or via Configuration.Set()'
@@ -126,7 +130,12 @@ class Auth {
       client_id: effectiveClientID,
       scope: _scope,
     }
-    return this._makeOAuthRequest(body, requestOptions)
+    const response = await this._makeOAuthRequest(body, requestOptions)
+    this.authManager.SetAccessToken(response.access_token)
+    if (response.refresh_token) {
+      this.authManager.SetRefreshToken(response.refresh_token)
+    }
+    return response
   }
 
   /**
@@ -179,7 +188,12 @@ class Auth {
       password,
       client_secret: clientSecret,
     }
-    return this._makeOAuthRequest(body, requestOptions)
+    const response = await this._makeOAuthRequest(body, requestOptions)
+    this.authManager.SetAccessToken(response.access_token)
+    if (response.refresh_token) {
+      this.authManager.SetRefreshToken(response.refresh_token)
+    }
+    return response
   }
 
   /**
@@ -204,7 +218,7 @@ class Auth {
       requestType?: string
     } = {}
   ): Promise<RequiredDeep<AccessToken>> {
-    const effectiveClientID = clientID ?? Configuration.Get().clientID
+    const effectiveClientID = clientID ?? this.config.clientID
     if (!effectiveClientID) {
       throw new Error(
         'clientID must be provided either as a parameter or via Configuration.Set()'
@@ -233,7 +247,12 @@ class Auth {
       client_id: effectiveClientID,
       client_secret: clientSecret,
     }
-    return this._makeOAuthRequest(body, requestOptions)
+    const response = await this._makeOAuthRequest(body, requestOptions)
+    this.authManager.SetAccessToken(response.access_token)
+    if (response.refresh_token) {
+      this.authManager.SetRefreshToken(response.refresh_token)
+    }
+    return response
   }
 
   /**
@@ -252,7 +271,7 @@ class Auth {
       requestType?: string
     } = {}
   ): Promise<RequiredDeep<AccessToken>> {
-    const effectiveClientID = clientID ?? Configuration.Get().clientID
+    const effectiveClientID = clientID ?? this.config.clientID
     if (!effectiveClientID) {
       throw new Error(
         'clientID must be provided either as a parameter or via Configuration.Set()'
@@ -264,7 +283,12 @@ class Auth {
       client_id: effectiveClientID,
       refresh_token: refreshToken,
     }
-    return this._makeOAuthRequest(body, requestOptions)
+    const response = await this._makeOAuthRequest(body, requestOptions)
+    this.authManager.SetAccessToken(response.access_token)
+    if (response.refresh_token) {
+      this.authManager.SetRefreshToken(response.refresh_token)
+    }
+    return response
   }
 
   /**
@@ -287,7 +311,7 @@ class Auth {
       requestType?: string
     } = {}
   ): Promise<RequiredDeep<AccessToken>> {
-    const effectiveClientID = clientID ?? Configuration.Get().clientID
+    const effectiveClientID = clientID ?? this.config.clientID
     if (!effectiveClientID) {
       throw new Error(
         'clientID must be provided either as a parameter or via Configuration.Set()'
@@ -319,8 +343,22 @@ class Auth {
       ;(body as any)['anonuserid'] = requestOptions.anonuserid
       delete requestOptions['anonuserid']
     }
-    return this._makeOAuthRequest(body, requestOptions)
+    const response = await this._makeOAuthRequest(body, requestOptions)
+    this.authManager.SetAccessToken(response.access_token)
+    if (response.refresh_token) {
+      this.authManager.SetRefreshToken(response.refresh_token)
+    }
+    return response
+  }
+
+  /**
+   * @description clears all authentication tokens from storage including access token, refresh token, impersonation token, identity token, and identity provider access token
+   */
+  public Logout(): void {
+    this.authManager.RemoveAccessToken()
+    this.authManager.RemoveRefreshToken()
+    this.authManager.RemoveImpersonationToken()
+    this.authManager.RemoveIdentityToken()
+    this.authManager.RemoveIdpAccessToken()
   }
 }
-
-export default new Auth()

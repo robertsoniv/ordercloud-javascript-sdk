@@ -1,0 +1,102 @@
+import { Configuration } from '../configuration'
+import { AuthManager } from '../api/AuthManager'
+import HttpClient from '../utils/HttpClient'
+import CookieService from '../utils/CookieService'
+import Auth from '../api/Auth'
+import { SdkConfiguration } from '../models'
+import { InterceptorContainer } from '../core/InterceptorManager'
+
+// Import all resource classes
+{{#resources}}
+import {{this.id}} from '../api/{{this.id}}'
+{{/resources}}
+import UserInfo from '../api/UserInfo'
+import Certs from '../api/Certs'
+
+/**
+ * OrderCloud SDK Client
+ *
+ * Provides access to all OrderCloud API resources through a single instance.
+ * Each client instance maintains its own configuration, authentication state, and interceptors.
+ *
+ * @example
+ * ```typescript
+ * const client = new OrderCloudClient({
+ *   clientID: 'my-client-id',
+ *   baseApiUrl: 'https://api.ordercloud.io'
+ * })
+ *
+ * await client.Auth.Login('username', 'password')
+ * const products = await client.Products.List()
+ * ```
+ */
+export class OrderCloudClient {
+  /**
+   * Interceptor container for adding request/response interceptors
+   * @example
+   * client.interceptors.request.use((config) => {
+   *   config.headers = { ...config.headers, 'X-Custom': 'value' }
+   *   return config
+   * })
+   */
+  public readonly interceptors: InterceptorContainer
+
+  private readonly _config: Configuration
+  private readonly _authManager: AuthManager
+  private readonly _httpClient: HttpClient
+  private readonly _auth: Auth
+
+  // Private fields for lazy-loaded resources
+{{#resources}}
+  private _{{toLowerCase this.id}}?: {{this.id}}
+{{/resources}}
+  private _userInfo?: UserInfo
+  private _certs?: Certs
+
+  /**
+   * Creates a new OrderCloud client instance
+   * @param config Partial configuration - any missing properties use defaults
+   */
+  constructor(config: Partial<SdkConfiguration> = {}) {
+    // Initialize configuration with defaults
+    this._config = new Configuration(config)
+    this.interceptors = this._config.interceptors
+
+    // Initialize authentication and HTTP client
+    const cookieService = new CookieService(this._config)
+    this._authManager = new AuthManager(this._config, cookieService)
+    this._httpClient = new HttpClient(this._config, this._authManager)
+    this._auth = new Auth(this._config, this._authManager)
+  }
+
+  /**
+   * Authentication resource (not lazy-loaded)
+   */
+  public get Auth(): Auth {
+    return this._auth
+  }
+
+  // Lazy-loaded resource getters
+{{#resources}}
+  public get {{this.id}}(): {{this.id}} {
+    if (!this._{{toLowerCase this.id}}) {
+      this._{{toLowerCase this.id}} = new {{this.id}}(this._httpClient)
+    }
+    return this._{{toLowerCase this.id}}
+  }
+
+{{/resources}}
+  public get UserInfo(): UserInfo {
+    if (!this._userInfo) {
+      this._userInfo = new UserInfo(this._httpClient)
+    }
+    return this._userInfo
+  }
+
+  public get Certs(): Certs {
+    if (!this._certs) {
+      this._certs = new Certs(this._httpClient)
+    }
+    return this._certs
+  }
+}

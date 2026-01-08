@@ -8,17 +8,19 @@ import { PartyType } from '../models/PartyType';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class CreditCards {
+export default class CreditCards {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.List = this.List.bind(this);
         this.Create = this.Create.bind(this);
         this.Get = this.Get.bind(this);
@@ -48,7 +50,7 @@ class CreditCards {
     public async List<TCreditCard extends CreditCard>(buyerID: string, listOptions: { search?: string, searchOn?: Searchable<'CreditCards.List'>, sortBy?: Sortable<'CreditCards.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TCreditCard>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/buyers/${buyerID}/creditcards`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/buyers/${buyerID}/creditcards`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -75,7 +77,7 @@ class CreditCards {
     public async Create<TCreditCard extends CreditCard>(buyerID: string, creditCard: CreditCard,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TCreditCard>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/buyers/${buyerID}/creditcards`, { ...requestOptions, body: creditCard, impersonating,  } )
+        return await this.http.post(`/buyers/${buyerID}/creditcards`, { ...requestOptions, body: creditCard, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -102,7 +104,7 @@ class CreditCards {
     public async Get<TCreditCard extends CreditCard>(buyerID: string, creditCardID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TCreditCard>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/buyers/${buyerID}/creditcards/${creditCardID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/buyers/${buyerID}/creditcards/${creditCardID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -130,7 +132,7 @@ class CreditCards {
     public async Save<TCreditCard extends CreditCard>(buyerID: string, creditCardID: string, creditCard: CreditCard,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TCreditCard>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/buyers/${buyerID}/creditcards/${creditCardID}`, { ...requestOptions, body: creditCard, impersonating,  } )
+        return await this.http.put(`/buyers/${buyerID}/creditcards/${creditCardID}`, { ...requestOptions, body: creditCard, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -157,7 +159,7 @@ class CreditCards {
     public async Delete(buyerID: string, creditCardID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/buyers/${buyerID}/creditcards/${creditCardID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/buyers/${buyerID}/creditcards/${creditCardID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -185,7 +187,7 @@ class CreditCards {
     public async Patch<TCreditCard extends CreditCard>(buyerID: string, creditCardID: string, creditCard: PartialDeep<CreditCard>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TCreditCard>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/buyers/${buyerID}/creditcards/${creditCardID}`, { ...requestOptions, body: creditCard, impersonating,  } )
+        return await this.http.patch(`/buyers/${buyerID}/creditcards/${creditCardID}`, { ...requestOptions, body: creditCard, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -214,7 +216,7 @@ class CreditCards {
     public async DeleteAssignment(buyerID: string, creditCardID: string, listOptions: { userID?: string, userGroupID?: string } = {}, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/buyers/${buyerID}/creditcards/${creditCardID}/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.delete(`/buyers/${buyerID}/creditcards/${creditCardID}/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -246,7 +248,7 @@ class CreditCards {
     public async ListAssignments<TCreditCardAssignment extends CreditCardAssignment>(buyerID: string, listOptions: { creditCardID?: string, userID?: string, userGroupID?: string, level?: PartyType, page?: number, pageSize?: number } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TCreditCardAssignment>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/buyers/${buyerID}/creditcards/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/buyers/${buyerID}/creditcards/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -273,7 +275,7 @@ class CreditCards {
     public async SaveAssignment(buyerID: string, creditCardAssignment: CreditCardAssignment,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/buyers/${buyerID}/creditcards/assignments`, { ...requestOptions, body: creditCardAssignment, impersonating,  } )
+        return await this.http.post(`/buyers/${buyerID}/creditcards/assignments`, { ...requestOptions, body: creditCardAssignment, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -299,5 +301,3 @@ class CreditCards {
         return this;
     }
 }
-
-export default new CreditCards();

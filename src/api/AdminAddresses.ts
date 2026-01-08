@@ -6,17 +6,19 @@ import { Address } from '../models/Address';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class AdminAddresses {
+export default class AdminAddresses {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.List = this.List.bind(this);
         this.Create = this.Create.bind(this);
         this.Get = this.Get.bind(this);
@@ -42,7 +44,7 @@ class AdminAddresses {
     public async List<TAddress extends Address>(listOptions: { search?: string, searchOn?: Searchable<'AdminAddresses.List'>, sortBy?: Sortable<'AdminAddresses.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TAddress>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/addresses`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/addresses`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -68,7 +70,7 @@ class AdminAddresses {
     public async Create<TAddress extends Address>(address: Address,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TAddress>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/addresses`, { ...requestOptions, body: address, impersonating,  } )
+        return await this.http.post(`/addresses`, { ...requestOptions, body: address, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -94,7 +96,7 @@ class AdminAddresses {
     public async Get<TAddress extends Address>(addressID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TAddress>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/addresses/${addressID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/addresses/${addressID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -121,7 +123,7 @@ class AdminAddresses {
     public async Save<TAddress extends Address>(addressID: string, address: Address,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TAddress>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/addresses/${addressID}`, { ...requestOptions, body: address, impersonating,  } )
+        return await this.http.put(`/addresses/${addressID}`, { ...requestOptions, body: address, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -147,7 +149,7 @@ class AdminAddresses {
     public async Delete(addressID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/addresses/${addressID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/addresses/${addressID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -174,7 +176,7 @@ class AdminAddresses {
     public async Patch<TAddress extends Address>(addressID: string, address: PartialDeep<Address>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TAddress>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/addresses/${addressID}`, { ...requestOptions, body: address, impersonating,  } )
+        return await this.http.patch(`/addresses/${addressID}`, { ...requestOptions, body: address, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -200,5 +202,3 @@ class AdminAddresses {
         return this;
     }
 }
-
-export default new AdminAddresses();

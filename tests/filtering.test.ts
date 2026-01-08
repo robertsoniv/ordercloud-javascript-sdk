@@ -1,18 +1,19 @@
 import mockFetch, { setupMockFetch } from './__mocks__/fetch'
-import { Tokens, Me, Users, Products, Buyers } from '../src'
+import { OrderCloudClient } from '../src'
 import { makeToken } from './utils'
 
 const apiUrl = 'https://api.ordercloud.io/v1'
 const validToken = makeToken()
 
+let client: OrderCloudClient
+
 beforeEach(() => {
   setupMockFetch({ Items: [], Meta: { Page: 1, PageSize: 20 } })
-  Tokens.RemoveImpersonationToken()
+  client = new OrderCloudClient()
 })
 
 test('can filter call with boolean (true)', async () => {
-  Tokens.SetAccessToken(validToken)
-  await Me.ListProducts({ filters: { 'xp.Featured': true } })
+  await client.Me.ListProducts({ filters: { 'xp.Featured': true } }, { accessToken: validToken })
   expect(mockFetch).toHaveBeenCalledTimes(1)
   
   const call = mockFetch.mock.calls[0]
@@ -27,8 +28,7 @@ test('can filter call with boolean (true)', async () => {
 })
 
 test('can filter call with boolean (false)', async () => {
-  Tokens.SetAccessToken(validToken)
-  await Me.ListProducts({ filters: { IsSubmitted: false } })
+  await client.Me.ListProducts({ filters: { IsSubmitted: false } }, { accessToken: validToken })
   expect(mockFetch).toHaveBeenCalledTimes(1)
   
   const call = mockFetch.mock.calls[0]
@@ -43,8 +43,7 @@ test('can filter call with boolean (false)', async () => {
 })
 
 test('can filter call with comparison operator', async () => {
-  Tokens.SetAccessToken(validToken)
-  await Me.ListOrders({ filters: { DateSubmitted: '>2020-04-20' } })
+  await client.Me.ListOrders({ filters: { DateSubmitted: '>2020-04-20' } }, { accessToken: validToken })
   expect(mockFetch).toHaveBeenCalledTimes(1)
   
   const call = mockFetch.mock.calls[0]
@@ -59,8 +58,7 @@ test('can filter call with comparison operator', async () => {
 })
 
 test('can filter call with wildcard operator', async () => {
-  Tokens.SetAccessToken(validToken)
-  await Users.List('my-mock-buyerid', { filters: { LastName: 'Smith*' } })
+  await client.Users.List('my-mock-buyerid', { filters: { LastName: 'Smith*' } }, { accessToken: validToken })
   expect(mockFetch).toHaveBeenCalledTimes(1)
   
   const call = mockFetch.mock.calls[0]
@@ -75,10 +73,9 @@ test('can filter call with wildcard operator', async () => {
 })
 
 test('can filter with logical OR operator', async () => {
-  Tokens.SetAccessToken(validToken)
-  await Users.List('my-mock-buyerid', {
+  await client.Users.List('my-mock-buyerid', {
     filters: { LastName: 'Smith*|*Jones' },
-  })
+  }, { accessToken: validToken })
   expect(mockFetch).toHaveBeenCalledTimes(1)
   
   const call = mockFetch.mock.calls[0]
@@ -93,8 +90,7 @@ test('can filter with logical OR operator', async () => {
 })
 
 test('can filter with logical AND operator', async () => {
-  Tokens.SetAccessToken(validToken)
-  await Products.List({ filters: { 'xp.Color': ['!red', '!blue'] } })
+  await client.Products.List({ filters: { 'xp.Color': ['!red', '!blue'] } }, { accessToken: validToken })
   expect(mockFetch).toHaveBeenCalledTimes(1)
   
   const call = mockFetch.mock.calls[0]
@@ -109,8 +105,7 @@ test('can filter with logical AND operator', async () => {
 })
 
 test('can use multiple searchOn parameters', async () => {
-  Tokens.SetAccessToken(validToken)
-  await Buyers.List({ searchOn: ['Name', 'ID'] })
+  await client.Buyers.List({ searchOn: ['Name', 'ID'] }, { accessToken: validToken })
   expect(mockFetch).toHaveBeenCalledTimes(1)
   
   const call = mockFetch.mock.calls[0]
@@ -126,8 +121,7 @@ test('can use multiple searchOn parameters', async () => {
 })
 
 test('can use multiple sortBy parameters', async () => {
-  Tokens.SetAccessToken(validToken)
-  await Buyers.List({ sortBy: ['Name', 'ID'] })
+  await client.Buyers.List({ sortBy: ['Name', 'ID'] }, { accessToken: validToken })
   expect(mockFetch).toHaveBeenCalledTimes(1)
   
   const call = mockFetch.mock.calls[0]

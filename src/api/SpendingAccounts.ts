@@ -8,17 +8,19 @@ import { PartyType } from '../models/PartyType';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class SpendingAccounts {
+export default class SpendingAccounts {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.List = this.List.bind(this);
         this.Create = this.Create.bind(this);
         this.Get = this.Get.bind(this);
@@ -48,7 +50,7 @@ class SpendingAccounts {
     public async List<TSpendingAccount extends SpendingAccount>(buyerID: string, listOptions: { search?: string, searchOn?: Searchable<'SpendingAccounts.List'>, sortBy?: Sortable<'SpendingAccounts.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TSpendingAccount>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/buyers/${buyerID}/spendingaccounts`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/buyers/${buyerID}/spendingaccounts`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -75,7 +77,7 @@ class SpendingAccounts {
     public async Create<TSpendingAccount extends SpendingAccount>(buyerID: string, spendingAccount: SpendingAccount,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TSpendingAccount>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/buyers/${buyerID}/spendingaccounts`, { ...requestOptions, body: spendingAccount, impersonating,  } )
+        return await this.http.post(`/buyers/${buyerID}/spendingaccounts`, { ...requestOptions, body: spendingAccount, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -102,7 +104,7 @@ class SpendingAccounts {
     public async Get<TSpendingAccount extends SpendingAccount>(buyerID: string, spendingAccountID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TSpendingAccount>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/buyers/${buyerID}/spendingaccounts/${spendingAccountID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/buyers/${buyerID}/spendingaccounts/${spendingAccountID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -130,7 +132,7 @@ class SpendingAccounts {
     public async Save<TSpendingAccount extends SpendingAccount>(buyerID: string, spendingAccountID: string, spendingAccount: SpendingAccount,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TSpendingAccount>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/buyers/${buyerID}/spendingaccounts/${spendingAccountID}`, { ...requestOptions, body: spendingAccount, impersonating,  } )
+        return await this.http.put(`/buyers/${buyerID}/spendingaccounts/${spendingAccountID}`, { ...requestOptions, body: spendingAccount, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -157,7 +159,7 @@ class SpendingAccounts {
     public async Delete(buyerID: string, spendingAccountID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/buyers/${buyerID}/spendingaccounts/${spendingAccountID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/buyers/${buyerID}/spendingaccounts/${spendingAccountID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -185,7 +187,7 @@ class SpendingAccounts {
     public async Patch<TSpendingAccount extends SpendingAccount>(buyerID: string, spendingAccountID: string, spendingAccount: PartialDeep<SpendingAccount>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TSpendingAccount>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/buyers/${buyerID}/spendingaccounts/${spendingAccountID}`, { ...requestOptions, body: spendingAccount, impersonating,  } )
+        return await this.http.patch(`/buyers/${buyerID}/spendingaccounts/${spendingAccountID}`, { ...requestOptions, body: spendingAccount, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -214,7 +216,7 @@ class SpendingAccounts {
     public async DeleteAssignment(buyerID: string, spendingAccountID: string, listOptions: { userID?: string, userGroupID?: string } = {}, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/buyers/${buyerID}/spendingaccounts/${spendingAccountID}/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.delete(`/buyers/${buyerID}/spendingaccounts/${spendingAccountID}/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -246,7 +248,7 @@ class SpendingAccounts {
     public async ListAssignments<TSpendingAccountAssignment extends SpendingAccountAssignment>(buyerID: string, listOptions: { spendingAccountID?: string, userID?: string, userGroupID?: string, level?: PartyType, page?: number, pageSize?: number } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TSpendingAccountAssignment>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/buyers/${buyerID}/spendingaccounts/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/buyers/${buyerID}/spendingaccounts/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -273,7 +275,7 @@ class SpendingAccounts {
     public async SaveAssignment(buyerID: string, spendingAccountAssignment: SpendingAccountAssignment,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/buyers/${buyerID}/spendingaccounts/assignments`, { ...requestOptions, body: spendingAccountAssignment, impersonating,  } )
+        return await this.http.post(`/buyers/${buyerID}/spendingaccounts/assignments`, { ...requestOptions, body: spendingAccountAssignment, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -299,5 +301,3 @@ class SpendingAccounts {
         return this;
     }
 }
-
-export default new SpendingAccounts();

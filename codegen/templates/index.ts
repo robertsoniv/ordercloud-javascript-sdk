@@ -1,8 +1,14 @@
-import Configuration from './configuration'
-export { Configuration }
+// Primary client export
+export { OrderCloudClient } from './client/OrderCloudClient'
+
+// Error types
 import OrderCloudError from './utils/OrderCloudError'
 export { OrderCloudError }
+
+// Abort and cancellation
 export { AbortManager, CancelError } from './core/AbortManager'
+
+// Interceptors
 export {
   InterceptorManager,
   InterceptorContainer,
@@ -13,5 +19,10 @@ export {
   ResponseInterceptor,
   ErrorInterceptor,
 } from './core/types'
-export * from './api/index'
+
+// All model types
 export * from './models/index'
+
+// Individual resource classes for advanced use cases
+// (Most users should use OrderCloudClient instead)
+export * from './api/index'

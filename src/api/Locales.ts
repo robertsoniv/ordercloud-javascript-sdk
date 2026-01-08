@@ -7,17 +7,19 @@ import { LocaleAssignment } from '../models/LocaleAssignment';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class Locales {
+export default class Locales {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.List = this.List.bind(this);
         this.Create = this.Create.bind(this);
         this.Get = this.Get.bind(this);
@@ -46,7 +48,7 @@ class Locales {
     public async List<TLocale extends Locale>(listOptions: { search?: string, searchOn?: Searchable<'Locales.List'>, sortBy?: Sortable<'Locales.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TLocale>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/locales`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/locales`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -72,7 +74,7 @@ class Locales {
     public async Create<TLocale extends Locale>(locale: Locale,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TLocale>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/locales`, { ...requestOptions, body: locale, impersonating,  } )
+        return await this.http.post(`/locales`, { ...requestOptions, body: locale, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -98,7 +100,7 @@ class Locales {
     public async Get<TLocale extends Locale>(localeID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TLocale>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/locales/${localeID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/locales/${localeID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -125,7 +127,7 @@ class Locales {
     public async Save<TLocale extends Locale>(localeID: string, locale: Locale,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TLocale>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/locales/${localeID}`, { ...requestOptions, body: locale, impersonating,  } )
+        return await this.http.put(`/locales/${localeID}`, { ...requestOptions, body: locale, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -151,7 +153,7 @@ class Locales {
     public async Delete(localeID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/locales/${localeID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/locales/${localeID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -178,7 +180,7 @@ class Locales {
     public async Patch<TLocale extends Locale>(localeID: string, locale: PartialDeep<Locale>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TLocale>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/locales/${localeID}`, { ...requestOptions, body: locale, impersonating,  } )
+        return await this.http.patch(`/locales/${localeID}`, { ...requestOptions, body: locale, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -207,7 +209,7 @@ class Locales {
     public async DeleteAssignment(localeID: string, listOptions: { buyerID?: string, userID?: string, userGroupID?: string } = {}, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/locales/${localeID}/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.delete(`/locales/${localeID}/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -238,7 +240,7 @@ class Locales {
     public async ListAssignments<TLocaleAssignment extends LocaleAssignment>(listOptions: { buyerID?: string, localeID?: string, userGroupID?: string, level?: 'Group' | 'Company', page?: number, pageSize?: number } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TLocaleAssignment>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/locales/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/locales/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -264,7 +266,7 @@ class Locales {
     public async SaveAssignment(localeAssignment: LocaleAssignment,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/locales/assignments`, { ...requestOptions, body: localeAssignment, impersonating,  } )
+        return await this.http.post(`/locales/assignments`, { ...requestOptions, body: localeAssignment, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -290,5 +292,3 @@ class Locales {
         return this;
     }
 }
-
-export default new Locales();

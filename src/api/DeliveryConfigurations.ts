@@ -6,17 +6,19 @@ import { DeliveryConfig } from '../models/DeliveryConfig';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class DeliveryConfigurations {
+export default class DeliveryConfigurations {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.List = this.List.bind(this);
         this.Create = this.Create.bind(this);
         this.Get = this.Get.bind(this);
@@ -42,7 +44,7 @@ class DeliveryConfigurations {
     public async List<TDeliveryConfig extends DeliveryConfig>(listOptions: { search?: string, searchOn?: Searchable<'DeliveryConfigurations.List'>, sortBy?: Sortable<'DeliveryConfigurations.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TDeliveryConfig>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/integrations/deliveryconfig`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/integrations/deliveryconfig`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -68,7 +70,7 @@ class DeliveryConfigurations {
     public async Create<TDeliveryConfig extends DeliveryConfig>(deliveryConfig: DeliveryConfig,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TDeliveryConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/integrations/deliveryconfig`, { ...requestOptions, body: deliveryConfig, impersonating,  } )
+        return await this.http.post(`/integrations/deliveryconfig`, { ...requestOptions, body: deliveryConfig, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -94,7 +96,7 @@ class DeliveryConfigurations {
     public async Get<TDeliveryConfig extends DeliveryConfig>(deliveryConfigID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TDeliveryConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/integrations/deliveryconfig/${deliveryConfigID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/integrations/deliveryconfig/${deliveryConfigID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -121,7 +123,7 @@ class DeliveryConfigurations {
     public async Save<TDeliveryConfig extends DeliveryConfig>(deliveryConfigID: string, deliveryConfig: DeliveryConfig,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TDeliveryConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrations/deliveryconfig/${deliveryConfigID}`, { ...requestOptions, body: deliveryConfig, impersonating,  } )
+        return await this.http.put(`/integrations/deliveryconfig/${deliveryConfigID}`, { ...requestOptions, body: deliveryConfig, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -147,7 +149,7 @@ class DeliveryConfigurations {
     public async Delete(deliveryConfigID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/integrations/deliveryconfig/${deliveryConfigID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/integrations/deliveryconfig/${deliveryConfigID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -174,7 +176,7 @@ class DeliveryConfigurations {
     public async Patch<TDeliveryConfig extends DeliveryConfig>(deliveryConfigID: string, deliveryConfig: PartialDeep<DeliveryConfig>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TDeliveryConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrations/deliveryconfig/${deliveryConfigID}`, { ...requestOptions, body: deliveryConfig, impersonating,  } )
+        return await this.http.patch(`/integrations/deliveryconfig/${deliveryConfigID}`, { ...requestOptions, body: deliveryConfig, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -200,5 +202,3 @@ class DeliveryConfigurations {
         return this;
     }
 }
-
-export default new DeliveryConfigurations();

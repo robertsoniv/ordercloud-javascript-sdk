@@ -1,5 +1,5 @@
 import mockFetch, { setupMockFetch } from './__mocks__/fetch'
-import { Tokens, Certs } from '../src'
+import { OrderCloudClient } from '../src'
 import { makeToken } from './utils'
 
 // endpoints that have oauth/ in path don't include /{apiVersion}/
@@ -7,14 +7,15 @@ const apiUrl = `https://api.ordercloud.io`
 const validToken = makeToken()
 const mockKid = 'x6sA-GfTGEWUp5OWFbhmmg'
 
+let client: OrderCloudClient
+
 beforeEach(() => {
   setupMockFetch({ key: 'mock-public-key' })
-  Tokens.RemoveAccessToken()
+  client = new OrderCloudClient()
 })
 
 test('can get cert', async () => {
-  Tokens.SetAccessToken(validToken)
-  await Certs.GetPublicKey(mockKid)
+  await client.Certs.GetPublicKey(mockKid, { accessToken: validToken })
   expect(mockFetch).toHaveBeenCalledTimes(1)
   
   const call = mockFetch.mock.calls[0]

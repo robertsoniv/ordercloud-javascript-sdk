@@ -7,17 +7,19 @@ import { XpThingType } from '../models/XpThingType';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class XpIndices {
+export default class XpIndices {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.List = this.List.bind(this);
         this.Put = this.Put.bind(this);
         this.Delete = this.Delete.bind(this);
@@ -40,7 +42,7 @@ class XpIndices {
     public async List<TXpIndex extends XpIndex>(listOptions: { search?: string, searchOn?: Searchable<'XpIndices.List'>, sortBy?: Sortable<'XpIndices.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TXpIndex>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/xpindices`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/xpindices`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -66,7 +68,7 @@ class XpIndices {
     public async Put(xpIndex: XpIndex,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/xpindices`, { ...requestOptions, body: xpIndex, impersonating,  } )
+        return await this.http.put(`/xpindices`, { ...requestOptions, body: xpIndex, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -93,7 +95,7 @@ class XpIndices {
     public async Delete(thingType: XpThingType, key: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/xpindices/${thingType}/${key}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/xpindices/${thingType}/${key}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -119,5 +121,3 @@ class XpIndices {
         return this;
     }
 }
-
-export default new XpIndices();

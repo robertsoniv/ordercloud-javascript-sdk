@@ -6,17 +6,19 @@ import { TrackingEvent } from '../models/TrackingEvent';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class TrackingEvents {
+export default class TrackingEvents {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.List = this.List.bind(this);
         this.Create = this.Create.bind(this);
         this.Get = this.Get.bind(this);
@@ -42,7 +44,7 @@ class TrackingEvents {
     public async List<TTrackingEvent extends TrackingEvent>(listOptions: { search?: string, searchOn?: Searchable<'TrackingEvents.List'>, sortBy?: Sortable<'TrackingEvents.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TTrackingEvent>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/integrations/trackingEvents`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/integrations/trackingEvents`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -68,7 +70,7 @@ class TrackingEvents {
     public async Create<TTrackingEvent extends TrackingEvent>(trackingEvent: TrackingEvent,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TTrackingEvent>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/integrations/trackingEvents`, { ...requestOptions, body: trackingEvent, impersonating,  } )
+        return await this.http.post(`/integrations/trackingEvents`, { ...requestOptions, body: trackingEvent, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -94,7 +96,7 @@ class TrackingEvents {
     public async Get<TTrackingEvent extends TrackingEvent>(eventID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TTrackingEvent>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/integrations/trackingEvents/${eventID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/integrations/trackingEvents/${eventID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -121,7 +123,7 @@ class TrackingEvents {
     public async Save<TTrackingEvent extends TrackingEvent>(eventID: string, trackingEvent: TrackingEvent,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TTrackingEvent>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrations/trackingEvents/${eventID}`, { ...requestOptions, body: trackingEvent, impersonating,  } )
+        return await this.http.put(`/integrations/trackingEvents/${eventID}`, { ...requestOptions, body: trackingEvent, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -147,7 +149,7 @@ class TrackingEvents {
     public async Delete(eventID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/integrations/trackingEvents/${eventID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/integrations/trackingEvents/${eventID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -174,7 +176,7 @@ class TrackingEvents {
     public async Patch<TTrackingEvent extends TrackingEvent>(eventID: string, trackingEvent: PartialDeep<TrackingEvent>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TTrackingEvent>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrations/trackingEvents/${eventID}`, { ...requestOptions, body: trackingEvent, impersonating,  } )
+        return await this.http.patch(`/integrations/trackingEvents/${eventID}`, { ...requestOptions, body: trackingEvent, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -200,5 +202,3 @@ class TrackingEvents {
         return this;
     }
 }
-
-export default new TrackingEvents();

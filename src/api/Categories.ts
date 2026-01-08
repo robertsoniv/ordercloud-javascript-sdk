@@ -9,17 +9,19 @@ import { CategoryProductAssignment } from '../models/CategoryProductAssignment';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class Categories {
+export default class Categories {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.List = this.List.bind(this);
         this.Create = this.Create.bind(this);
         this.Get = this.Get.bind(this);
@@ -56,7 +58,7 @@ class Categories {
     public async List<TCategory extends Category>(catalogID: string, listOptions: { depth?: string, search?: string, searchOn?: Searchable<'Categories.List'>, sortBy?: Sortable<'Categories.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TCategory>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/catalogs/${catalogID}/categories`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/catalogs/${catalogID}/categories`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -84,7 +86,7 @@ class Categories {
     public async Create<TCategory extends Category>(catalogID: string, category: Category,listOptions: { adjustListOrders?: boolean } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TCategory>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/catalogs/${catalogID}/categories`, { ...requestOptions, body: category, impersonating, params: listOptions  } )
+        return await this.http.post(`/catalogs/${catalogID}/categories`, { ...requestOptions, body: category, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -111,7 +113,7 @@ class Categories {
     public async Get<TCategory extends Category>(catalogID: string, categoryID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TCategory>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/catalogs/${catalogID}/categories/${categoryID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/catalogs/${catalogID}/categories/${categoryID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -140,7 +142,7 @@ class Categories {
     public async Save<TCategory extends Category>(catalogID: string, categoryID: string, category: Category,listOptions: { adjustListOrders?: boolean } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TCategory>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/catalogs/${catalogID}/categories/${categoryID}`, { ...requestOptions, body: category, impersonating, params: listOptions  } )
+        return await this.http.put(`/catalogs/${catalogID}/categories/${categoryID}`, { ...requestOptions, body: category, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -167,7 +169,7 @@ class Categories {
     public async Delete(catalogID: string, categoryID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/catalogs/${catalogID}/categories/${categoryID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/catalogs/${catalogID}/categories/${categoryID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -196,7 +198,7 @@ class Categories {
     public async Patch<TCategory extends Category>(catalogID: string, categoryID: string, category: PartialDeep<Category>, listOptions: { adjustListOrders?: boolean } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TCategory>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/catalogs/${catalogID}/categories/${categoryID}`, { ...requestOptions, body: category, impersonating, params: listOptions  } )
+        return await this.http.patch(`/catalogs/${catalogID}/categories/${categoryID}`, { ...requestOptions, body: category, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -226,7 +228,7 @@ class Categories {
     public async DeleteAssignment(catalogID: string, categoryID: string, listOptions: { buyerID?: string, userID?: string, userGroupID?: string } = {}, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/catalogs/${catalogID}/categories/${categoryID}/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.delete(`/catalogs/${catalogID}/categories/${categoryID}/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -254,7 +256,7 @@ class Categories {
     public async DeleteBundleAssignment(catalogID: string, categoryID: string, bundleID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/catalogs/${catalogID}/categories/${categoryID}/bundleassignments/${bundleID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/catalogs/${catalogID}/categories/${categoryID}/bundleassignments/${bundleID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -282,7 +284,7 @@ class Categories {
     public async DeleteProductAssignment(catalogID: string, categoryID: string, productID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/catalogs/${catalogID}/categories/${categoryID}/productassignments/${productID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/catalogs/${catalogID}/categories/${categoryID}/productassignments/${productID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -314,7 +316,7 @@ class Categories {
     public async ListAssignments<TCategoryAssignment extends CategoryAssignment>(catalogID: string, listOptions: { categoryID?: string, buyerID?: string, userGroupID?: string, level?: 'Group' | 'Company', page?: number, pageSize?: number } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TCategoryAssignment>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/catalogs/${catalogID}/categories/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/catalogs/${catalogID}/categories/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -341,7 +343,7 @@ class Categories {
     public async SaveAssignment(catalogID: string, categoryAssignment: CategoryAssignment,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/catalogs/${catalogID}/categories/assignments`, { ...requestOptions, body: categoryAssignment, impersonating,  } )
+        return await this.http.post(`/catalogs/${catalogID}/categories/assignments`, { ...requestOptions, body: categoryAssignment, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -371,7 +373,7 @@ class Categories {
     public async ListBundleAssignments<TCategoryBundleAssignment extends CategoryBundleAssignment>(catalogID: string, listOptions: { categoryID?: string, bundleID?: string, page?: number, pageSize?: number } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TCategoryBundleAssignment>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/catalogs/${catalogID}/categories/bundleassignments`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/catalogs/${catalogID}/categories/bundleassignments`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -398,7 +400,7 @@ class Categories {
     public async SaveBundleAssignment(catalogID: string, categoryBundleAssignment: CategoryBundleAssignment,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/catalogs/${catalogID}/categories/bundleassignments`, { ...requestOptions, body: categoryBundleAssignment, impersonating,  } )
+        return await this.http.post(`/catalogs/${catalogID}/categories/bundleassignments`, { ...requestOptions, body: categoryBundleAssignment, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -428,7 +430,7 @@ class Categories {
     public async ListProductAssignments<TCategoryProductAssignment extends CategoryProductAssignment>(catalogID: string, listOptions: { categoryID?: string, productID?: string, page?: number, pageSize?: number } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TCategoryProductAssignment>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/catalogs/${catalogID}/categories/productassignments`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/catalogs/${catalogID}/categories/productassignments`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -455,7 +457,7 @@ class Categories {
     public async SaveProductAssignment(catalogID: string, categoryProductAssignment: CategoryProductAssignment,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/catalogs/${catalogID}/categories/productassignments`, { ...requestOptions, body: categoryProductAssignment, impersonating,  } )
+        return await this.http.post(`/catalogs/${catalogID}/categories/productassignments`, { ...requestOptions, body: categoryProductAssignment, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -481,5 +483,3 @@ class Categories {
         return this;
     }
 }
-
-export default new Categories();

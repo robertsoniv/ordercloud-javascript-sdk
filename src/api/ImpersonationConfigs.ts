@@ -6,17 +6,19 @@ import { ImpersonationConfig } from '../models/ImpersonationConfig';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class ImpersonationConfigs {
+export default class ImpersonationConfigs {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.List = this.List.bind(this);
         this.Create = this.Create.bind(this);
         this.Get = this.Get.bind(this);
@@ -42,7 +44,7 @@ class ImpersonationConfigs {
     public async List<TImpersonationConfig extends ImpersonationConfig>(listOptions: { search?: string, searchOn?: Searchable<'ImpersonationConfigs.List'>, sortBy?: Sortable<'ImpersonationConfigs.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TImpersonationConfig>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/impersonationconfig`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/impersonationconfig`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -68,7 +70,7 @@ class ImpersonationConfigs {
     public async Create<TImpersonationConfig extends ImpersonationConfig>(impersonationConfig: ImpersonationConfig,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TImpersonationConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/impersonationconfig`, { ...requestOptions, body: impersonationConfig, impersonating,  } )
+        return await this.http.post(`/impersonationconfig`, { ...requestOptions, body: impersonationConfig, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -94,7 +96,7 @@ class ImpersonationConfigs {
     public async Get<TImpersonationConfig extends ImpersonationConfig>(impersonationConfigID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TImpersonationConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/impersonationconfig/${impersonationConfigID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/impersonationconfig/${impersonationConfigID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -121,7 +123,7 @@ class ImpersonationConfigs {
     public async Save<TImpersonationConfig extends ImpersonationConfig>(impersonationConfigID: string, impersonationConfig: ImpersonationConfig,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TImpersonationConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/impersonationconfig/${impersonationConfigID}`, { ...requestOptions, body: impersonationConfig, impersonating,  } )
+        return await this.http.put(`/impersonationconfig/${impersonationConfigID}`, { ...requestOptions, body: impersonationConfig, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -147,7 +149,7 @@ class ImpersonationConfigs {
     public async Delete(impersonationConfigID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/impersonationconfig/${impersonationConfigID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/impersonationconfig/${impersonationConfigID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -174,7 +176,7 @@ class ImpersonationConfigs {
     public async Patch<TImpersonationConfig extends ImpersonationConfig>(impersonationConfigID: string, impersonationConfig: PartialDeep<ImpersonationConfig>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TImpersonationConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/impersonationconfig/${impersonationConfigID}`, { ...requestOptions, body: impersonationConfig, impersonating,  } )
+        return await this.http.patch(`/impersonationconfig/${impersonationConfigID}`, { ...requestOptions, body: impersonationConfig, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -200,5 +202,3 @@ class ImpersonationConfigs {
         return this;
     }
 }
-
-export default new ImpersonationConfigs();

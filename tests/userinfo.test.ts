@@ -1,9 +1,12 @@
 import mockFetch, { setupMockFetch } from './__mocks__/fetch'
-import { UserInfo, Tokens } from '../src/index'
+import { OrderCloudClient } from '../src/index'
 import { makeToken } from './utils'
+
+let client: OrderCloudClient
 
 beforeEach(() => {
   setupMockFetch({ sub: 'test-user', cid: 'test-client' })
+  client = new OrderCloudClient()
 })
 
 afterEach(() => {
@@ -13,8 +16,7 @@ afterEach(() => {
 
 test('handles auth userinfo', async () => {
   const validToken = makeToken()
-  Tokens.SetAccessToken(validToken)
-  await UserInfo.GetToken()
+  await client.UserInfo.GetToken({ accessToken: validToken })
 
   expect(mockFetch).toHaveBeenCalledTimes(1)
   const call = mockFetch.mock.calls[0]

@@ -6,17 +6,19 @@ import { Webhook } from '../models/Webhook';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class Webhooks {
+export default class Webhooks {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.List = this.List.bind(this);
         this.Create = this.Create.bind(this);
         this.Get = this.Get.bind(this);
@@ -42,7 +44,7 @@ class Webhooks {
     public async List<TWebhook extends Webhook>(listOptions: { search?: string, searchOn?: Searchable<'Webhooks.List'>, sortBy?: Sortable<'Webhooks.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TWebhook>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/webhooks`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/webhooks`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -68,7 +70,7 @@ class Webhooks {
     public async Create<TWebhook extends Webhook>(webhook: Webhook,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TWebhook>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/webhooks`, { ...requestOptions, body: webhook, impersonating,  } )
+        return await this.http.post(`/webhooks`, { ...requestOptions, body: webhook, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -94,7 +96,7 @@ class Webhooks {
     public async Get<TWebhook extends Webhook>(webhookID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TWebhook>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/webhooks/${webhookID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/webhooks/${webhookID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -121,7 +123,7 @@ class Webhooks {
     public async Save<TWebhook extends Webhook>(webhookID: string, webhook: Webhook,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TWebhook>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/webhooks/${webhookID}`, { ...requestOptions, body: webhook, impersonating,  } )
+        return await this.http.put(`/webhooks/${webhookID}`, { ...requestOptions, body: webhook, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -147,7 +149,7 @@ class Webhooks {
     public async Delete(webhookID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/webhooks/${webhookID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/webhooks/${webhookID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -174,7 +176,7 @@ class Webhooks {
     public async Patch<TWebhook extends Webhook>(webhookID: string, webhook: PartialDeep<Webhook>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TWebhook>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/webhooks/${webhookID}`, { ...requestOptions, body: webhook, impersonating,  } )
+        return await this.http.patch(`/webhooks/${webhookID}`, { ...requestOptions, body: webhook, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -200,5 +202,3 @@ class Webhooks {
         return this;
     }
 }
-
-export default new Webhooks();

@@ -7,17 +7,19 @@ import { InventoryRecordAssignment } from '../models/InventoryRecordAssignment';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class InventoryRecords {
+export default class InventoryRecords {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.List = this.List.bind(this);
         this.Create = this.Create.bind(this);
         this.Get = this.Get.bind(this);
@@ -57,7 +59,7 @@ class InventoryRecords {
     public async List<TInventoryRecord extends InventoryRecord>(productID: string, listOptions: { search?: string, searchOn?: Searchable<'InventoryRecords.List'>, sortBy?: Sortable<'InventoryRecords.List'>, page?: number, pageSize?: number, filters?: Filters, includeAddress?: boolean } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TInventoryRecord>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/products/${productID}/inventoryrecords`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/products/${productID}/inventoryrecords`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -84,7 +86,7 @@ class InventoryRecords {
     public async Create<TInventoryRecord extends InventoryRecord>(productID: string, inventoryRecord: InventoryRecord,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TInventoryRecord>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/products/${productID}/inventoryrecords`, { ...requestOptions, body: inventoryRecord, impersonating,  } )
+        return await this.http.post(`/products/${productID}/inventoryrecords`, { ...requestOptions, body: inventoryRecord, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -111,7 +113,7 @@ class InventoryRecords {
     public async Get<TInventoryRecord extends InventoryRecord>(productID: string, inventoryRecordID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TInventoryRecord>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/products/${productID}/inventoryrecords/${inventoryRecordID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/products/${productID}/inventoryrecords/${inventoryRecordID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -139,7 +141,7 @@ class InventoryRecords {
     public async Save<TInventoryRecord extends InventoryRecord>(productID: string, inventoryRecordID: string, inventoryRecord: InventoryRecord,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TInventoryRecord>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/products/${productID}/inventoryrecords/${inventoryRecordID}`, { ...requestOptions, body: inventoryRecord, impersonating,  } )
+        return await this.http.put(`/products/${productID}/inventoryrecords/${inventoryRecordID}`, { ...requestOptions, body: inventoryRecord, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -166,7 +168,7 @@ class InventoryRecords {
     public async Delete(productID: string, inventoryRecordID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/products/${productID}/inventoryrecords/${inventoryRecordID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/products/${productID}/inventoryrecords/${inventoryRecordID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -194,7 +196,7 @@ class InventoryRecords {
     public async Patch<TInventoryRecord extends InventoryRecord>(productID: string, inventoryRecordID: string, inventoryRecord: PartialDeep<InventoryRecord>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TInventoryRecord>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/products/${productID}/inventoryrecords/${inventoryRecordID}`, { ...requestOptions, body: inventoryRecord, impersonating,  } )
+        return await this.http.patch(`/products/${productID}/inventoryrecords/${inventoryRecordID}`, { ...requestOptions, body: inventoryRecord, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -224,7 +226,7 @@ class InventoryRecords {
     public async DeleteAssignment(productID: string, inventoryRecordID: string, listOptions: { buyerID?: string, userID?: string, userGroupID?: string } = {}, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/products/${productID}/inventoryrecords/${inventoryRecordID}/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.delete(`/products/${productID}/inventoryrecords/${inventoryRecordID}/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -256,7 +258,7 @@ class InventoryRecords {
     public async ListAssignments<TInventoryRecordAssignment extends InventoryRecordAssignment>(productID: string, listOptions: { buyerID?: string, inventoryRecordID?: string, userGroupID?: string, level?: 'Group' | 'Company', page?: number, pageSize?: number } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TInventoryRecordAssignment>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/products/${productID}/inventoryrecords/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/products/${productID}/inventoryrecords/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -283,7 +285,7 @@ class InventoryRecords {
     public async SaveAssignment(productID: string, inventoryRecordAssignment: InventoryRecordAssignment,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/products/${productID}/inventoryrecords/assignments`, { ...requestOptions, body: inventoryRecordAssignment, impersonating,  } )
+        return await this.http.post(`/products/${productID}/inventoryrecords/assignments`, { ...requestOptions, body: inventoryRecordAssignment, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -317,7 +319,7 @@ class InventoryRecords {
     public async ListVariant<TInventoryRecord extends InventoryRecord>(productID: string, variantID: string, listOptions: { search?: string, searchOn?: Searchable<'InventoryRecords.ListVariant'>, sortBy?: Sortable<'InventoryRecords.ListVariant'>, page?: number, pageSize?: number, filters?: Filters, includeAddress?: boolean } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TInventoryRecord>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/products/${productID}/variants/${variantID}/inventoryrecords`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/products/${productID}/variants/${variantID}/inventoryrecords`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -345,7 +347,7 @@ class InventoryRecords {
     public async CreateVariant<TInventoryRecord extends InventoryRecord>(productID: string, variantID: string, inventoryRecord: InventoryRecord,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TInventoryRecord>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/products/${productID}/variants/${variantID}/inventoryrecords`, { ...requestOptions, body: inventoryRecord, impersonating,  } )
+        return await this.http.post(`/products/${productID}/variants/${variantID}/inventoryrecords`, { ...requestOptions, body: inventoryRecord, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -373,7 +375,7 @@ class InventoryRecords {
     public async GetVariant<TInventoryRecord extends InventoryRecord>(productID: string, variantID: string, inventoryRecordID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TInventoryRecord>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/products/${productID}/variants/${variantID}/inventoryrecords/${inventoryRecordID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/products/${productID}/variants/${variantID}/inventoryrecords/${inventoryRecordID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -402,7 +404,7 @@ class InventoryRecords {
     public async SaveVariant<TInventoryRecord extends InventoryRecord>(productID: string, variantID: string, inventoryRecordID: string, inventoryRecord: InventoryRecord,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TInventoryRecord>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/products/${productID}/variants/${variantID}/inventoryrecords/${inventoryRecordID}`, { ...requestOptions, body: inventoryRecord, impersonating,  } )
+        return await this.http.put(`/products/${productID}/variants/${variantID}/inventoryrecords/${inventoryRecordID}`, { ...requestOptions, body: inventoryRecord, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -430,7 +432,7 @@ class InventoryRecords {
     public async DeleteVariant(productID: string, variantID: string, inventoryRecordID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/products/${productID}/variants/${variantID}/inventoryrecords/${inventoryRecordID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/products/${productID}/variants/${variantID}/inventoryrecords/${inventoryRecordID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -459,7 +461,7 @@ class InventoryRecords {
     public async PatchVariant<TInventoryRecord extends InventoryRecord>(productID: string, variantID: string, inventoryRecordID: string, inventoryRecord: PartialDeep<InventoryRecord>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TInventoryRecord>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/products/${productID}/variants/${variantID}/inventoryrecords/${inventoryRecordID}`, { ...requestOptions, body: inventoryRecord, impersonating,  } )
+        return await this.http.patch(`/products/${productID}/variants/${variantID}/inventoryrecords/${inventoryRecordID}`, { ...requestOptions, body: inventoryRecord, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -490,7 +492,7 @@ class InventoryRecords {
     public async DeleteVariantAssignment(productID: string, variantID: string, inventoryRecordID: string, listOptions: { buyerID?: string, userID?: string, userGroupID?: string } = {}, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/products/${productID}/variants/${variantID}/inventoryrecords/${inventoryRecordID}/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.delete(`/products/${productID}/variants/${variantID}/inventoryrecords/${inventoryRecordID}/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -523,7 +525,7 @@ class InventoryRecords {
     public async ListVariantAssignments<TInventoryRecordAssignment extends InventoryRecordAssignment>(productID: string, variantID: string, listOptions: { buyerID?: string, inventoryRecordID?: string, userGroupID?: string, level?: 'Group' | 'Company', page?: number, pageSize?: number } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TInventoryRecordAssignment>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/products/${productID}/variants/${variantID}/inventoryrecords/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/products/${productID}/variants/${variantID}/inventoryrecords/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -551,7 +553,7 @@ class InventoryRecords {
     public async SaveVariantAssignment(productID: string, variantID: string, inventoryRecordAssignment: InventoryRecordAssignment,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/products/${productID}/variants/${variantID}/inventoryrecords/assignments`, { ...requestOptions, body: inventoryRecordAssignment, impersonating,  } )
+        return await this.http.post(`/products/${productID}/variants/${variantID}/inventoryrecords/assignments`, { ...requestOptions, body: inventoryRecordAssignment, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -577,5 +579,3 @@ class InventoryRecords {
         return this;
     }
 }
-
-export default new InventoryRecords();

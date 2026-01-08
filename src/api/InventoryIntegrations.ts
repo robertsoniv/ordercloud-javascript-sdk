@@ -2,17 +2,19 @@ import { InventoryIntegration } from '../models/InventoryIntegration';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class InventoryIntegrations {
+export default class InventoryIntegrations {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.Get = this.Get.bind(this);
         this.Save = this.Save.bind(this);
         this.Delete = this.Delete.bind(this);
@@ -30,7 +32,7 @@ class InventoryIntegrations {
     public async Get<TInventoryIntegration extends InventoryIntegration>(requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TInventoryIntegration>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/integrations/inventory`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/integrations/inventory`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -56,7 +58,7 @@ class InventoryIntegrations {
     public async Save<TInventoryIntegration extends InventoryIntegration>(inventoryIntegration: InventoryIntegration,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TInventoryIntegration>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrations/inventory`, { ...requestOptions, body: inventoryIntegration, impersonating,  } )
+        return await this.http.put(`/integrations/inventory`, { ...requestOptions, body: inventoryIntegration, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -81,7 +83,7 @@ class InventoryIntegrations {
     public async Delete(requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/integrations/inventory`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/integrations/inventory`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -107,7 +109,7 @@ class InventoryIntegrations {
     public async Patch<TInventoryIntegration extends InventoryIntegration>(inventoryIntegration: PartialDeep<InventoryIntegration>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TInventoryIntegration>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrations/inventory`, { ...requestOptions, body: inventoryIntegration, impersonating,  } )
+        return await this.http.patch(`/integrations/inventory`, { ...requestOptions, body: inventoryIntegration, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -133,5 +135,3 @@ class InventoryIntegrations {
         return this;
     }
 }
-
-export default new InventoryIntegrations();

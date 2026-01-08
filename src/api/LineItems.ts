@@ -10,17 +10,19 @@ import { Address } from '../models/Address';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class LineItems {
+export default class LineItems {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.ListAcrossOrders = this.ListAcrossOrders.bind(this);
         this.List = this.List.bind(this);
         this.Create = this.Create.bind(this);
@@ -55,7 +57,7 @@ class LineItems {
     public async ListAcrossOrders<TExtendedLineItem extends ExtendedLineItem>(direction: OrderDirection, listOptions: { buyerID?: string, supplierID?: string, from?: string, to?: string, search?: string, searchOn?: Searchable<'LineItems.ListAcrossOrders'>, searchType?: SearchType, sortBy?: Sortable<'LineItems.ListAcrossOrders'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TExtendedLineItem>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/lineitems/${direction}`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/lineitems/${direction}`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -88,7 +90,7 @@ class LineItems {
     public async List<TLineItem extends LineItem>(direction: OrderDirection, orderID: string, listOptions: { search?: string, searchOn?: Searchable<'LineItems.List'>, sortBy?: Sortable<'LineItems.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TLineItem>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/orders/${direction}/${orderID}/lineitems`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/orders/${direction}/${orderID}/lineitems`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -116,7 +118,7 @@ class LineItems {
     public async Create<TLineItem extends LineItem>(direction: OrderDirection, orderID: string, lineItem: LineItem,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TLineItem>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/orders/${direction}/${orderID}/lineitems`, { ...requestOptions, body: lineItem, impersonating,  } )
+        return await this.http.post(`/orders/${direction}/${orderID}/lineitems`, { ...requestOptions, body: lineItem, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -144,7 +146,7 @@ class LineItems {
     public async Get<TLineItem extends LineItem>(direction: OrderDirection, orderID: string, lineItemID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TLineItem>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/orders/${direction}/${orderID}/lineitems/${lineItemID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/orders/${direction}/${orderID}/lineitems/${lineItemID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -173,7 +175,7 @@ class LineItems {
     public async Save<TLineItem extends LineItem>(direction: OrderDirection, orderID: string, lineItemID: string, lineItem: LineItem,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TLineItem>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/orders/${direction}/${orderID}/lineitems/${lineItemID}`, { ...requestOptions, body: lineItem, impersonating,  } )
+        return await this.http.put(`/orders/${direction}/${orderID}/lineitems/${lineItemID}`, { ...requestOptions, body: lineItem, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -201,7 +203,7 @@ class LineItems {
     public async Delete(direction: OrderDirection, orderID: string, lineItemID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/orders/${direction}/${orderID}/lineitems/${lineItemID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/orders/${direction}/${orderID}/lineitems/${lineItemID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -230,7 +232,7 @@ class LineItems {
     public async Patch<TLineItem extends LineItem>(direction: OrderDirection, orderID: string, lineItemID: string, lineItem: PartialDeep<LineItem>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TLineItem>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/orders/${direction}/${orderID}/lineitems/${lineItemID}`, { ...requestOptions, body: lineItem, impersonating,  } )
+        return await this.http.patch(`/orders/${direction}/${orderID}/lineitems/${lineItemID}`, { ...requestOptions, body: lineItem, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -259,7 +261,7 @@ class LineItems {
     public async SetShippingAddress<TLineItem extends LineItem>(direction: OrderDirection, orderID: string, lineItemID: string, address: Address,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TLineItem>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/orders/${direction}/${orderID}/lineitems/${lineItemID}/shipto`, { ...requestOptions, body: address, impersonating,  } )
+        return await this.http.put(`/orders/${direction}/${orderID}/lineitems/${lineItemID}/shipto`, { ...requestOptions, body: address, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -288,7 +290,7 @@ class LineItems {
     public async PatchShippingAddress<TLineItem extends LineItem>(direction: OrderDirection, orderID: string, lineItemID: string, address: PartialDeep<Address>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TLineItem>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/orders/${direction}/${orderID}/lineitems/${lineItemID}/shipto`, { ...requestOptions, body: address, impersonating,  } )
+        return await this.http.patch(`/orders/${direction}/${orderID}/lineitems/${lineItemID}/shipto`, { ...requestOptions, body: address, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -314,5 +316,3 @@ class LineItems {
         return this;
     }
 }
-
-export default new LineItems();

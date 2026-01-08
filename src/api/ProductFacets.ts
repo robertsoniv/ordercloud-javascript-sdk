@@ -6,17 +6,19 @@ import { ProductFacet } from '../models/ProductFacet';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class ProductFacets {
+export default class ProductFacets {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.List = this.List.bind(this);
         this.Create = this.Create.bind(this);
         this.Get = this.Get.bind(this);
@@ -42,7 +44,7 @@ class ProductFacets {
     public async List<TProductFacet extends ProductFacet>(listOptions: { search?: string, searchOn?: Searchable<'ProductFacets.List'>, sortBy?: Sortable<'ProductFacets.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TProductFacet>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/productfacets`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/productfacets`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -68,7 +70,7 @@ class ProductFacets {
     public async Create<TProductFacet extends ProductFacet>(productFacet: ProductFacet,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TProductFacet>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/productfacets`, { ...requestOptions, body: productFacet, impersonating,  } )
+        return await this.http.post(`/productfacets`, { ...requestOptions, body: productFacet, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -94,7 +96,7 @@ class ProductFacets {
     public async Get<TProductFacet extends ProductFacet>(productFacetID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TProductFacet>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/productfacets/${productFacetID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/productfacets/${productFacetID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -121,7 +123,7 @@ class ProductFacets {
     public async Save<TProductFacet extends ProductFacet>(productFacetID: string, productFacet: ProductFacet,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TProductFacet>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/productfacets/${productFacetID}`, { ...requestOptions, body: productFacet, impersonating,  } )
+        return await this.http.put(`/productfacets/${productFacetID}`, { ...requestOptions, body: productFacet, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -147,7 +149,7 @@ class ProductFacets {
     public async Delete(productFacetID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/productfacets/${productFacetID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/productfacets/${productFacetID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -174,7 +176,7 @@ class ProductFacets {
     public async Patch<TProductFacet extends ProductFacet>(productFacetID: string, productFacet: PartialDeep<ProductFacet>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TProductFacet>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/productfacets/${productFacetID}`, { ...requestOptions, body: productFacet, impersonating,  } )
+        return await this.http.patch(`/productfacets/${productFacetID}`, { ...requestOptions, body: productFacet, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -200,5 +202,3 @@ class ProductFacets {
         return this;
     }
 }
-
-export default new ProductFacets();

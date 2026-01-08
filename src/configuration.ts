@@ -1,69 +1,96 @@
 import { SdkConfiguration } from './models'
 import { InterceptorContainer } from './core/InterceptorManager'
 
-class Configuration {
-  private defaultConfig: SdkConfiguration = {
-    baseApiUrl: 'https://api.ordercloud.io',
-    apiVersion: 'v1',
-    timeoutInMilliseconds: 60 * 1000, // 60 seconds by default
-    clientID: null,
-    cookieOptions: {
-      samesite: 'lax', // browser default
-      secure: false,
-      domain: null,
-      prefix: 'ordercloud',
-      path: '/', // accessible on any path in the domain
-    },
-  }
-  private config: SdkConfiguration = cloneDeep(this.defaultConfig)
+/**
+ * Instance-based configuration for OrderCloud client
+ * Each client instance maintains its own immutable configuration
+ */
+export class Configuration {
+  private readonly config: Readonly<SdkConfiguration>
 
   /**
    * Public interceptor container for adding request/response interceptors
    * @example
-   * Configuration.interceptors.request.use(
+   * client.interceptors.request.use(
    *   (config) => {
    *     config.headers = { ...config.headers, 'X-Custom': 'value' }
    *     return config
    *   }
    * )
    */
-  public interceptors: InterceptorContainer = new InterceptorContainer()
+  public readonly interceptors: InterceptorContainer = new InterceptorContainer()
 
   /**
-   * @ignore
-   * not part of public api, don't include in generated docs
+   * Creates a new Configuration instance with the provided settings
+   * Applies defaults for any missing values
+   * @param config Partial configuration - any missing properties use defaults
    */
-  constructor() {
-    this.Set = this.Set.bind(this)
-    this.Get = this.Get.bind(this)
-  }
-
-  Set(config: SdkConfiguration): void {
-    // Deprecation warning for axiosAdapter
-    if (config?.axiosAdapter) {
-      console.warn(
-        'OrderCloud SDK: axiosAdapter is deprecated and will be removed in the next major version. ' +
-          'The SDK now uses native fetch. Use fetchImplementation if you need to provide a custom fetch implementation.'
-      )
+  constructor(config: Partial<SdkConfiguration> = {}) {
+    const defaultConfig: SdkConfiguration = {
+      baseApiUrl: 'https://api.ordercloud.io',
+      apiVersion: 'v1',
+      timeoutInMilliseconds: 60 * 1000, // 60 seconds by default
+      clientID: null,
+      cookieOptions: {
+        samesite: 'lax', // browser default
+        secure: false,
+        domain: null,
+        prefix: 'ordercloud',
+        path: '/', // accessible on any path in the domain
+      },
     }
 
-    this.config = { ...this.defaultConfig, ...this.config, ...(config || {}) }
-    this.config.cookieOptions = {
-      ...this.defaultConfig.cookieOptions,
-      ...this.config.cookieOptions,
-      ...(config?.cookieOptions || {}),
-    }
+    // Merge user config with defaults
+    this.config = Object.freeze({
+      ...defaultConfig,
+      ...config,
+      cookieOptions: {
+        ...defaultConfig.cookieOptions,
+        ...(config.cookieOptions || {}),
+      },
+    })
   }
 
-  Get(): SdkConfiguration {
+  /**
+   * Get the current configuration
+   * @returns Readonly configuration object
+   */
+  public Get(): Readonly<SdkConfiguration> {
     return this.config
   }
-}
 
-// takes an object and creates a new one with same properties/values
-// useful so we don't mutate original object
-function cloneDeep(obj: any): any {
-  return JSON.parse(JSON.stringify(obj))
-}
+  /**
+   * Get base API URL
+   */
+  public get baseApiUrl(): string {
+    return this.config.baseApiUrl
+  }
 
-export default new Configuration()
+  /**
+   * Get API version
+   */
+  public get apiVersion(): string {
+    return this.config.apiVersion
+  }
+
+  /**
+   * Get client ID
+   */
+  public get clientID(): string | null {
+    return this.config.clientID
+  }
+
+  /**
+   * Get timeout in milliseconds
+   */
+  public get timeoutInMilliseconds(): number {
+    return this.config.timeoutInMilliseconds
+  }
+
+  /**
+   * Get cookie options
+   */
+  public get cookieOptions() {
+    return this.config.cookieOptions
+  }
+}

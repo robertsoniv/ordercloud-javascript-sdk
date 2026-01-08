@@ -1,5 +1,5 @@
 import mockFetch, { setupMockFetch } from './__mocks__/fetch'
-import { Auth, ApiRole } from '../src/index'
+import { OrderCloudClient, ApiRole } from '../src/index'
 
 const testdata = {
   authUrl: 'https://api.ordercloud.io/oauth/token',
@@ -15,8 +15,11 @@ const testdata = {
   },
 }
 
+let client: OrderCloudClient
+
 beforeEach(() => {
   setupMockFetch({ access_token: 'mock-token', expires_in: 3600 })
+  client = new OrderCloudClient({ clientID: testdata.clientID })
 })
 
 afterEach(() => {
@@ -26,7 +29,7 @@ afterEach(() => {
 
 const urlencode = encodeURIComponent
 test('can auth with login, no custom roles', async () => {
-  await Auth.Login(
+  await client.Auth.Login(
     testdata.username,
     testdata.password,
     testdata.clientID,
@@ -52,7 +55,7 @@ test('can auth with login, no custom roles', async () => {
 })
 
 test('can auth with login without scope or custom roles', async () => {
-  await Auth.Login(testdata.username, testdata.password, testdata.clientID)
+  await client.Auth.Login(testdata.username, testdata.password, testdata.clientID)
   expect(mockFetch).toHaveBeenCalledTimes(1)
 
   const call = mockFetch.mock.calls[0]
@@ -71,7 +74,7 @@ test('can auth with login without scope or custom roles', async () => {
 })
 
 test('can auth with login with custom roles', async () => {
-  await Auth.Login(
+  await client.Auth.Login(
     testdata.username,
     testdata.password,
     testdata.clientID,
@@ -100,7 +103,7 @@ test('can auth with login with custom roles', async () => {
 })
 
 test('can auth with elevated login, no custom roles', async () => {
-  await Auth.ElevatedLogin(
+  await client.Auth.ElevatedLogin(
     testdata.clientSecret,
     testdata.username,
     testdata.password,
@@ -129,7 +132,7 @@ test('can auth with elevated login, no custom roles', async () => {
 })
 
 test('can auth with elevated login with custom roles', async () => {
-  await Auth.ElevatedLogin(
+  await client.Auth.ElevatedLogin(
     testdata.clientSecret,
     testdata.username,
     testdata.password,
@@ -159,7 +162,7 @@ test('can auth with elevated login with custom roles', async () => {
 })
 
 test('can auth with client credentials, no custom roles', async () => {
-  await Auth.ClientCredentials(
+  await client.Auth.ClientCredentials(
     testdata.clientSecret,
     testdata.clientID,
     testdata.scope as ApiRole[]
@@ -182,7 +185,7 @@ test('can auth with client credentials, no custom roles', async () => {
 })
 
 test('can auth with client credentials with custom roles', async () => {
-  await Auth.ClientCredentials(
+  await client.Auth.ClientCredentials(
     testdata.clientSecret,
     testdata.clientID,
     testdata.scope as ApiRole[],
@@ -207,7 +210,7 @@ test('can auth with client credentials with custom roles', async () => {
 
 test('can auth with refresh token', async () => {
   const refreshToken = 'mock-refresh-token'
-  await Auth.RefreshToken(refreshToken, testdata.clientID)
+  await client.Auth.RefreshToken(refreshToken, testdata.clientID)
   expect(mockFetch).toHaveBeenCalledTimes(1)
   
   const call = mockFetch.mock.calls[0]
@@ -224,7 +227,7 @@ test('can auth with refresh token', async () => {
 })
 
 test('can auth anonymous, no custom roles', async () => {
-  await Auth.Anonymous(testdata.clientID, testdata.scope)
+  await client.Auth.Anonymous(testdata.clientID, testdata.scope)
   expect(mockFetch).toHaveBeenCalledTimes(1)
 
   const call = mockFetch.mock.calls[0]
@@ -243,7 +246,7 @@ test('can auth anonymous, no custom roles', async () => {
 })
 
 test('handles auth anonymous with anonuserid', async () => {
-  await Auth.Anonymous(testdata.clientID, testdata.scope, undefined, {
+  await client.Auth.Anonymous(testdata.clientID, testdata.scope, undefined, {
     anonuserid: 'myanonuserid',
   })
 
@@ -263,7 +266,7 @@ test('handles auth anonymous with anonuserid', async () => {
 })
 
 test('can auth anonymous with custom roles', async () => {
-  await Auth.Anonymous(testdata.clientID, testdata.scope, testdata.customRoles)
+  await client.Auth.Anonymous(testdata.clientID, testdata.scope, testdata.customRoles)
   expect(mockFetch).toHaveBeenCalledTimes(1)
 
   const call = mockFetch.mock.calls[0]

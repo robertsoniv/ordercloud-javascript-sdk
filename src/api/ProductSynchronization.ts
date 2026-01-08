@@ -3,17 +3,19 @@ import { SyncProduct } from '../models/SyncProduct';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class ProductSynchronization {
+export default class ProductSynchronization {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.Get = this.Get.bind(this);
         this.Save = this.Save.bind(this);
         this.Delete = this.Delete.bind(this);
@@ -32,7 +34,7 @@ class ProductSynchronization {
     public async Get<TProductSyncConfig extends ProductSyncConfig>(requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TProductSyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/integrations/productsync`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/integrations/productsync`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -58,7 +60,7 @@ class ProductSynchronization {
     public async Save<TProductSyncConfig extends ProductSyncConfig>(productSyncConfig: ProductSyncConfig,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TProductSyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrations/productsync`, { ...requestOptions, body: productSyncConfig, impersonating,  } )
+        return await this.http.put(`/integrations/productsync`, { ...requestOptions, body: productSyncConfig, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -83,7 +85,7 @@ class ProductSynchronization {
     public async Delete(requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/integrations/productsync`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/integrations/productsync`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -109,7 +111,7 @@ class ProductSynchronization {
     public async Patch<TProductSyncConfig extends ProductSyncConfig>(productSyncConfig: PartialDeep<ProductSyncConfig>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TProductSyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrations/productsync`, { ...requestOptions, body: productSyncConfig, impersonating,  } )
+        return await this.http.patch(`/integrations/productsync`, { ...requestOptions, body: productSyncConfig, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -135,7 +137,7 @@ class ProductSynchronization {
     public async Sync(syncProduct: SyncProduct,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/integrations/productsync/sync`, { ...requestOptions, body: syncProduct, impersonating,  } )
+        return await this.http.post(`/integrations/productsync/sync`, { ...requestOptions, body: syncProduct, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -161,5 +163,3 @@ class ProductSynchronization {
         return this;
     }
 }
-
-export default new ProductSynchronization();

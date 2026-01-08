@@ -1,17 +1,19 @@
 import { IdentityToken } from '../models/IdentityToken'
 import { RequiredDeep } from '../models/RequiredDeep'
 import { RequestOptions } from '../models/RequestOptions'
-import http from '../utils/HttpClient'
+import HttpClient from '../utils/HttpClient'
 import OrderCloudError from '../utils/OrderCloudError'
 
-class UserInfo {
+export default class UserInfo {
   private impersonating: boolean = false
+  private readonly http: HttpClient
 
   /**
    * @ignore
    * not part of public api, don't include in generated docs
    */
-  constructor() {
+  constructor(http: HttpClient) {
+    this.http = http
     this.GetToken = this.GetToken.bind(this)
   }
 
@@ -27,7 +29,7 @@ class UserInfo {
   ): Promise<RequiredDeep<IdentityToken>> {
     const impersonating = this.impersonating
     this.impersonating = false
-    return await http
+    return await this.http
       .get(`oauth/userinfo`, {
         ...requestOptions,
         impersonating,
@@ -57,5 +59,3 @@ class UserInfo {
     return this
   }
 }
-
-export default new UserInfo()

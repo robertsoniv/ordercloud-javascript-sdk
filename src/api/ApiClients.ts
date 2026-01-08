@@ -9,17 +9,19 @@ import { ApiClientAssignment } from '../models/ApiClientAssignment';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class ApiClients {
+export default class ApiClients {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.List = this.List.bind(this);
         this.Create = this.Create.bind(this);
         this.Get = this.Get.bind(this);
@@ -54,7 +56,7 @@ class ApiClients {
     public async List<TApiClient extends ApiClient>(listOptions: { search?: string, searchOn?: Searchable<'ApiClients.List'>, sortBy?: Sortable<'ApiClients.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TApiClient>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/apiclients`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/apiclients`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -80,7 +82,7 @@ class ApiClients {
     public async Create<TApiClient extends ApiClient>(apiClient: ApiClient,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TApiClient>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/apiclients`, { ...requestOptions, body: apiClient, impersonating,  } )
+        return await this.http.post(`/apiclients`, { ...requestOptions, body: apiClient, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -106,7 +108,7 @@ class ApiClients {
     public async Get<TApiClient extends ApiClient>(apiClientID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TApiClient>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/apiclients/${apiClientID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/apiclients/${apiClientID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -133,7 +135,7 @@ class ApiClients {
     public async Save<TApiClient extends ApiClient>(apiClientID: string, apiClient: ApiClient,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TApiClient>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/apiclients/${apiClientID}`, { ...requestOptions, body: apiClient, impersonating,  } )
+        return await this.http.put(`/apiclients/${apiClientID}`, { ...requestOptions, body: apiClient, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -159,7 +161,7 @@ class ApiClients {
     public async Delete(apiClientID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/apiclients/${apiClientID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/apiclients/${apiClientID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -186,7 +188,7 @@ class ApiClients {
     public async Patch<TApiClient extends ApiClient>(apiClientID: string, apiClient: PartialDeep<ApiClient>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TApiClient>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/apiclients/${apiClientID}`, { ...requestOptions, body: apiClient, impersonating,  } )
+        return await this.http.patch(`/apiclients/${apiClientID}`, { ...requestOptions, body: apiClient, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -218,7 +220,7 @@ class ApiClients {
     public async ListSecrets<TApiClientSecret extends ApiClientSecret>(apiClientID: string, listOptions: { search?: string, searchOn?: Searchable<'ApiClients.ListSecrets'>, sortBy?: Sortable<'ApiClients.ListSecrets'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TApiClientSecret>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/apiclients/${apiClientID}/secrets`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/apiclients/${apiClientID}/secrets`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -245,7 +247,7 @@ class ApiClients {
     public async CreateSecret<TApiClientSecretCreateResponse extends ApiClientSecretCreateResponse>(apiClientID: string, apiClientSecret: ApiClientSecret,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TApiClientSecretCreateResponse>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/apiclients/${apiClientID}/secrets`, { ...requestOptions, body: apiClientSecret, impersonating,  } )
+        return await this.http.post(`/apiclients/${apiClientID}/secrets`, { ...requestOptions, body: apiClientSecret, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -272,7 +274,7 @@ class ApiClients {
     public async GetSecret<TApiClientSecret extends ApiClientSecret>(apiClientID: string, apiClientSecretID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TApiClientSecret>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/apiclients/${apiClientID}/secrets/${apiClientSecretID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/apiclients/${apiClientID}/secrets/${apiClientSecretID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -299,7 +301,7 @@ class ApiClients {
     public async DeleteSecret(apiClientID: string, apiClientSecretID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/apiclients/${apiClientID}/secrets/${apiClientSecretID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/apiclients/${apiClientID}/secrets/${apiClientSecretID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -327,7 +329,7 @@ class ApiClients {
     public async PatchSecret<TApiClientSecret extends ApiClientSecret>(apiClientID: string, apiClientSecretID: string, apiClientSecret: PartialDeep<ApiClientSecret>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TApiClientSecret>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/apiclients/${apiClientID}/secrets/${apiClientSecretID}`, { ...requestOptions, body: apiClientSecret, impersonating,  } )
+        return await this.http.patch(`/apiclients/${apiClientID}/secrets/${apiClientSecretID}`, { ...requestOptions, body: apiClientSecret, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -357,7 +359,7 @@ class ApiClients {
     public async ListAssignments<TApiClientAssignment extends ApiClientAssignment>(listOptions: { apiClientID?: string, buyerID?: string, supplierID?: string, page?: number, pageSize?: number } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TApiClientAssignment>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/apiclients/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/apiclients/assignments`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -383,7 +385,7 @@ class ApiClients {
     public async SaveAssignment(apiClientAssignment: ApiClientAssignment,requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/apiclients/assignments`, { ...requestOptions, body: apiClientAssignment, impersonating,  } )
+        return await this.http.post(`/apiclients/assignments`, { ...requestOptions, body: apiClientAssignment, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -410,7 +412,7 @@ class ApiClients {
     public async DeleteBuyerAssignment(apiClientID: string, buyerID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/buyers/${buyerID}/ApiClients/Assignments/${apiClientID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/buyers/${buyerID}/ApiClients/Assignments/${apiClientID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -437,7 +439,7 @@ class ApiClients {
     public async DeleteSupplierAssignment(apiClientID: string, supplierID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/suppliers/${supplierID}/ApiClients/Assignments/${apiClientID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/suppliers/${supplierID}/ApiClients/Assignments/${apiClientID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -463,5 +465,3 @@ class ApiClients {
         return this;
     }
 }
-
-export default new ApiClients();

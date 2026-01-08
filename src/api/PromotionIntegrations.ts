@@ -2,17 +2,19 @@ import { PromotionIntegration } from '../models/PromotionIntegration';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class PromotionIntegrations {
+export default class PromotionIntegrations {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.Get = this.Get.bind(this);
         this.Save = this.Save.bind(this);
         this.Delete = this.Delete.bind(this);
@@ -30,7 +32,7 @@ class PromotionIntegrations {
     public async Get<TPromotionIntegration extends PromotionIntegration>(requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TPromotionIntegration>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/integrations/promotion`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/integrations/promotion`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -56,7 +58,7 @@ class PromotionIntegrations {
     public async Save<TPromotionIntegration extends PromotionIntegration>(promotionIntegration: PromotionIntegration,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TPromotionIntegration>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrations/promotion`, { ...requestOptions, body: promotionIntegration, impersonating,  } )
+        return await this.http.put(`/integrations/promotion`, { ...requestOptions, body: promotionIntegration, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -81,7 +83,7 @@ class PromotionIntegrations {
     public async Delete(requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/integrations/promotion`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/integrations/promotion`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -107,7 +109,7 @@ class PromotionIntegrations {
     public async Patch<TPromotionIntegration extends PromotionIntegration>(promotionIntegration: PartialDeep<PromotionIntegration>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TPromotionIntegration>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrations/promotion`, { ...requestOptions, body: promotionIntegration, impersonating,  } )
+        return await this.http.patch(`/integrations/promotion`, { ...requestOptions, body: promotionIntegration, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -133,5 +135,3 @@ class PromotionIntegrations {
         return this;
     }
 }
-
-export default new PromotionIntegrations();

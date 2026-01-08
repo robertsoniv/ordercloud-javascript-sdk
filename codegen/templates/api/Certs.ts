@@ -1,17 +1,19 @@
 import { RequiredDeep } from '../models/RequiredDeep'
 import { RequestOptions } from '../models/RequestOptions'
-import http from '../utils/HttpClient'
+import HttpClient from '../utils/HttpClient'
 import OrderCloudError from '../utils/OrderCloudError'
 import { PublicKey } from '../models/PublicKey'
 
-class Certs {
+export default class Certs {
   private impersonating: boolean = false
+  private readonly http: HttpClient
 
   /**
    * @ignore
    * not part of public api, don't include in generated docs
    */
-  constructor() {
+  constructor(http: HttpClient) {
+    this.http = http
     this.GetPublicKey = this.GetPublicKey.bind(this)
   }
 
@@ -30,7 +32,7 @@ class Certs {
   ): Promise<RequiredDeep<TPublicKey>> {
     const impersonating = this.impersonating
     this.impersonating = false
-    return await http
+    return await this.http
       .get(`oauth/certs/${ID}`, { ...requestOptions, impersonating })
       .catch(ex => {
         // If it's already an OrderCloudError from HttpClient, just re-throw
@@ -57,5 +59,3 @@ class Certs {
     return this
   }
 }
-
-export default new Certs()

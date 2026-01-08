@@ -1,12 +1,14 @@
 import mockFetch, { setupMockFetch } from './__mocks__/fetch'
 import OrderCloudError from '../src/utils/OrderCloudError'
-import { Products, Tokens, Auth, Configuration } from '../src'
+import { OrderCloudClient } from '../src'
 import { makeToken } from './utils'
 
 const validToken = makeToken()
 
+let client: OrderCloudClient
+
 beforeEach(() => {
-  Tokens.SetAccessToken(validToken)
+  client = new OrderCloudClient()
 })
 
 describe('OrderCloudError - Improvements', () => {
@@ -25,7 +27,7 @@ describe('OrderCloudError - Improvements', () => {
     )
 
     try {
-      await Products.Get('test-id')
+      await client.Products.Get('test-id', { accessToken: validToken })
       fail('Should have thrown')
     } catch (error) {
       expect(error.isOrderCloudError).toBe(true)
@@ -45,7 +47,7 @@ describe('OrderCloudError - Improvements', () => {
     )
 
     try {
-      await Products.Get('test-id')
+      await client.Products.Get('test-id', { accessToken: validToken })
       fail('Should have thrown')
     } catch (error) {
       expect(error.isOrderCloudError).toBe(true)
@@ -55,7 +57,7 @@ describe('OrderCloudError - Improvements', () => {
   })
 
   test('should handle Auth error correctly', async () => {
-    Configuration.Set({ clientID: 'test-client-id' })
+    const authClient = new OrderCloudClient({ clientID: 'test-client-id' })
     setupMockFetch(
       {
         Errors: [
@@ -70,7 +72,7 @@ describe('OrderCloudError - Improvements', () => {
     )
 
     try {
-      await Auth.Login('baduser', 'badpass')
+      await authClient.Auth.Login('baduser', 'badpass')
       fail('Should have thrown')
     } catch (error) {
       expect(error.isOrderCloudError).toBe(true)
@@ -82,8 +84,8 @@ describe('OrderCloudError - Improvements', () => {
 
   test('should handle network errors', async () => {
     mockFetch.mockRejectedValueOnce(new Error('Network request failed'))
-    await expect(Products.Get('test-id')).rejects.toThrow(
-      'Network request failed'
-    )
+    await expect(
+      client.Products.Get('test-id', { accessToken: validToken })
+    ).rejects.toThrow('Network request failed')
   })
 })

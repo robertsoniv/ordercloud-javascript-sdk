@@ -2,17 +2,19 @@ import { OrderSyncConfig } from '../models/OrderSyncConfig';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class OrderSynchronization {
+export default class OrderSynchronization {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.Get = this.Get.bind(this);
         this.Save = this.Save.bind(this);
         this.Delete = this.Delete.bind(this);
@@ -30,7 +32,7 @@ class OrderSynchronization {
     public async Get<TOrderSyncConfig extends OrderSyncConfig>(requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TOrderSyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/integrations/OrderSync`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/integrations/OrderSync`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -56,7 +58,7 @@ class OrderSynchronization {
     public async Save<TOrderSyncConfig extends OrderSyncConfig>(orderSyncConfig: OrderSyncConfig,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TOrderSyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/integrations/OrderSync`, { ...requestOptions, body: orderSyncConfig, impersonating,  } )
+        return await this.http.put(`/integrations/OrderSync`, { ...requestOptions, body: orderSyncConfig, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -81,7 +83,7 @@ class OrderSynchronization {
     public async Delete(requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/integrations/OrderSync`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/integrations/OrderSync`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -107,7 +109,7 @@ class OrderSynchronization {
     public async Patch<TOrderSyncConfig extends OrderSyncConfig>(orderSyncConfig: PartialDeep<OrderSyncConfig>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TOrderSyncConfig>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/integrations/OrderSync`, { ...requestOptions, body: orderSyncConfig, impersonating,  } )
+        return await this.http.patch(`/integrations/OrderSync`, { ...requestOptions, body: orderSyncConfig, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -133,5 +135,3 @@ class OrderSynchronization {
         return this;
     }
 }
-
-export default new OrderSynchronization();

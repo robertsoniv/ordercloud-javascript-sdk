@@ -1,7 +1,7 @@
 import { NativeDataFetcher } from '../core/NativeDataFetcher'
 import { RequestConfig } from '../core/types'
-import tokenService from '../api/Tokens'
-import Configuration from '../configuration'
+import { AuthManager } from '../api/AuthManager'
+import { Configuration } from '../configuration'
 import { parseErrorResponse } from './parseErrorResponse'
 import OrderCloudError from './OrderCloudError'
 
@@ -16,10 +16,29 @@ interface OcRequestConfig extends RequestConfig {
   cancelToken?: any // For backward compatibility, mapped to signal
 }
 
-class HttpClient {
-  private fetcher: NativeDataFetcher | null = null
+export default class HttpClient {
+  private readonly fetcher: NativeDataFetcher
+  private readonly authManager: AuthManager
+  private readonly config: Configuration
 
-  constructor() {
+  constructor(config: Configuration, authManager: AuthManager) {
+    this.config = config
+    this.authManager = authManager
+
+    // Initialize fetcher immediately (not lazy)
+    const sdkConfig = config.Get()
+    this.fetcher = new NativeDataFetcher({
+      baseURL: sdkConfig.baseApiUrl || 'https://api.ordercloud.io',
+      timeout: sdkConfig.timeoutInMilliseconds,
+      fetchImplementation: sdkConfig.fetchImplementation,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    // Use the client's interceptor container
+    this.fetcher.interceptors = config.interceptors
+
+    // Bind methods
     this.get = this.get.bind(this)
     this.put = this.put.bind(this)
     this.post = this.post.bind(this)
@@ -28,24 +47,6 @@ class HttpClient {
     this._resolveToken = this._resolveToken.bind(this)
     this._buildRequestConfig = this._buildRequestConfig.bind(this)
     this._addTokenToConfig = this._addTokenToConfig.bind(this)
-    this._initializeFetcher = this._initializeFetcher.bind(this)
-  }
-
-  private _initializeFetcher(): NativeDataFetcher {
-    if (!this.fetcher) {
-      const sdkConfig = Configuration.Get()
-      this.fetcher = new NativeDataFetcher({
-        baseURL: sdkConfig.baseApiUrl || 'https://api.ordercloud.io',
-        timeout: sdkConfig.timeoutInMilliseconds,
-        fetchImplementation: sdkConfig.fetchImplementation,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      // Use the shared interceptor container from Configuration
-      this.fetcher.interceptors = Configuration.interceptors
-    }
-    return this.fetcher
   }
 
   public get = async (path: string, config?: OcRequestConfig): Promise<any> => {
@@ -79,13 +80,12 @@ class HttpClient {
     path: string,
     config?: OcRequestConfig
   ) {
-    const fetcher = this._initializeFetcher()
     const requestConfig = await this._buildRequestConfig(config)
 
     // oauth endpoints unlike the rest don't have /{apiVersion}/ appended to them
     const fullPath = path.includes('oauth/')
       ? `/${path}`
-      : `/${Configuration.Get().apiVersion}${path}`
+      : `/${this.config.apiVersion}${path}`
 
     // Build request with proper body handling
     const requestOptions: RequestConfig = {
@@ -104,27 +104,27 @@ class HttpClient {
     let response: any
     try {
       if (verb === 'GET') {
-        response = await fetcher.get(fullPath, requestOptions)
+        response = await this.fetcher.get(fullPath, requestOptions)
       } else if (verb === 'POST') {
-        response = await fetcher.post(
+        response = await this.fetcher.post(
           fullPath,
           requestOptions.body,
           requestOptions
         )
       } else if (verb === 'PUT') {
-        response = await fetcher.put(
+        response = await this.fetcher.put(
           fullPath,
           requestOptions.body,
           requestOptions
         )
       } else if (verb === 'PATCH') {
-        response = await fetcher.patch(
+        response = await this.fetcher.patch(
           fullPath,
           requestOptions.body,
           requestOptions
         )
       } else if (verb === 'DELETE') {
-        response = await fetcher.delete(fullPath, requestOptions)
+        response = await this.fetcher.delete(fullPath, requestOptions)
       }
 
       return response
@@ -149,7 +149,7 @@ class HttpClient {
     config: OcRequestConfig
   ): Promise<OcRequestConfig> {
     const token = this._resolveToken(config)
-    const validToken = await tokenService.GetValidToken(token)
+    const validToken = await this.authManager.GetValidToken(token)
 
     if (!config.headers) {
       config.headers = {}
@@ -172,9 +172,9 @@ class HttpClient {
     if (config['accessToken']) {
       token = config['accessToken']
     } else if (config['impersonating']) {
-      token = tokenService.GetImpersonationToken()
+      token = this.authManager.GetImpersonationToken()
     } else {
-      token = tokenService.GetAccessToken()
+      token = this.authManager.GetAccessToken()
     }
 
     // remove these custom parameters
@@ -187,7 +187,7 @@ class HttpClient {
   private async _buildRequestConfig(
     config?: OcRequestConfig
   ): Promise<OcRequestConfig> {
-    const sdkConfig = Configuration.Get()
+    const sdkConfig = this.config.Get()
 
     // Handle cancelToken for backward compatibility
     let signal = config?.signal
@@ -216,5 +216,3 @@ class HttpClient {
     return this._addTokenToConfig(requestConfig)
   }
 }
-
-export default new HttpClient()

@@ -9,17 +9,19 @@ import { User } from '../models/User';
 import { PartialDeep } from '../models/PartialDeep';
 import { RequiredDeep } from '../models/RequiredDeep';
 import { RequestOptions } from '../models/RequestOptions';
-import http from '../utils/HttpClient';
+import HttpClient from '../utils/HttpClient';
 import OrderCloudError from '../utils/OrderCloudError';
 
-class OrderReturns {
+export default class OrderReturns {
     private impersonating:boolean = false;
+    private readonly http: HttpClient;
 
     /**
     * @ignore
     * not part of public api, don't include in generated docs
     */
-    constructor() {
+    constructor(http: HttpClient) {
+        this.http = http;
         this.List = this.List.bind(this);
         this.Create = this.Create.bind(this);
         this.Get = this.Get.bind(this);
@@ -54,7 +56,7 @@ class OrderReturns {
     public async List<TOrderReturn extends OrderReturn>(listOptions: { approvable?: boolean, search?: string, searchOn?: Searchable<'OrderReturns.List'>, sortBy?: Sortable<'OrderReturns.List'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TOrderReturn>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/orderreturns`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/orderreturns`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -80,7 +82,7 @@ class OrderReturns {
     public async Create<TOrderReturn extends OrderReturn>(orderReturn: OrderReturn,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TOrderReturn>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/orderreturns`, { ...requestOptions, body: orderReturn, impersonating,  } )
+        return await this.http.post(`/orderreturns`, { ...requestOptions, body: orderReturn, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -106,7 +108,7 @@ class OrderReturns {
     public async Get<TOrderReturn extends OrderReturn>(returnID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TOrderReturn>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/orderreturns/${returnID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.get(`/orderreturns/${returnID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -133,7 +135,7 @@ class OrderReturns {
     public async Save<TOrderReturn extends OrderReturn>(returnID: string, orderReturn: OrderReturn,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TOrderReturn>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.put(`/orderreturns/${returnID}`, { ...requestOptions, body: orderReturn, impersonating,  } )
+        return await this.http.put(`/orderreturns/${returnID}`, { ...requestOptions, body: orderReturn, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -159,7 +161,7 @@ class OrderReturns {
     public async Delete(returnID: string, requestOptions: RequestOptions = {} ): Promise<void>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/orderreturns/${returnID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/orderreturns/${returnID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -186,7 +188,7 @@ class OrderReturns {
     public async Patch<TOrderReturn extends OrderReturn>(returnID: string, orderReturn: PartialDeep<OrderReturn>, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TOrderReturn>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.patch(`/orderreturns/${returnID}`, { ...requestOptions, body: orderReturn, impersonating,  } )
+        return await this.http.patch(`/orderreturns/${returnID}`, { ...requestOptions, body: orderReturn, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -218,7 +220,7 @@ class OrderReturns {
     public async ListApprovals<TOrderReturnApproval extends OrderReturnApproval>(returnID: string, listOptions: { search?: string, searchOn?: Searchable<'OrderReturns.ListApprovals'>, sortBy?: Sortable<'OrderReturns.ListApprovals'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TOrderReturnApproval>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/orderreturns/${returnID}/approvals`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/orderreturns/${returnID}/approvals`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -245,7 +247,7 @@ class OrderReturns {
     public async Approve<TOrderReturn extends OrderReturn>(returnID: string, approvalInfo: ApprovalInfo,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TOrderReturn>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/orderreturns/${returnID}/approve`, { ...requestOptions, body: approvalInfo, impersonating,  } )
+        return await this.http.post(`/orderreturns/${returnID}/approve`, { ...requestOptions, body: approvalInfo, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -271,7 +273,7 @@ class OrderReturns {
     public async Cancel<TOrderReturn extends OrderReturn>(returnID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TOrderReturn>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/orderreturns/${returnID}/cancel`, { ...requestOptions, impersonating,  } )
+        return await this.http.post(`/orderreturns/${returnID}/cancel`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -297,7 +299,7 @@ class OrderReturns {
     public async Complete<TOrderReturn extends OrderReturn>(returnID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TOrderReturn>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/orderreturns/${returnID}/complete`, { ...requestOptions, impersonating,  } )
+        return await this.http.post(`/orderreturns/${returnID}/complete`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -324,7 +326,7 @@ class OrderReturns {
     public async Decline<TOrderReturn extends OrderReturn>(returnID: string, approvalInfo: ApprovalInfo,requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TOrderReturn>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/orderreturns/${returnID}/decline`, { ...requestOptions, body: approvalInfo, impersonating,  } )
+        return await this.http.post(`/orderreturns/${returnID}/decline`, { ...requestOptions, body: approvalInfo, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -356,7 +358,7 @@ class OrderReturns {
     public async ListEligibleApprovers<TUser extends User>(returnID: string, listOptions: { search?: string, searchOn?: Searchable<'OrderReturns.ListEligibleApprovers'>, sortBy?: Sortable<'OrderReturns.ListEligibleApprovers'>, page?: number, pageSize?: number, filters?: Filters } = {}, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<ListPage<TUser>>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.get(`/orderreturns/${returnID}/eligibleapprovers`, { ...requestOptions, impersonating, params: listOptions  } )
+        return await this.http.get(`/orderreturns/${returnID}/eligibleapprovers`, { ...requestOptions, impersonating, params: listOptions  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -383,7 +385,7 @@ class OrderReturns {
     public async DeleteItem<TOrderReturn extends OrderReturn>(returnID: string, lineItemID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TOrderReturn>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.delete(`/orderreturns/${returnID}/items/${lineItemID}`, { ...requestOptions, impersonating,  } )
+        return await this.http.delete(`/orderreturns/${returnID}/items/${lineItemID}`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -409,7 +411,7 @@ class OrderReturns {
     public async Submit<TOrderReturn extends OrderReturn>(returnID: string, requestOptions: RequestOptions = {} ): Promise<RequiredDeep<TOrderReturn>>{
         const impersonating = this.impersonating;
         this.impersonating = false;
-        return await http.post(`/orderreturns/${returnID}/submit`, { ...requestOptions, impersonating,  } )
+        return await this.http.post(`/orderreturns/${returnID}/submit`, { ...requestOptions, impersonating,  } )
         .catch(ex => {
             // If it's already an OrderCloudError from HttpClient, just re-throw
             if(ex.isOrderCloudError) {
@@ -435,5 +437,3 @@ class OrderReturns {
         return this;
     }
 }
-
-export default new OrderReturns();
